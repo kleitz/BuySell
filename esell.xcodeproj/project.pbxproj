@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		849993881D9904BA006C050C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849993871D9904BA006C050C /* GoogleService-Info.plist */; };
+		8499938A1D992451006C050C /* listingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849993891D992451006C050C /* listingsTableViewController.swift */; };
 		84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EA1D98F15E00111668 /* AppDelegate.swift */; };
-		84DFB0ED1D98F15E00111668 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EC1D98F15E00111668 /* ViewController.swift */; };
+		84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EC1D98F15E00111668 /* LoginViewController.swift */; };
 		84DFB0F01D98F15E00111668 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0EE1D98F15E00111668 /* Main.storyboard */; };
 		84DFB0F21D98F15E00111668 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0F11D98F15E00111668 /* Assets.xcassets */; };
 		84DFB0F51D98F15E00111668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */; };
@@ -21,9 +22,10 @@
 		21CCE51F04529112EBFDE571 /* Pods-esell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-esell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-esell/Pods-esell.debug.xcconfig"; sourceTree = "<group>"; };
 		26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_esell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		849993871D9904BA006C050C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		849993891D992451006C050C /* listingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = listingsTableViewController.swift; sourceTree = "<group>"; };
 		84DFB0E71D98F15C00111668 /* esell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = esell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DFB0EA1D98F15E00111668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		84DFB0EC1D98F15E00111668 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		84DFB0EC1D98F15E00111668 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		84DFB0EF1D98F15E00111668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84DFB0F11D98F15E00111668 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84DFB0F41D98F15E00111668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -72,8 +74,9 @@
 			isa = PBXGroup;
 			children = (
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
-				84DFB0EC1D98F15E00111668 /* ViewController.swift */,
+				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
+				849993891D992451006C050C /* listingsTableViewController.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,
 				84DFB0F61D98F15E00111668 /* Info.plist */,
@@ -215,8 +218,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84DFB0ED1D98F15E00111668 /* ViewController.swift in Sources */,
+				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,
+				8499938A1D992451006C050C /* listingsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
