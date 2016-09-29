@@ -24,19 +24,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs
         FIRApp.configure()
         
-        
-        if let alreadySignedIn = FIRAuth.auth()?.currentUser {
-            print("already logged in. current user: \(alreadySignedIn)")
-            // segue to main view controller
-            // go to antoher view
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            storyboard.instantiateViewControllerWithIdentifier("listingsTable")
-            //presentViewController(vc, animated: true, completion: nil)
-
-            
-        } else {
-            // sign in
-        }
+        ///need the already logged in logic here
+//        if let alreadySignedIn = FIRAuth.auth()?.currentUser {
+//            print("already logged in. current user: \(alreadySignedIn)")
+//            // segue to main view controller
+//            // go to antoher view
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            storyboard.instantiateViewControllerWithIdentifier("listingsTable")
+//            //presentViewController(vc, animated: true, completion: nil)
+//
+//            
+//        } else {
+//            // sign in
+//        }
         
         return true
     }
