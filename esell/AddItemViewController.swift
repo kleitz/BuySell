@@ -13,7 +13,7 @@ import Firebase
 class AddItemViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet var imageView: UIImageView!
     
     @IBOutlet weak var saveButton: UIButton!
     
@@ -48,7 +48,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         // Add save button fucntion
         
-        saveButton.addTarget(self, action: #selector(savePost), forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(savePostButton), forControlEvents: .TouchUpInside)
         
     }
 
@@ -90,25 +90,49 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
     }
     
-    func savePost() {
+    func savePostButton() {
         
-        // Create storage ref
+        // Create STORAGE ref for images only (not database reference)
         
-//        let storageRef = FIRStorage.storage().reference()
-//        
-//        if let uploadData = UIImagePNGRepresentation(imageView.image!) {
-//            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
-//                
-//                if error != nil {
-//                    print(error?.localizedDescription)
-//                    return
-//                }
-//                
-//                print(metadata)
-//            }
-//            
-//        }
-
+        let storageRef = FIRStorage.storage().reference().child("image.png")
+        
+        guard let imageFromPicker = self.imageView.image else {
+            print("error w/ unwrapping image")
+            return
+        }
+        
+        guard let imageData = UIImagePNGRepresentation(imageFromPicker) else {
+            print("error w/ converting image to NSData")
+            return
+        }
+        
+        // Store in storage (the image gets its own url)
+        
+        storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+            
+            if error != nil {
+                print(error?.localizedDescription)
+                return
+            }
+            
+            print(metadata)
+            
+            guard let imageURL = metadata?.downloadURL()?.absoluteString else {
+                print("unable to get imageURL")
+                return
+            }
+            
+            // use separate function to save all info into firebase database (including the url string of the image)
+            
+            self.saveNewPostInDataBase(imageURL: imageURL)
+            
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    func saveNewPostInDataBase(imageURL imageURL: String){
         // do saving into firebase here
         
         let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
@@ -118,10 +142,10 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         let newPostRef = postsRef.childByAutoId()
         
         guard let itemTitle = titleText.text,
-        itemDescription = descriptionText.text,
-        itemPrice = priceText.text else {
-            print("error")
-            return
+            itemDescription = descriptionText.text,
+            itemPrice = priceText.text else {
+                print("error")
+                return
         }
         
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -131,7 +155,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             return
         }
         
-        let values = ["title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp() ]
+        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL ]
         
         newPostRef.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {
@@ -139,11 +163,14 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
                 return
             }
             
-            print("saved POSTinfo succesufly in firebase DB")
+            print("saved POSTinfo successfly in firebase DB")
+            
+//            postsRef.child("created_at").observeEventType(.Value, withBlock: { (snap) in
+//                if let t = snap.value as? NSTimeInterval {
+//                    print(NSDate(timeIntervalSince1970: t/1000))
+//                }
+//            })
         })
-
-        
-        
     }
 
     
@@ -157,4 +184,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     }
     */
 
+    
+    deinit {
+        print("(deinit) -> AddNew view")
+    }
 }
+

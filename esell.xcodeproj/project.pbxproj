@@ -32,7 +32,7 @@
 		8499938F1D9B5715006C050C /* ItemListing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListing.swift; sourceTree = "<group>"; };
 		84DFB0E71D98F15C00111668 /* esell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = esell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DFB0EA1D98F15E00111668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		84DFB0EC1D98F15E00111668 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		84DFB0EC1D98F15E00111668 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = esell/LoginViewController.swift; sourceTree = "<group>"; };
 		84DFB0EF1D98F15E00111668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84DFB0F11D98F15E00111668 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84DFB0F41D98F15E00111668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,6 +63,7 @@
 		84DFB0DE1D98F15C00111668 = {
 			isa = PBXGroup;
 			children = (
+				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
 				84DFB0E91D98F15D00111668 /* esell */,
 				84DFB0E81D98F15C00111668 /* Products */,
 				9921E4AF41DAA5E48982D334 /* Pods */,
@@ -82,7 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
-				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
 				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,

@@ -8,11 +8,14 @@
 
 import UIKit
 import Firebase
+import FBSDKLoginKit
 
 class ListingsTableViewController: UITableViewController {
 
     let cellId = "cell"
     var posts = [ItemListing]()
+    
+    @IBOutlet weak var logoutButton: FBSDKLoginButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,17 +28,22 @@ class ListingsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        
+      //   Attach logout button to logout function
+        logoutButton.addTarget(self, action: #selector(logout), forControlEvents: .TouchUpInside)
+        
     }
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         return posts.count
     }
 
@@ -47,16 +55,35 @@ class ListingsTableViewController: UITableViewController {
         
         let post = posts[indexPath.row]
         
+        
+        // TODO IMplement better error handling/checking for this cell part
+        
         guard let title = post.title,
         let price = post.price,
-        let desc = post.itemDescription else {
+        let desc = post.itemDescription,
+        let imageURL = post.imageURL else {
             print("error getting info for cell")
-            return cell
+            fatalError()
         }
+        
+        // get the image stuff out
+        
+        guard let url = NSURL(string: imageURL) else {
+            print("error getting imageurl to nsurl")
+            fatalError()
+        }
+        
+        if let imageData = NSData(contentsOfURL: url) {
+            cell.photo.image = UIImage(data: imageData)
+        }
+        
+        // set the string stuff
         
         cell.titleText.text = title
         cell.priceText.text = price
         cell.descriptionText.text = desc
+        
+        // each cell returns
         
         print("Cell returned safely...")
         return cell
@@ -134,9 +161,15 @@ class ListingsTableViewController: UITableViewController {
             post.price = dictionary["price"] as? String
             post.author = dictionary["author"] as? String
             
+            post.imageURL = dictionary["image_url"] as? String
+            
+            
             print("PRINT POST title: \(post.title)")
             
-            // put into the array
+            
+            
+            // PUT INTO LOCAL ARRAY
+            
             print("APPENDED \n")
             self.posts.append(post)
             
@@ -158,6 +191,31 @@ class ListingsTableViewController: UITableViewController {
         
         
         
+    }
+    
+    
+    func logout() {
+        
+      ///  print("\(self.rootViewController)")
+        
+        // the logic should be that if the root view is the login controller, then juist idsmiss this listings view controller.
+        // if the root view is the listings view, then just present the login controller but then the button will still say logout? and the syncing is msessed up...
+            
+        // dismiss
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+        // go to LOGIN VIEW AGAIN
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+        
+    }
+    
+    deinit {
+        
+        print("(deinit) -> Listings")
     }
 
 }

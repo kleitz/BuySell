@@ -20,7 +20,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         button.readPermissions = ["email"]
         return button
     }()
-    
+   
+    ///DONT NEED THIS BECAUSE APPDELEGATE DECIDES in begining whether user logged in or not...
 //    override func viewDidAppear(animated: Bool) {
 //        if ((FIRAuth.auth()?.currentUser) != nil) {
 //            
@@ -44,9 +45,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError?) {
+        
         print("User Logged In w/FBLoginManager")
-        
-        
         print("result: \(result)")
         
         if let error = error {
@@ -95,20 +95,19 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                                 print(error)
                                 
                             } else {
-                                print("fetched user: \(result)")
-                                let userName: NSString = result.valueForKey("name") as! NSString
-                                print("usrename: \(userName)")
                                 
+                                print("fetched user from fb: \(result)")
+                                
+                                let userName: NSString = result.valueForKey("name") as! NSString
+                
                                 let userID: NSString = result.valueForKey("id") as! NSString
-                                print("userid: \(userID)")
                                 
                                 let email: NSString = result.valueForKey("email") as! NSString
-                                print("email: \(email)")
+              
                                 
                                 
                                 // do saving into firebase here
-                                
-                                
+
                                 let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
                                 
                                 let usersRef = ref.child("users").child(uid)
@@ -117,35 +116,34 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                                 
                                 usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
                                     if err != nil {
-                                        print(err)
+                                        print(err?.localizedDescription)
                                         return
                                     }
                                     
-                                    print("saved user succesufly in firebase DB")
+                                    print("user -> in firebase DB")
                                 })
 
-                                
-                                
                             }
                         })
                     }
                     
-                    
                 })
-        
-        
                 
-                // go to another view
+                // go to the MAIN view if pass auth
+                print("PRESNETING MAIN View ( + layer)")
                 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier("mainNavig")
                 self.presentViewController(vc, animated: true, completion: nil)
+
             }
         }
     }
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        
         try! FIRAuth.auth()!.signOut()
+        
         print("User Logged Out")
     }
     
@@ -159,6 +157,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 //        performSegueWithIdentifier(Constants.Segues.SignInToFp, sender: nil)
 //        
 //    }
+    
+    deinit {
+        
+        print("(deinit) -> LOGIN ")
+    }
 
 
 }

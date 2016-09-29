@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import UIKit
 
 class ItemListing: NSObject {
     
     var title: String?
     
-    var photo: NSURL?
+    var imageURL: String?
     
     var price: String?
     
@@ -26,5 +27,6 @@ class ItemListing: NSObject {
 //        self.title = title
 //        self.itemDescription = itemDescription
 //    }
-//    
+//
+    
 }
