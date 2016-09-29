@@ -94,7 +94,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         // Create STORAGE ref for images only (not database reference)
         
-        let storageRef = FIRStorage.storage().reference().child("image.png")
+        let imageName = NSUUID().UUIDString
+    
+        let storageRef = FIRStorage.storage().reference().child("post_images").child("\(imageName).png")
         
         guard let imageFromPicker = self.imageView.image else {
             print("error w/ unwrapping image")
@@ -128,7 +130,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        /// if the root view controller is the login page....this dismissing doesnt' work becuase it closes teh whole thing
+        /// if the root veiw controllers is the posts page... it doesn't even dsmiss (can't dismiss itslef, it'sattached to the posts page)
+        // self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
