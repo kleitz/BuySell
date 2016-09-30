@@ -169,11 +169,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             
             print("saved POSTinfo successfly in firebase DB")
             
-//            postsRef.child("created_at").observeEventType(.Value, withBlock: { (snap) in
-//                if let t = snap.value as? NSTimeInterval {
-//                    print(NSDate(timeIntervalSince1970: t/1000))
-//                }
-//            })
+
+            
         })
     }
 
@@ -190,7 +187,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
 
     
     deinit {
-        print("(deinit) -> AddNew view")
+        print("(deinit) -> [AddItemViewController]")
     }
 }
 

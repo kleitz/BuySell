@@ -20,16 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        print("FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser)")
+        // Use/configure Firebase
         
-        // Use Firebase library to configure APIs
         FIRApp.configure()
+        
+        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) (if nil then login page shows by default)")
         
         // Go to main view if alreayd has auth
         
         if ((FIRAuth.auth()?.currentUser) != nil) {
-            print(" > logged in already, so present main View")
-            print(" > current user: \(FIRAuth.auth()?.currentUser)")
+            
+            print("---> [appdel] logged in already, so present main View")
             
             // Get a reference to the storyboard
             
@@ -37,44 +38,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UINavigationController else {
                 
-                print("ERROR setting up main controller to go to")
+                print("---> [appdel] ERROR setting up main controller to go to")
                 
                 fatalError()
             }
+            
+            // Present/set the view controller
+            
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             appDelegate.window?.rootViewController = mainPage
             
             
-            print("\nthe root is set as : MAIN navig")
+            print("---> [appdel] the root is set as : MAIN navig\n")
         }
             
-        // Go to login view if no auth
-            
-        else {
-            
-            print(" >! is not logged in so present LoginView")
-            
-            // Get a reference to the storyboard
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            // Instantiate the login view controller
-            
-            guard let loginPage = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
-                
-                print("ERROR setting up login controller to go to")
-                
-                fatalError()
-            }
-            
-            // Present the view controller
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            
-            appDelegate.window?.rootViewController = loginPage
-            
-            print("\nthe root is set as : LOGIN page")
-            
-        }
+       //// Go to login view if no auth  // OK THIS HAPPENS BY DEFAULT SO COMMENTING OUT THE LOGIN INSTANTIATOR (kinda udplicates the idea of going to login )
+//    
+//        else {
+//            
+//            print("---> [appdel] is not logged in so present LoginView")
+//            
+//            // Get a reference to the storyboard
+//            
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            
+//            // Instantiate the login view controller
+//            
+//            guard let loginPage = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+//                
+//                print("---> [appdel] ERROR setting up login controller to go to")
+//                
+//                fatalError()
+//            }
+//            
+//            // Present the view controller
+//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//            
+//            appDelegate.window?.rootViewController = loginPage
+//            
+//            print("---> [appdel] the root is set as : LOGIN page")
+//            
+//        }
         
         return true
     }

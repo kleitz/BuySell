@@ -21,17 +21,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         return button
     }()
    
-    ///DONT NEED THIS BECAUSE APPDELEGATE DECIDES in begining whether user logged in or not...
-//    override func viewDidAppear(animated: Bool) {
-//        if ((FIRAuth.auth()?.currentUser) != nil) {
-//            
-//            // go to another view IF USER IS ALREADY LOGGED In
-//            
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let vc = storyboard.instantiateViewControllerWithIdentifier("mainNavig")
-//            self.presentViewController(vc, animated: true, completion: nil)
-//        }
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +35,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError?) {
         
-        print("User Logged In w/FBLoginManager")
-        print("result: \(result)")
+        print("[LoginControl] User Logged In w/FBLoginManager")
+        print("[LoginControl] result: \(result)")
         
         if let error = error {
             print(error.localizedDescription)
@@ -56,7 +45,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             
         else if result.isCancelled {
             // Handle cancellations
-            print("User canceled -no action yet")
+            print("[LoginControl] User canceled login ")
         }
             
         else {
@@ -67,74 +56,53 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             {
                 let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
                 
-                // Do work
+                // Do work here (means no error using FB login manager)
                 
                 FIRAuth.auth()?.signInWithCredential(credential, completion: { (user, error) in
-                    // do somethin here dunno what yet
                     
                     if error != nil {
-                        /// error handling
+                        // error handling if you get an error using Firebase Auth
+                        
                         print(error)
                         
                     }
                     
-                    /// means no error, successfuly authenticated...
+                    // means no error using Firebase Auth, successfuly authenticated... do stuff here
                     
                     guard let uid = user?.uid else {
                         return
                     }
                     
+                    // save FIRAuth's uid in UserDefaults
+                    
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.setObject(uid, forKey: "uid")
                     
+
+
                     if ((FBSDKAccessToken.currentAccessToken()) != nil){
-                        FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"]).startWithCompletionHandler( { (connection, result, error) -> Void in
-                            if (error != nil) {
-                                
-                                //process error
-                                print(error)
-                                
-                            } else {
-                                
-                                print("fetched user from fb: \(result)")
-                                
-                                let userName: NSString = result.valueForKey("name") as! NSString
-                
-                                let userID: NSString = result.valueForKey("id") as! NSString
-                                
-                                let email: NSString = result.valueForKey("email") as! NSString
-              
-                                
-                                
-                                // do saving into firebase here
-
-                                let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
-                                
-                                let usersRef = ref.child("users").child(uid)
-                                
-                                let values = ["name": userName, "fb_id": userID, "email": email, "created_at": FIRServerValue.timestamp() ]
-                                
-                                usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                                    if err != nil {
-                                        print(err?.localizedDescription)
-                                        return
-                                    }
-                                    
-                                    print("user -> in firebase DB")
-                                })
-
-                            }
-                        })
+                        
+                        // Send FBSDK graph request to get user info parameters from Facebook
+                        
+                        self.returnUserDatafromFBGraphRequest(withAuthUID: uid)
+                        
+                        // Success login, go to Main Page
+                        
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UINavigationController else {
+                            
+                            print("ERROR setting up main controller to go to")
+                            return
+                        }
+                        
+                        let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+                        
+                        appDelegate.window?.rootViewController = mainPage
+                        
                     }
                     
                 })
-                
-                // go to the MAIN view if pass auth
-                print("PRESNETING MAIN View ( + layer)")
-                
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewControllerWithIdentifier("mainNavig")
-                self.presentViewController(vc, animated: true, completion: nil)
+
 
             }
         }
@@ -144,12 +112,56 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         try! FIRAuth.auth()!.signOut()
         
-        print("User Logged Out")
+        print("[LoginControl] User Logged Out")
+    }
+    
+    func returnUserDatafromFBGraphRequest(withAuthUID uid: String){
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"]).startWithCompletionHandler( { (connection, result, error) -> Void in
+            if (error != nil) {
+                
+                //process error
+                
+                print("[LoginControl] Error FBSDKgraph request \(error.localizedDescription)")
+                
+            } else {
+                
+                // successful request, do work
+                
+                let userName: NSString = result.valueForKey("name") as! NSString
+                
+                let userID: NSString = result.valueForKey("id") as! NSString
+                
+                let email: NSString = result.valueForKey("email") as! NSString
+                
+                print("[LoginControl] fetched user from fb: \(email)")
+                
+                
+                
+                // do saving into firebase here
+                
+                let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+                
+                let usersRef = ref.child("users").child(uid)
+                
+                let values = ["name": userName, "fb_id": userID, "email": email, "created_at": FIRServerValue.timestamp() ]
+                
+                usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                    if err != nil {
+                        print(err?.localizedDescription)
+                        return
+                    }
+                    
+                    print("[LoginControl] user info -> in firebase DB")
+                    
+                })
+                
+            }
+        })
     }
     
 //    func signedIn(user: FIRUser?) {
 //        MeasurementHelper.sendLoginEvent()
-//        
+//
 //        AppState.sharedInstance.displayName = user?.displayName ?? user?.email
 //        AppState.sharedInstance.photoUrl = user?.photoURL
 //        AppState.sharedInstance.signedIn = true
@@ -160,7 +172,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     deinit {
         
-        print("(deinit) -> LOGIN ")
+        print("(deinit) -> [LoginControl] ")
     }
 
 

@@ -23,6 +23,8 @@ class ItemListing: NSObject {
     
     var author: String?
     
+    var createdDate: NSDate?
+    
 //    init(title: String, itemDescription: String) {
 //        self.title = title
 //        self.itemDescription = itemDescription

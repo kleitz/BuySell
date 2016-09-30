@@ -21,7 +21,12 @@ class ListingsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
-        fetchPosts()
+        // does adding dispatch help load?
+        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        
+        self.fetchPostsFromFirebase()
+        
+        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -85,8 +90,13 @@ class ListingsTableViewController: UITableViewController {
         
         // each cell returns
         
-        print("Cell returned safely...")
+        print("Cell returned/reloaded safely... [tablewview.cellForRowAtIndexPath]")
         return cell
+        
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("selected row@ \(indexPath.row)")
         
     }
  
@@ -112,21 +122,6 @@ class ListingsTableViewController: UITableViewController {
     */
 
     /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -136,10 +131,9 @@ class ListingsTableViewController: UITableViewController {
     }
     */
     
-    func fetchPosts() {
+    func fetchPostsFromFirebase() {
         
-        print("running fetchPosts()")
-        print("unadded posts count; \(posts.count)")
+        print("/n > running fetchPosts()...")
         
         let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
         
@@ -151,7 +145,7 @@ class ListingsTableViewController: UITableViewController {
             
             guard let dictionary = snapshot.value as? [String:AnyObject] else {
                 print("error unwrapping post")
-                return
+                fatalError()
             }
             
             let post = ItemListing()
@@ -160,28 +154,27 @@ class ListingsTableViewController: UITableViewController {
             post.itemDescription = dictionary["description"] as? String
             post.price = dictionary["price"] as? String
             post.author = dictionary["author"] as? String
-            
             post.imageURL = dictionary["image_url"] as? String
             
-            
-            print("PRINT POST title: \(post.title)")
-            
-            
-            
+            // test print the date ...
+            guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
+                print("error getting itme out")
+                fatalError()
+            }
+    
+            post.createdDate = NSDate(timeIntervalSinceReferenceDate: postDate/1000)
+
             // PUT INTO LOCAL ARRAY
-            
-            print("APPENDED \n")
             self.posts.append(post)
             
-            // need to put on main queue
+            print("APPENDED in array so table can read. posts.count: \(self.posts.count)")
             
+            // need to put on main queue (I tried it and it still works if not on main queue??)
             dispatch_async(dispatch_get_main_queue(), {
-                
-                print(" > reload table view")
                 
                 self.tableView.reloadData()
                 
-                print("added posts count; \(self.posts.count)")
+                print(" > reload table view")
                 
             })
             
@@ -189,33 +182,56 @@ class ListingsTableViewController: UITableViewController {
                 print("fetchPosts error: \(error.localizedDescription)")
         })
         
-        
-        
     }
     
     
     func logout() {
         
-      ///  print("\(self.rootViewController)")
+        // present the loginView again
+        print("clicked log out button on posts view - so far other action in this function")
+        //performSegueWithIdentifier("segueToLogin", sender: logoutButton)
         
-        // the logic should be that if the root view is the login controller, then juist idsmiss this listings view controller.
-        // if the root view is the listings view, then just present the login controller but then the button will still say logout? and the syncing is msessed up...
-            
-        // dismiss
-        self.dismissViewControllerAnimated(true, completion: nil)
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let loginPage = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
+        //self.presentViewController(vc, animated: true, completion: nil)
         
-        // go to LOGIN VIEW AGAIN
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
-        self.presentViewController(vc, animated: true, completion: nil)
-        
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated) // No need for semicolon
+        print(">> view appearin -> Listings")
     }
     
     deinit {
         
         print("(deinit) -> Listings")
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        print(" >> started segue")
+        
+        if let identifier = segue.identifier {
+            
+            switch identifier {
+                
+            case "segueToItemDetail":
+                
+                if let cell = sender as? UITableViewCell {
+                    
+                    let rowIndex = self.tableView.indexPathForCell(cell)!.row
+                    
+                    guard let itemDetailController = segue.destinationViewController as? ItemDetailViewController else {
+                        fatalError("seg failed")
+                    }
+                    
+                    itemDetailController.post = posts[rowIndex]
+                }
+                
+            default: break
+            }
+        }
+        
     }
 
 }
