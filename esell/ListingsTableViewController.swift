@@ -12,7 +12,6 @@ import FBSDKLoginKit
 
 class ListingsTableViewController: UITableViewController {
 
-    let cellId = "cell"
     var posts = [ItemListing]()
     
     @IBOutlet weak var logoutButton: FBSDKLoginButton!
@@ -80,6 +79,7 @@ class ListingsTableViewController: UITableViewController {
         
         if let imageData = NSData(contentsOfURL: url) {
             cell.photo.image = UIImage(data: imageData)
+            cell.photo.contentMode = .ScaleAspectFill
         }
         
         // set the string stuff
@@ -90,7 +90,7 @@ class ListingsTableViewController: UITableViewController {
         
         // each cell returns
         
-        print("Cell returned/reloaded safely... [tablewview.cellForRowAtIndexPath]")
+        print("Cell returned... [cellForRowAtIndexPath]")
         return cell
         
     }
@@ -121,15 +121,36 @@ class ListingsTableViewController: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        print(" >> started segue")
+        
+        if let identifier = segue.identifier {
+            
+            switch identifier {
+                
+            case "segueToItemDetail":
+                
+                if let cell = sender as? UITableViewCell {
+                    
+                    let rowIndex = self.tableView.indexPathForCell(cell)!.row
+                    
+                    guard let itemDetailController = segue.destinationViewController as? ItemDetailViewController else {
+                        fatalError("seg failed")
+                    }
+                    
+                    itemDetailController.post = posts[rowIndex]
+                }
+            default: break
+            }
+        }
+        
     }
-    */
+    
+    // MARK: functions
     
     func fetchPostsFromFirebase() {
         
@@ -161,9 +182,21 @@ class ListingsTableViewController: UITableViewController {
                 print("error getting itme out")
                 fatalError()
             }
-    
-            post.createdDate = NSDate(timeIntervalSinceReferenceDate: postDate/1000)
-
+            
+            // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
+            post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
+        
+            let formatter = NSDateFormatter()
+//            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+//            formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+//            formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+            let rocCal = NSCalendar(calendarIdentifier: NSCalendarIdentifierRepublicOfChina)
+            formatter.calendar = rocCal
+            formatter.dateStyle = .FullStyle
+            print(formatter.stringFromDate(post.createdDate!))
+            
+            print("postDate -> \(post.createdDate)")
+            
             // PUT INTO LOCAL ARRAY
             self.posts.append(post)
             
@@ -188,7 +221,7 @@ class ListingsTableViewController: UITableViewController {
     func logout() {
         
         // present the loginView again
-        print("clicked log out button on posts view - so far other action in this function")
+        print("clicked log out button on posts view - so far no other action in this function")
         //performSegueWithIdentifier("segueToLogin", sender: logoutButton)
         
         //let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -197,41 +230,16 @@ class ListingsTableViewController: UITableViewController {
         
     }
     
+    // MARK: for logging view controller lifecycle
+    
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated) // No need for semicolon
+        super.viewWillAppear(animated)
         print(">> view appearin -> Listings")
     }
     
     deinit {
-        
         print("(deinit) -> Listings")
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        print(" >> started segue")
-        
-        if let identifier = segue.identifier {
-            
-            switch identifier {
-                
-            case "segueToItemDetail":
-                
-                if let cell = sender as? UITableViewCell {
-                    
-                    let rowIndex = self.tableView.indexPathForCell(cell)!.row
-                    
-                    guard let itemDetailController = segue.destinationViewController as? ItemDetailViewController else {
-                        fatalError("seg failed")
-                    }
-                    
-                    itemDetailController.post = posts[rowIndex]
-                }
-                
-            default: break
-            }
-        }
-        
-    }
-
+    
 }

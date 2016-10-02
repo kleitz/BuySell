@@ -31,7 +31,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        imagePicker.delegate = self
        
         
         
@@ -50,30 +50,77 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         saveButton.addTarget(self, action: #selector(savePostButton), forControlEvents: .TouchUpInside)
         
+        
+        
+        
     }
 
     
     // Function attached to UIImageview for selecting photo from photolibrary
     func selectImage(gesture: UIGestureRecognizer) {
         
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum){
+        /// The special action sheet for user to choose between camera / photogallery
+        
+        //show the action sheet (i.e. the little pop-up box from the bottom that allows you to choose whether you want to pick a photo from the photo library or from your camera)
+        
+        let optionMenu = UIAlertController(title: nil, message: "Where would you like the image from?", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let photoLibraryOption = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
             
-            print(" > clicked to selectImage")
+            print(" > clicked to selectImage FROM LIBRARY")
             
-            imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            imagePicker.allowsEditing = false
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum){
+                self.imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                self.imagePicker.allowsEditing = true
+                self.imagePicker.modalPresentationStyle = .Popover
+                self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            }
+
+        })
+        
+        let cameraOption = UIAlertAction(title: "Take a photo", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
+            print(" > clicked to selectImage FROM take a photo")
+            //shows the camera
+            self.imagePicker.allowsEditing = true
+            self.imagePicker.sourceType = .Camera
+            self.imagePicker.modalPresentationStyle = .Popover
+            self.presentViewController(self.imagePicker, animated: true, completion: nil)
             
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+        })
+        
+        let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print("Cancel")
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+        
+        //Adding the actions to the action sheet. Here, camera will only show up as an option if the camera is available in the first place.
+        optionMenu.addAction(photoLibraryOption)
+        optionMenu.addAction(cancelOption)
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) == true {
+            optionMenu.addAction(cameraOption)} else {
+            print ("I don't have a camera.")
         }
+        
+        //Now that the action sheet is set up, we present it.
+        self.presentViewController(optionMenu, animated: true, completion: nil)
+        
+
     }
     
-    // ImagePicker Delegate Methods (2 of them)
+    // ImagePicker Delegate Methods
+    
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         
         print("   > canceled selectImage")
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        print(" > finished picking image w/ edit")
+    }
+
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         

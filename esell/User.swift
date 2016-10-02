@@ -11,15 +11,17 @@ import Foundation
 class User: NSObject {
     
     var name: String?
-    
-    var role: [String]?
+    var email: String?
+    var imageURL: String?
+    var createdDate: NSDate?
     
     var location: String?
     
     var phone: String?
     
-    var email: String?
     
+    
+    //var role: [String]?
     
 //    init(name: String, role: [String]) {
 //        self.name = name

@@ -116,7 +116,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func returnUserDatafromFBGraphRequest(withAuthUID uid: String){
-        FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"]).startWithCompletionHandler( { (connection, result, error) -> Void in
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, email, picture.type(normal), link"]).startWithCompletionHandler( { (connection, result, error) -> Void in
             if (error != nil) {
                 
                 //process error
@@ -133,8 +133,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 let email: NSString = result.valueForKey("email") as! NSString
                 
-                print("[LoginControl] fetched user from fb: \(email)")
+                let fbLink: NSString = result.valueForKey("link") as! NSString
                 
+                guard let picture = result.valueForKey("picture") as? NSDictionary,
+                let pictureData = picture.valueForKey("data") as? NSDictionary,
+                let pictureURL = pictureData.valueForKey("url") as? String else {
+                    print("[LoginControl] Error getting fb pic url")
+                    return
+                }
+                
+                print("[LoginControl] fetched user from fb: \(email)")
                 
                 
                 // do saving into firebase here
@@ -143,7 +151,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 let usersRef = ref.child("users").child(uid)
                 
-                let values = ["name": userName, "fb_id": userID, "email": email, "created_at": FIRServerValue.timestamp() ]
+                let values = ["name": userName, "fb_id": userID, "email": email, "created_at": FIRServerValue.timestamp(), "fb_url": fbLink , "fb_pic_url": pictureURL]
                 
                 usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
                     if err != nil {
