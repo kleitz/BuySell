@@ -34,8 +34,7 @@ class ListingsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         
-      //   Attach logout button to logout function
-        logoutButton.addTarget(self, action: #selector(logout), forControlEvents: .TouchUpInside)
+      
         
     }
 
@@ -217,18 +216,7 @@ class ListingsTableViewController: UITableViewController {
         
     }
     
-    
-    func logout() {
-        
-        // present the loginView again
-        print("clicked log out button on posts view - so far no other action in this function")
-        //performSegueWithIdentifier("segueToLogin", sender: logoutButton)
-        
-        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        //let loginPage = storyboard.instantiateViewControllerWithIdentifier("LoginViewController")
-        //self.presentViewController(vc, animated: true, completion: nil)
-        
-    }
+
     
     // MARK: for logging view controller lifecycle
     

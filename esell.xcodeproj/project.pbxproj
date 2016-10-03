@@ -19,6 +19,8 @@
 		84DFB0F51D98F15E00111668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */; };
 		84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E1BCB91D9C052C00315DB3 /* PostCell.swift */; };
 		84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */; };
+		84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F554771DA2003300D7BDA5 /* ProfileViewController.swift */; };
+		84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */; };
 		A5025873D50A8DD465F085E8 /* Pods_esell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,8 @@
 		84DFB0F61D98F15E00111668 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84E1BCB91D9C052C00315DB3 /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
+		84F554771DA2003300D7BDA5 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +91,9 @@
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
+				84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */,
 				849993891D992451006C050C /* ListingsTableViewController.swift */,
+				84F554771DA2003300D7BDA5 /* ProfileViewController.swift */,
 				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,
 				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
 				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
@@ -243,10 +249,12 @@
 			files = (
 				84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */,
 				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
+				84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */,
 				84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */,
 				849993901D9B5715006C050C /* ItemListing.swift in Sources */,
 				8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,
+				84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 			);

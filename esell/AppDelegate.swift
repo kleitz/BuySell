@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             
-            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UINavigationController else {
+            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
                 
                 print("---> [appdel] ERROR setting up main controller to go to")
                 

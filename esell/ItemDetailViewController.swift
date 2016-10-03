@@ -151,10 +151,12 @@ class ItemDetailViewController: UIViewController {
                 if let imageURL = childDictionary["fb_pic_url"] as? String {
                     self.sellerInfo.imageURL = imageURL
                 }
-                
-                // Get seller label update UI from the updated user info
             
                 self.itemSeller.text = ("Posted \(daysAgo) by \(self.sellerInfo.name ?? "")")
+                
+                // TODO put the seller info as a button or somwhere else so that it can be clicked on & user can view the seller info separately
+                // maybe as a drag down arrow to view it down...
+                
                 print("TESTPRINT seller text: \(self.itemSeller.text)")
                 
                 print("TESTPRINT SELER INFO VAR: -> \(self.sellerInfo). name: \(self.sellerInfo.name!) email: \(self.sellerInfo.email)")
