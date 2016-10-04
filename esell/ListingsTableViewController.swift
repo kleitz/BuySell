@@ -11,19 +11,9 @@ import Firebase
 import FBSDKLoginKit
 
 class ListingsTableViewController: UITableViewController {
-
-    var posts = [ItemListing]()
     
-    var postCount = 0 {
-        willSet {
-            print("in WillSet>> Called just before didset reloading tableview")
-        }
-        didSet {
-
-            tableView.reloadData()
-        }
-        
-    }
+    var posts = [ItemListing]()
+    var imageCache = [String:UIImage]()
     
     
     override func viewDidLoad() {
@@ -31,34 +21,22 @@ class ListingsTableViewController: UITableViewController {
         
         print("_tableView view loaded")
         
-        // does adding dispatch help load when get FIRdatabase data?
-//        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-//
-//        
-//        
-//        }
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-  
+        
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return posts.count
-    
+        
     }
-
+    
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -71,7 +49,7 @@ class ListingsTableViewController: UITableViewController {
         // TODO IMplement better error handling/checking for this cell part
         
         if let title = post.title,
-        let price = post.price,
+            let price = post.price,
             let desc = post.itemDescription {
             
             // set up the data gotten
@@ -82,25 +60,81 @@ class ListingsTableViewController: UITableViewController {
         }
         
         // do image stuff here TODO make load separately
+        // does adding dispatch help load when get FIRdatabase data?
         
-        if let image = post.imageAsUIImage {
-            cell.photo.image = image
+        // temp set image
+        cell.photo.image = UIImage(named:"shopbag")
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            
+            // Jump in to a background thread to get the image for this item
+                        
+            // Check our image cache for the existing key. This is just a dictionary of UIImages
+            
+            guard let imageURL = post.imageURL else {
+                fatalError()
+            }
+            
+            // Check if image already exists in imageCache
+            
+            let image: UIImage? = self.imageCache[imageURL]
+            
+            
+            if (image == nil) {
+                print("--> start request grab imageData from URLstring")
+                
+                // If the image does not exist, we need to download it
+                guard let imgURL = NSURL(string: imageURL) else {
+                    fatalError("error unwrap string to NSURL")
+                }
+                
+                // Download an NSData representation of the image at the URL
+                let urlRequest = NSURLRequest(URL: imgURL)
+                
+                
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                    if error == nil {
+                        
+                        guard let unwrappedData = data else {
+                            fatalError()
+                        }
+                        
+                        guard let image = UIImage(data: unwrappedData) else {
+                            fatalError()
+                        }
+                        
+                        // Store the image in to our cache
+                        
+                        self.imageCache[imageURL] = image
+                        
+                        
+                        // Display image (using main thread)
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            cell.photo.image = image
+                            cell.photo.contentMode = .ScaleAspectFit
+                        })
+                        
+                    } else {
+                        
+                        print(error?.localizedDescription)
+                    }
+                })
+                
+                task.resume()
+                
+            } else {
+                print("--> start show image, already in imageCache")
+                // Display image (using main thread)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    cell.photo.image = image
+                    cell.photo.contentMode = .ScaleAspectFit
+                })
+            }
+            
+            
         }
-    
-//        // this part uses URL
-//        // get the image stuff out
-//        
-//        guard let url = NSURL(string: imageURL) else {
-//            print("error getting imageurl to nsurl")
-//            fatalError()
-//        }
-//        
-//        if let imageData = NSData(contentsOfURL: url) {
-//            cell.photo.image = UIImage(data: imageData)
-//            cell.photo.contentMode = .ScaleAspectFit
-//        }
-        
-        
         
         // each cell returns
         
@@ -113,31 +147,31 @@ class ListingsTableViewController: UITableViewController {
         print("selected row@ \(indexPath.row)")
         
     }
- 
-
+    
+    
     /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
+     // Override to support conditional editing of the table view.
+     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
     /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-
+     // Override to support editing the table view.
+     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+     if editingStyle == .Delete {
+     // Delete the row from the data source
+     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+     } else if editingStyle == .Insert {
+     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }
+     }
+     */
+    
+    
     // MARK: - Navigation
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         print(" >> started segue")
@@ -146,7 +180,7 @@ class ListingsTableViewController: UITableViewController {
             
             switch identifier {
                 
-            case "segueToItemDetail":
+            case "segueTableToItemDetail":
                 
                 if let cell = sender as? UITableViewCell {
                     
@@ -165,7 +199,7 @@ class ListingsTableViewController: UITableViewController {
     }
     
     
-
+    
     
     // MARK: for logging view controller lifecycle
     

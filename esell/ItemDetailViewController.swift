@@ -51,17 +51,17 @@ class ItemDetailViewController: UIViewController {
             itemDescription.text = description
         }
         
-        if let image = post.imageAsUIImage {
-            itemImage.image = image
-            itemImage.contentMode = .ScaleAspectFit
-        }
-
-//        if let unwrappedImageURL: String = post.imageURL,
-//        let url = NSURL(string: unwrappedImageURL),
-//        let imageData = NSData(contentsOfURL: url) {
-//            itemImage.image = UIImage(data: imageData)
+//        if let image = post.imageAsUIImage {
+//            itemImage.image = image
 //            itemImage.contentMode = .ScaleAspectFit
 //        }
+
+        if let unwrappedImageURL: String = post.imageURL,
+        let url = NSURL(string: unwrappedImageURL),
+        let imageData = NSData(contentsOfURL: url) {
+            itemImage.image = UIImage(data: imageData)
+            itemImage.contentMode = .ScaleAspectFit
+        }
         
         
         

@@ -23,6 +23,7 @@ class SegmentViewController: UIViewController {
     
     var posts = [ItemListing]()
     
+    //var imageCache = NSMutableDictionary()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,13 +40,15 @@ class SegmentViewController: UIViewController {
         
         self.fetchPostsFromFirebase()
         
+        
+        
     }
     
     // MARK: functions
     
     func fetchPostsFromFirebase() {
         
-        print("/n > running fetchPosts()...")
+        print("\n > running fetchPosts()...")
         
         let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
         
@@ -75,54 +78,34 @@ class SegmentViewController: UIViewController {
             }
             
             // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
+            
             post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
-            
-            let formatter = NSDateFormatter()
-            //            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-            //            formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
-            //            formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-            let rocCal = NSCalendar(calendarIdentifier: NSCalendarIdentifierRepublicOfChina)
-            formatter.calendar = rocCal
-            formatter.dateStyle = .FullStyle
-            print(formatter.stringFromDate(post.createdDate!))
-            
             print("postDate -> \(post.createdDate)")
             
-            
-            /// Hey do the image handling here ON A BACKGROUND THREAD SO IT"S NOT SLOW
-            // get the image stuff out first as UIImage
-
-            
-            guard let url = NSURL(string: post.imageURL!),
-            let imageData = NSData(contentsOfURL: url) else {
-                print("error getting imageurl to nsurl")
-                fatalError()
-            }
-            post.imageAsUIImage = UIImage(data: imageData)
+//            let formatter = NSDateFormatter()
+//            let rocCal = NSCalendar(calendarIdentifier: NSCalendarIdentifierRepublicOfChina)
+//            formatter.calendar = rocCal
+//            formatter.dateStyle = .FullStyle
+            //print(formatter.stringFromDate(post.createdDate!))
             
             
             // PUT INTO LOCAL ARRAY
             self.tableViewController.posts.append(post)
-            self.tableViewController.postCount += 1
-            
+  
             self.collectionViewController.posts.append(post)
-            self.collectionViewController.postCount += 1
+ 
             
-            print("new var postCount: \(self.tableViewController.postCount)")
             print("APPENDED in array. posts.count: \(self.tableViewController.posts.count)")
             
-            dispatch_async(dispatch_get_main_queue()) {
-                self.collectionViewController.collectionView.reloadData()
-                print("___reloaded")
-                
-            }
-
             
-//            // Also put in the child view controllers' data array
-//            
-//            self.tableViewController.posts = self.posts
-//            self.collectionViewController.posts = self.posts
-
+            // Reload UI after data update
+            
+            //dispatch_async(dispatch_get_main_queue(), {
+                self.tableViewController.tableView.reloadData()
+            
+                self.collectionViewController.collectionView.reloadData()
+            
+            //})
      
             }, withCancelBlock: { (error) in
                 print("fetchPosts error: \(error.localizedDescription)")
@@ -142,10 +125,10 @@ class SegmentViewController: UIViewController {
         
         segmentControl.selectedSegmentIndex = Segment.table.rawValue
         
+        tableViewController.view.hidden = false
+        collectionViewController.view.hidden = true
         
-        // initiate the lazy vars?
-    
-        setupSegmentSwitchView()
+        
         
     }
     
@@ -153,15 +136,18 @@ class SegmentViewController: UIViewController {
         switch segmentControl.selectedSegmentIndex
         {
         case Segment.table.rawValue:
-            print("blah 1")
+            print(" > select table")
             tableViewController.view.hidden = false
             collectionViewController.view.hidden = true
             
             
         case Segment.collection.rawValue:
-            print("blah 2")
+            print(" > select collection")
             tableViewController.view.hidden = true
             collectionViewController.view.hidden = false
+            
+            // Make imagecache faster by setting it the same?
+            tableViewController.imageCache = collectionViewController.imageCache
             
             
         default: break;
@@ -183,7 +169,7 @@ class SegmentViewController: UIViewController {
         // Add this as a CHILD view controller
         
         self.addViewControllerAsChildViewController(viewController)
-        print(" >> Segment.mainview: just added table view controller")
+        print(" >> Segment.mainview: just added table view controller \n")
         
         
         return viewController
@@ -205,7 +191,7 @@ class SegmentViewController: UIViewController {
         // Add this as a CHILD view controller
         
         self.addViewControllerAsChildViewController(viewController)
-        print(" >> Segment.mainview: just added collection view controller")
+        print(" >> Segment.mainview: just added collection view controller \n")
         
         
         return viewController
