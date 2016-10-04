@@ -16,6 +16,10 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Set up title
+        
+        self.navigationItem.title = "My Account"
+        
         
         //   Attach logout button to logout function
         

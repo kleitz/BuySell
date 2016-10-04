@@ -14,28 +14,36 @@ class ListingsTableViewController: UITableViewController {
 
     var posts = [ItemListing]()
     
-    @IBOutlet weak var logoutButton: FBSDKLoginButton!
+    var postCount = 0 {
+        willSet {
+            print("in WillSet>> Called just before didset reloading tableview")
+        }
+        didSet {
+
+            tableView.reloadData()
+        }
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("_tableView view loaded")
         
-        // does adding dispatch help load?
-        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-        
-        self.fetchPostsFromFirebase()
-        
-        }
+        // does adding dispatch help load when get FIRdatabase data?
+//        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//
+//        
+//        
+//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        
-      
-        
+  
     }
 
     // MARK: - Table view data source
@@ -48,6 +56,7 @@ class ListingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return posts.count
+    
     }
 
     
@@ -61,31 +70,37 @@ class ListingsTableViewController: UITableViewController {
         
         // TODO IMplement better error handling/checking for this cell part
         
-        guard let title = post.title,
+        if let title = post.title,
         let price = post.price,
-        let desc = post.itemDescription,
-        let imageURL = post.imageURL else {
-            print("error getting info for cell")
-            fatalError()
+            let desc = post.itemDescription {
+            
+            // set up the data gotten
+            
+            cell.titleText.text = title
+            cell.priceText.text = price
+            cell.descriptionText.text = desc
         }
         
-        // get the image stuff out
+        // do image stuff here TODO make load separately
         
-        guard let url = NSURL(string: imageURL) else {
-            print("error getting imageurl to nsurl")
-            fatalError()
+        if let image = post.imageAsUIImage {
+            cell.photo.image = image
         }
+    
+//        // this part uses URL
+//        // get the image stuff out
+//        
+//        guard let url = NSURL(string: imageURL) else {
+//            print("error getting imageurl to nsurl")
+//            fatalError()
+//        }
+//        
+//        if let imageData = NSData(contentsOfURL: url) {
+//            cell.photo.image = UIImage(data: imageData)
+//            cell.photo.contentMode = .ScaleAspectFit
+//        }
         
-        if let imageData = NSData(contentsOfURL: url) {
-            cell.photo.image = UIImage(data: imageData)
-            cell.photo.contentMode = .ScaleAspectFill
-        }
         
-        // set the string stuff
-        
-        cell.titleText.text = title
-        cell.priceText.text = price
-        cell.descriptionText.text = desc
         
         // each cell returns
         
@@ -149,72 +164,6 @@ class ListingsTableViewController: UITableViewController {
         
     }
     
-    // MARK: functions
-    
-    func fetchPostsFromFirebase() {
-        
-        print("/n > running fetchPosts()...")
-        
-        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
-        
-        ref.child("posts").observeEventType(.ChildAdded, withBlock: { (snapshot
-            ) in
-            
-            print(snapshot)
-            
-            
-            guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("error unwrapping post")
-                fatalError()
-            }
-            
-            let post = ItemListing()
-            
-            post.title = dictionary["title"] as? String
-            post.itemDescription = dictionary["description"] as? String
-            post.price = dictionary["price"] as? String
-            post.author = dictionary["author"] as? String
-            post.imageURL = dictionary["image_url"] as? String
-            
-            // test print the date ...
-            guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
-                print("error getting itme out")
-                fatalError()
-            }
-            
-            // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
-            post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
-        
-            let formatter = NSDateFormatter()
-//            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-//            formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
-//            formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-            let rocCal = NSCalendar(calendarIdentifier: NSCalendarIdentifierRepublicOfChina)
-            formatter.calendar = rocCal
-            formatter.dateStyle = .FullStyle
-            print(formatter.stringFromDate(post.createdDate!))
-            
-            print("postDate -> \(post.createdDate)")
-            
-            // PUT INTO LOCAL ARRAY
-            self.posts.append(post)
-            
-            print("APPENDED in array so table can read. posts.count: \(self.posts.count)")
-            
-            // need to put on main queue (I tried it and it still works if not on main queue??)
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                self.tableView.reloadData()
-                
-                print(" > reload table view")
-                
-            })
-            
-            }, withCancelBlock: { (error) in
-                print("fetchPosts error: \(error.localizedDescription)")
-        })
-        
-    }
     
 
     

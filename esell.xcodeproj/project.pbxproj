@@ -21,6 +21,8 @@
 		84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */; };
 		84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F554771DA2003300D7BDA5 /* ProfileViewController.swift */; };
 		84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */; };
+		84F5547E1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5547D1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift */; };
+		84F554801DA24F0F00D7BDA5 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5547F1DA24F0F00D7BDA5 /* CollectionViewCell.swift */; };
 		A5025873D50A8DD465F085E8 /* Pods_esell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 		84F554771DA2003300D7BDA5 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentViewController.swift; sourceTree = "<group>"; };
+		84F5547D1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsCollectionViewController.swift; sourceTree = "<group>"; };
+		84F5547F1DA24F0F00D7BDA5 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +97,8 @@
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
 				84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */,
 				849993891D992451006C050C /* ListingsTableViewController.swift */,
+				84F5547D1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift */,
+				84F5547F1DA24F0F00D7BDA5 /* CollectionViewCell.swift */,
 				84F554771DA2003300D7BDA5 /* ProfileViewController.swift */,
 				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,
 				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
@@ -249,8 +255,10 @@
 			files = (
 				84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */,
 				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
+				84F554801DA24F0F00D7BDA5 /* CollectionViewCell.swift in Sources */,
 				84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */,
 				84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */,
+				84F5547E1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift in Sources */,
 				849993901D9B5715006C050C /* ItemListing.swift in Sources */,
 				8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,

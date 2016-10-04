@@ -29,11 +29,16 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set up title
+        
+        self.navigationItem.title = "Post an Item to Sell"
+        
 
         // Do any additional setup after loading the view.
-        imagePicker.delegate = self
-       
         
+        imagePicker.delegate = self
+
         
         
         // Create tap gesture recognizer

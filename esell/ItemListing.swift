@@ -15,6 +15,9 @@ class ItemListing: NSObject {
     
     var imageURL: String?
     
+    var imageAsUIImage: UIImage?
+    //var imageCache = [String:UIImage]?()
+    
     var price: String?
     
     var itemDescription: String?

@@ -50,28 +50,31 @@ class ItemDetailViewController: UIViewController {
         if let description = post.itemDescription {
             itemDescription.text = description
         }
-
-        if let unwrappedImageURL: String = post.imageURL,
-        let url = NSURL(string: unwrappedImageURL),
-        let imageData = NSData(contentsOfURL: url) {
-            itemImage.image = UIImage(data: imageData)
-            itemImage.contentMode = .ScaleAspectFill
-        }
         
-        // oh no the author is the UID which isn't for the UI to show....
+        if let image = post.imageAsUIImage {
+            itemImage.image = image
+            itemImage.contentMode = .ScaleAspectFit
+        }
+
+//        if let unwrappedImageURL: String = post.imageURL,
+//        let url = NSURL(string: unwrappedImageURL),
+//        let imageData = NSData(contentsOfURL: url) {
+//            itemImage.image = UIImage(data: imageData)
+//            itemImage.contentMode = .ScaleAspectFit
+//        }
+        
+        
+        
+        // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
+        
         guard let seller = post.author else {
        
             fatalError("Error getting seller")
             
         }
-        
-        
-        
-    
+
         // TODO need to write a query here to get the SELLER INFO to appear, including the actual name of the author UID
-        
-        
-        
+
         fetchUserInfoFromFirebase(sellerUID: seller)
 
         
