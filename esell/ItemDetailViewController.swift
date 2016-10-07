@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ItemDetailViewController: UIViewController {
+class ItemDetailViewController: UIViewController, UIViewControllerTransitioningDelegate  {
     
    
     @IBOutlet weak var itemTitle: UILabel!
@@ -22,6 +22,7 @@ class ItemDetailViewController: UIViewController {
     
     @IBOutlet weak var itemSeller: UILabel!
     
+    @IBOutlet weak var sellerInfoButton: UIButton!
     
     
     var post = ItemListing()
@@ -51,19 +52,20 @@ class ItemDetailViewController: UIViewController {
             itemDescription.text = description
         }
         
-//        if let image = post.imageAsUIImage {
-//            itemImage.image = image
-//            itemImage.contentMode = .ScaleAspectFit
-//        }
-
-        if let unwrappedImageURL: String = post.imageURL,
-        let url = NSURL(string: unwrappedImageURL),
-        let imageData = NSData(contentsOfURL: url) {
-            itemImage.image = UIImage(data: imageData)
-            itemImage.contentMode = .ScaleAspectFit
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            
+            if let unwrappedImageURL: String = self.post.imageURL,
+                let url = NSURL(string: unwrappedImageURL),
+                let imageData = NSData(contentsOfURL: url) {
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.itemImage.image = UIImage(data: imageData)
+                    self.itemImage.contentMode = .ScaleAspectFit
+                })
+            }
+            
         }
-        
-        
         
         // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
         
@@ -73,7 +75,10 @@ class ItemDetailViewController: UIViewController {
             
         }
 
-        // TODO need to write a query here to get the SELLER INFO to appear, including the actual name of the author UID
+        // Attach function for click seller info button
+        sellerInfoButton.addTarget(self, action: #selector(showSellerInfo), forControlEvents: .TouchUpInside)
+        
+        // Query Firebase to get SELLER INFO to appear, use author UID to get name
 
         fetchUserInfoFromFirebase(sellerUID: seller)
 
@@ -106,6 +111,8 @@ class ItemDetailViewController: UIViewController {
                 print("Error: failed getting top level keyID dict out of user query")
                 return
             }
+            print("test print full dictionary w/ toplevel ID: \(dictionary)")
+            
             
             guard let childDictionary = dictionary[uid] as? [String: AnyObject] else {
                 print("Error: failed getting the bottom level dict out of user query")
@@ -170,9 +177,40 @@ class ItemDetailViewController: UIViewController {
  
     }
     
+    func showSellerInfo() {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let pvc = storyboard.instantiateViewControllerWithIdentifier("SellerInfoViewController") as UIViewController
+        
+        pvc.modalPresentationStyle = UIModalPresentationStyle.Custom
+        pvc.transitioningDelegate = self
+        pvc.view.backgroundColor = UIColor.blackColor()
+        pvc.view.alpha = 0.75
+        
+        self.presentViewController(pvc, animated: true, completion: nil)
+        
+
+        
+    }
+    
+    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
+        
+        return HalfSizePresentationController(presentedViewController: presented, presentingViewController: presenting)
+        
+    }
     
     deinit {
+        
         print("(deinit) -> [ItemDetailViewController]")
+    }
+    
+}
+
+class HalfSizePresentationController : UIPresentationController {
+    override func frameOfPresentedViewInContainerView() -> CGRect {
+        
+        // note: used ! here
+        return CGRect(x: 0, y: containerView!.bounds.height/2, width: containerView!.bounds.width, height: containerView!.bounds.height/2)
     }
 }
 

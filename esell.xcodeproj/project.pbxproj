@@ -18,6 +18,7 @@
 		84DFB0F21D98F15E00111668 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0F11D98F15E00111668 /* Assets.xcassets */; };
 		84DFB0F51D98F15E00111668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */; };
 		84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E1BCB91D9C052C00315DB3 /* PostCell.swift */; };
+		84E299481DA5DDFC00A7E7DB /* SellerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E299471DA5DDFC00A7E7DB /* SellerInfoViewController.swift */; };
 		84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */; };
 		84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F554771DA2003300D7BDA5 /* ProfileViewController.swift */; };
 		84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */; };
@@ -43,6 +44,7 @@
 		84DFB0F41D98F15E00111668 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84DFB0F61D98F15E00111668 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84E1BCB91D9C052C00315DB3 /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		84E299471DA5DDFC00A7E7DB /* SellerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellerInfoViewController.swift; sourceTree = "<group>"; };
 		84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 		84F554771DA2003300D7BDA5 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				84F554771DA2003300D7BDA5 /* ProfileViewController.swift */,
 				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,
 				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
+				84E299471DA5DDFC00A7E7DB /* SellerInfoViewController.swift */,
 				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,
@@ -263,6 +266,7 @@
 				8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,
 				84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */,
+				84E299481DA5DDFC00A7E7DB /* SellerInfoViewController.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 			);

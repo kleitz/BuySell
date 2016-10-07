@@ -144,7 +144,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                 task.resume()
                 
             } else {
-                
+                print("--> start show image, already in imageCache")
                 // Display image (using main thread)
                 
                 dispatch_async(dispatch_get_main_queue(), {
@@ -155,7 +155,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         }
 
         return cell
-        
+
     }
 
     

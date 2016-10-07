@@ -51,6 +51,10 @@ class SegmentViewController: UIViewController {
         print("\n > running fetchPosts()...")
         
         let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+    
+        // you can use queryLimitedToFirst(3) to limit to max number of results returned
+        
+        // TODO how to order by reverse created_at ? it doesn't work.... tried queryOrderedByChild("created_at")
         
         ref.child("posts").observeEventType(.ChildAdded, withBlock: { (snapshot
             ) in
@@ -90,13 +94,15 @@ class SegmentViewController: UIViewController {
             
             
             // PUT INTO LOCAL ARRAY
+            // TODO could use .insert(post, atIndex: 0) if you wanted reverse order locally but it's not perfect, still better to find a way to query it from Firebase in reverse order of date
+            
             self.tableViewController.posts.append(post)
   
             self.collectionViewController.posts.append(post)
  
             
-            print("APPENDED in array. posts.count: \(self.tableViewController.posts.count)")
-            
+            print("INSERTED in array. posts.count: \(self.tableViewController.posts.count)")
+
             
             // Reload UI after data update
             
