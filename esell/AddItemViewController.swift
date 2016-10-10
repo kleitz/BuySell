@@ -31,6 +31,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     
     @IBOutlet weak var pickupOnOffSwitch: UISwitch!
     
+    @IBOutlet weak var closeButton: UIButton!
+    
     
     var imagePicker = UIImagePickerController()
     
@@ -62,7 +64,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         imagePicker.delegate = self
 
-        
+        // Looks for single or multiple taps. FOr dismissing keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
         // Create tap gesture recognizer
         
@@ -91,7 +95,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         pickupText.addGestureRecognizer(tapOnPickup)
        
 
-        
+        // Code to close the new item viewcontroller
+        closeButton.addTarget(self, action: #selector(closeModal), forControlEvents: .TouchUpInside)
         
     }
     
@@ -370,8 +375,28 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         pickupText.text = pickupLocationValues[row]
         
         self.view.endEditing(true)
+    
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
+    func closeModal() {
+        
+        if let parent = self.presentingViewController as? UITabBarController {
+            
+            parent.selectedIndex = 0
+            
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
+    
+    
+    
 //    
 //    func textFieldDidBeginEditing(textField: UITextField) {
 //        

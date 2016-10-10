@@ -13,9 +13,8 @@ import FBSDKLoginKit
 class ListingsTableViewController: UITableViewController {
     
     var posts = [ItemListing]()
-    var imageCache = [String:UIImage]()
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,8 +75,8 @@ class ListingsTableViewController: UITableViewController {
             }
             
             // Check if image already exists in imageCache
-            
-            let image: UIImage? = self.imageCache[imageURL]
+            let parentView = self.parentViewController as! SegmentViewController
+            let image: UIImage? = parentView.imageCache[imageURL]
             
             
             if (image == nil) {
@@ -105,7 +104,7 @@ class ListingsTableViewController: UITableViewController {
                         
                         // Store the image in to our cache
                         
-                        self.imageCache[imageURL] = image
+                        parentView.imageCache[imageURL] = image
                         
                         
                         // Display image (using main thread)

@@ -21,9 +21,11 @@ class SegmentViewController: UIViewController {
     @IBOutlet weak var mainView: UIView!
     
     
-    var posts = [ItemListing]()
+    // Setup image cache
     
-    //var imageCache = NSMutableDictionary()
+    var imageCache = [String:UIImage]()
+
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,7 @@ class SegmentViewController: UIViewController {
         
         // Set up title
         self.navigationItem.title = "Browse Items"
+        
         
         
         // Fetch data
@@ -56,7 +59,7 @@ class SegmentViewController: UIViewController {
         
         // TODO how to order by reverse created_at ? it doesn't work.... tried queryOrderedByChild("created_at")
         
-        ref.child("posts").observeEventType(.ChildAdded, withBlock: { (snapshot
+        ref.child("posts").queryOrderedByChild("created_at").observeEventType(.ChildAdded, withBlock: { (snapshot
             ) in
             
             print(snapshot)
@@ -74,6 +77,8 @@ class SegmentViewController: UIViewController {
             post.price = dictionary["price"] as? String
             post.author = dictionary["author"] as? String
             post.imageURL = dictionary["image_url"] as? String
+            post.pickupLatitude = dictionary["latitude"] as? Double
+            post.pickupLongitude = dictionary["longitude"] as? Double
             
             // test print the date ...
             guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
@@ -99,7 +104,9 @@ class SegmentViewController: UIViewController {
             self.tableViewController.posts.append(post)
   
             self.collectionViewController.posts.append(post)
- 
+            
+            let postTabBarController = self.tabBarController as! PostTabBarController
+            postTabBarController.posts.append(post)
             
             print("INSERTED in array. posts.count: \(self.tableViewController.posts.count)")
 
@@ -112,10 +119,15 @@ class SegmentViewController: UIViewController {
                 self.collectionViewController.collectionView.reloadData()
             
             //})
+            
+            print("printing posts test. \(self.tableViewController.posts.first)")
+            print(" > \(postTabBarController.posts.first?.pickupCoordinate)")
      
             }, withCancelBlock: { (error) in
                 print("fetchPosts error: \(error.localizedDescription)")
         })
+        
+        
         
     }
     
@@ -151,9 +163,6 @@ class SegmentViewController: UIViewController {
             print(" > select collection")
             tableViewController.view.hidden = true
             collectionViewController.view.hidden = false
-            
-            // Make imagecache faster by setting it the same?
-            tableViewController.imageCache = collectionViewController.imageCache
             
             
         default: break;

@@ -16,7 +16,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     
     var posts = [ItemListing]()
     
-    var imageCache = [String:UIImage]()
+
     
     var screenSize: CGRect!
     var screenWidth: CGFloat!
@@ -98,7 +98,9 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                 fatalError()
             }
             
-            let image: UIImage? = self.imageCache[imageURL]
+            let parentView = self.parentViewController as! SegmentViewController
+            
+            let image: UIImage? = parentView.imageCache[imageURL]
             
             if (image == nil) {
                 
@@ -125,7 +127,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                         
                         // Store the image in to our cache
                         
-                        self.imageCache[imageURL] = image
+                        parentView.imageCache[imageURL] = image
                         
                         
                         // Display image (using main thread)

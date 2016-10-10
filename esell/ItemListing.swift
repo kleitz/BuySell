@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 class ItemListing: NSObject {
     
@@ -33,5 +34,21 @@ class ItemListing: NSObject {
 //        self.itemDescription = itemDescription
 //    }
 //
+    var pickupLatitude: Double?
     
+    var pickupLongitude: Double?
+    
+    var pickupCoordinate: CLLocationCoordinate2D {
+        
+        guard let lat = pickupLatitude else {
+            
+            // TODO fix handling later
+            fatalError()
+        }
+        guard let long  = pickupLongitude else {
+            fatalError()
+        }
+        
+        return CLLocationCoordinate2DMake(lat, long)
+    }
 }
