@@ -21,11 +21,6 @@ class SegmentViewController: UIViewController {
     @IBOutlet weak var mainView: UIView!
     
     
-    // Setup image cache
-    
-    var imageCache = [String:UIImage]()
-
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +67,7 @@ class SegmentViewController: UIViewController {
             
             let post = ItemListing()
             
+            // parse all the data and store in Post class
             post.title = dictionary["title"] as? String
             post.itemDescription = dictionary["description"] as? String
             post.price = dictionary["price"] as? String
@@ -100,15 +96,14 @@ class SegmentViewController: UIViewController {
             
             // PUT INTO LOCAL ARRAY
             // TODO could use .insert(post, atIndex: 0) if you wanted reverse order locally but it's not perfect, still better to find a way to query it from Firebase in reverse order of date
-            
-            self.tableViewController.posts.append(post)
-  
-            self.collectionViewController.posts.append(post)
+
+
+            // Store the posts in TabBarController (data will be sourced from there)
             
             let postTabBarController = self.tabBarController as! PostTabBarController
             postTabBarController.posts.append(post)
             
-            print("INSERTED in array. posts.count: \(self.tableViewController.posts.count)")
+            print("INSERTED in array. posts.count: \(postTabBarController.posts.count)")
 
             
             // Reload UI after data update
@@ -119,8 +114,7 @@ class SegmentViewController: UIViewController {
                 self.collectionViewController.collectionView.reloadData()
             
             //})
-            
-            print("printing posts test. \(self.tableViewController.posts.first)")
+        
             print(" > \(postTabBarController.posts.first?.pickupCoordinate)")
      
             }, withCancelBlock: { (error) in

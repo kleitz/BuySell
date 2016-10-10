@@ -12,14 +12,14 @@ import FBSDKLoginKit
 
 class ListingsTableViewController: UITableViewController {
     
-    var posts = [ItemListing]()
+    var sourceViewController = PostTabBarController()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("_tableView view loaded")
         
+        sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
     }
     
@@ -32,7 +32,7 @@ class ListingsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return posts.count
+        return sourceViewController.posts.count
         
     }
     
@@ -42,7 +42,7 @@ class ListingsTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("PostCell", forIndexPath: indexPath) as! PostCell
         
-        let post = posts[indexPath.row]
+        let post = sourceViewController.posts[indexPath.row]
         
         
         // TODO IMplement better error handling/checking for this cell part
@@ -75,8 +75,8 @@ class ListingsTableViewController: UITableViewController {
             }
             
             // Check if image already exists in imageCache
-            let parentView = self.parentViewController as! SegmentViewController
-            let image: UIImage? = parentView.imageCache[imageURL]
+            
+            let image: UIImage? = self.sourceViewController.imageCache[imageURL]
             
             
             if (image == nil) {
@@ -104,7 +104,7 @@ class ListingsTableViewController: UITableViewController {
                         
                         // Store the image in to our cache
                         
-                        parentView.imageCache[imageURL] = image
+                        self.sourceViewController.imageCache[imageURL] = image
                         
                         
                         // Display image (using main thread)
@@ -143,7 +143,7 @@ class ListingsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("selected row@ \(indexPath.row)")
+        print(" >> selected row@ \(indexPath.row)")
         
     }
     
@@ -189,15 +189,18 @@ class ListingsTableViewController: UITableViewController {
                         fatalError("seg failed")
                     }
                     
-                    itemDetailController.post = posts[rowIndex]
+                    itemDetailController.post = sourceViewController.posts[rowIndex]
+                    
+                    // for passing image
+                    if let image: UIImage = sourceViewController.imageCache[sourceViewController.posts[rowIndex].imageURL!] {
+                        itemDetailController.image = image
+                    }
                 }
             default: break
             }
         }
         
     }
-    
-    
     
     
     // MARK: for logging view controller lifecycle

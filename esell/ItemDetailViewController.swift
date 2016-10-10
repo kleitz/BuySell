@@ -26,6 +26,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     
     
     var post = ItemListing()
+    var image = UIImage()
     
     var sellerInfo = User()
 
@@ -52,20 +53,22 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
             itemDescription.text = description
         }
         
+        itemImage.image = image
+        itemImage.contentMode = .ScaleAspectFit
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            
-            if let unwrappedImageURL: String = self.post.imageURL,
-                let url = NSURL(string: unwrappedImageURL),
-                let imageData = NSData(contentsOfURL: url) {
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.itemImage.image = UIImage(data: imageData)
-                    self.itemImage.contentMode = .ScaleAspectFit
-                })
-            }
-            
-        }
+        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        //
+        //            if let unwrappedImageURL: String = self.post.imageURL,
+        //                let url = NSURL(string: unwrappedImageURL),
+        //                let imageData = NSData(contentsOfURL: url) {
+        //
+        //                dispatch_async(dispatch_get_main_queue(), {
+        //                    self.itemImage.image = UIImage(data: imageData)
+        //                    self.itemImage.contentMode = .ScaleAspectFit
+        //                })
+        //            }
+        //        }
+        
         
         // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
         

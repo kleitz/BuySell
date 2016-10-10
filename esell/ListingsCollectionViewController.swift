@@ -14,9 +14,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     
     let reuseIdentifier = "cell"
     
-    var posts = [ItemListing]()
-    
-
+    var sourceViewController = PostTabBarController()
     
     var screenSize: CGRect!
     var screenWidth: CGFloat!
@@ -31,6 +29,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         
         print("_collectionView view loaded")
 
+        sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
     }
     
@@ -65,13 +64,13 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
+        return sourceViewController.posts.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         
-        let post = posts[indexPath.row]
+        let post = sourceViewController.posts[indexPath.row]
         
         // Configure the cell
         
@@ -98,9 +97,8 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                 fatalError()
             }
             
-            let parentView = self.parentViewController as! SegmentViewController
             
-            let image: UIImage? = parentView.imageCache[imageURL]
+            let image: UIImage? = self.sourceViewController.imageCache[imageURL]
             
             if (image == nil) {
                 
@@ -127,7 +125,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                         
                         // Store the image in to our cache
                         
-                        parentView.imageCache[imageURL] = image
+                        self.sourceViewController.imageCache[imageURL] = image
                         
                         
                         // Display image (using main thread)
@@ -163,7 +161,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        print("____collectionView. selected #\(indexPath)")
+        print(" >> collectionView. selected @ #\(indexPath.row)")
     }
     
     // MARK: - Navigation
@@ -186,7 +184,14 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                         fatalError("seg failed")
                     }
                     
-                    itemDetailController.post = posts[rowIndex]
+                    itemDetailController.post = sourceViewController.posts[rowIndex]
+                    
+                    
+                    // for passing image
+                    if let image: UIImage = sourceViewController.imageCache[sourceViewController.posts[rowIndex].imageURL!] {
+                        itemDetailController.image = image
+                    }
+                    
                 }
             default: break
             }

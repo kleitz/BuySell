@@ -29,7 +29,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     
     @IBOutlet weak var pickupText: UITextField!
     
-    @IBOutlet weak var pickupOnOffSwitch: UISwitch!
     
     @IBOutlet weak var closeButton: UIButton!
     
@@ -47,10 +46,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         self.navigationItem.title = "Post an Item to Sell"
         
-        // set up pickup switch
-        pickupOnOffSwitch.addTarget(self, action: #selector(includePickup), forControlEvents: .TouchUpInside)
-        
-        
+    
         // Hide the picker
         
         pickupLocationPicker.dataSource = self
@@ -100,15 +96,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
     }
     
-    // Function attached to include pickup switch
-    
-    func includePickup(){
-        if pickupOnOffSwitch.on {
-            pickupText.hidden = false
-        } else {
-            pickupText.hidden = true
-        }
-    }
+   
     
     // Function attached to pickupText
     func selectPickupLocation(gesture: UIGestureRecognizer) {
