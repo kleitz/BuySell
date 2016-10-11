@@ -9,6 +9,9 @@
 import UIKit
 import Firebase
 
+// Note: the things needed to display here are:
+// title, image, description, price
+
 class ItemDetailViewController: UIViewController, UIViewControllerTransitioningDelegate  {
     
    
@@ -73,9 +76,9 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
         
         guard let seller = post.author else {
-       
-            fatalError("Error getting seller")
             
+            print("Error getting seller")
+            return
         }
 
         // Attach function for click seller info button

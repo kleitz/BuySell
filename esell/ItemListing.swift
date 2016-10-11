@@ -15,10 +15,7 @@ class ItemListing: NSObject {
     var title: String?
     
     var imageURL: String?
-    
-    //var imageAsUIImage: UIImage?
-    //var imageCache = [String:UIImage]?()
-    
+
     var price: String?
     
     var itemDescription: String?
@@ -29,16 +26,11 @@ class ItemListing: NSObject {
     
     var createdDate: NSDate?
     
-//    init(title: String, itemDescription: String) {
-//        self.title = title
-//        self.itemDescription = itemDescription
-//    }
-//
     var pickupLatitude: Double?
     
     var pickupLongitude: Double?
     
-    var pickupCoordinate: CLLocationCoordinate2D {
+    var coordinate: CLLocationCoordinate2D {
         
         guard let lat = pickupLatitude else {
             
@@ -51,4 +43,9 @@ class ItemListing: NSObject {
         
         return CLLocationCoordinate2DMake(lat, long)
     }
+    
+    var subtitle: String? {
+        return itemDescription
+    }
+    
 }

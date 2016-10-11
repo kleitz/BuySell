@@ -127,7 +127,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         })
         
         let cameraOption = UIAlertAction(title: "Take a photo", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
+            
             print(" > clicked to selectImage FROM take a photo")
+            
             //shows the camera
             self.imagePicker.allowsEditing = true
             self.imagePicker.sourceType = .Camera
@@ -139,6 +141,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Cancel")
+//            if let parent = self.presentingViewController as? UITabBarController {
+//                parent.selectedIndex = 0
+//            }
             self.dismissViewControllerAnimated(true, completion: nil)
         })
         
@@ -161,6 +166,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         
         print("   > canceled selectImage")
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -174,14 +180,16 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         print("   > completed selectImage")
         
-        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        // use [UIImagePickerControllerEditedImage] intsead of [...OriginalImage] if allow editing = true
+        let chosenImage = info[UIImagePickerControllerEditedImage] as! UIImage
+        
         imageView.contentMode = .ScaleAspectFit
         imageView.image = chosenImage
+        
         dismissViewControllerAnimated(true, completion: nil)
         
-//        // hide the photo placeholders once the image is picked
+        // hide the photo placeholders once the image is picked
         photoIcon.hidden = true
-//        photoLabel.hidden = true
         
     }
     

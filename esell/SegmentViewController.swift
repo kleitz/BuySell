@@ -78,8 +78,7 @@ class SegmentViewController: UIViewController {
             
             // test print the date ...
             guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
-                print("error getting itme out")
-                fatalError()
+                fatalError("error getting time out")
             }
             
             // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
@@ -115,7 +114,7 @@ class SegmentViewController: UIViewController {
             
             //})
         
-            print(" > \(postTabBarController.posts.first?.pickupCoordinate)")
+            print(" > \(postTabBarController.posts.first?.coordinate)")
      
             }, withCancelBlock: { (error) in
                 print("fetchPosts error: \(error.localizedDescription)")
