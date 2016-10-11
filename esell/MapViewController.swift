@@ -184,35 +184,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             
             
         }
-        /* //using guard and if statements were too hard to read, comment out & replace with case/switch above
-//        guard !(annotation is MKUserLocation) else {
-//            //if annotation is not an MKPointAnnotation (eg. MKUserLocation),
-//            //return nil so map draws default view for it (eg. blue dot)...
-//            return nil
-//        }
-//        
-//        let reuseId = "pickupLocation"
-//        
-//        var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
-//        
-//        if annotationView == nil {
-//            
-//            print("annotation == nil . for some reason this is the pickup locations")
-//            print("annoation: \(annotation)")
-//            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-//            
-//            annotationView!.leftCalloutAccessoryView = UIButton(type: .DetailDisclosure)
-//            annotationView!.canShowCallout = true
-//        }
-//        else {
-//            print("annotation != is NOT nil . for some reason this is the userlocation")
-//            //annotationView!.image = UIImage(named: "home")
-//            annotationView!.annotation = annotation
-//        }
-//        
-//        annotationView!.image = UIImage(named: "shopbag")
-//        return annotationView
-        */
+
     }
     
     

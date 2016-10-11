@@ -76,6 +76,9 @@ class SegmentViewController: UIViewController {
             post.pickupLatitude = dictionary["latitude"] as? Double
             post.pickupLongitude = dictionary["longitude"] as? Double
             
+            //TODO add the online payment stuff here. and shipping.
+            
+            
             // test print the date ...
             guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
                 fatalError("error getting time out")
@@ -85,12 +88,6 @@ class SegmentViewController: UIViewController {
             
             post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
             print("postDate -> \(post.createdDate)")
-            
-//            let formatter = NSDateFormatter()
-//            let rocCal = NSCalendar(calendarIdentifier: NSCalendarIdentifierRepublicOfChina)
-//            formatter.calendar = rocCal
-//            formatter.dateStyle = .FullStyle
-            //print(formatter.stringFromDate(post.createdDate!))
             
             
             // PUT INTO LOCAL ARRAY

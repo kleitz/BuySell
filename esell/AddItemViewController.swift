@@ -18,48 +18,55 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     
     @IBOutlet weak var photoIcon: UIImageView!
     
-    @IBOutlet weak var saveButton: UIButton!
-    
     @IBOutlet weak var titleText: UITextField!
    
     @IBOutlet weak var priceText: UITextField!
     
     @IBOutlet weak var descriptionText: UITextView!
     
-    
     @IBOutlet weak var pickupText: UITextField!
+ 
+    @IBOutlet weak var acceptOnlinePaymentSwitch: UISwitch!
     
+    @IBOutlet weak var acceptShippingOptionSwitch: UISwitch!
     
-    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var pickupSwitch: UISegmentedControl!
     
     
     var imagePicker = UIImagePickerController()
     
     var pickupLocationPicker = UIPickerView()
     
-    var pickupLocationValues: [String] = ["Choose pickup location", "MRT Taipei Main", "MRT Shuanglian", "MRT Zhongshan", "MRT Minquan E Rd", "MRT Dongmen"]
+    var pickupLocationValues: [String] = ["MRT Taipei Main", "MRT Shuanglian", "MRT Zhongshan", "MRT Minquan E Rd", "MRT Dongmen"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set up title
+        // Set up navigation items such as title
         
-        self.navigationItem.title = "Post an Item to Sell"
+        self.navigationItem.title = "Create Post"
         
-    
-        // Hide the picker
+        let cancelButton =  UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(closeModal))
+        let postButton = UIBarButtonItem(title: "Preview", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
+        
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = postButton
+        
+        
+        // Setup segment control for pickup option
+        setupPickupSegmentControl()
+        
+        // Hide the picker's uipickerview
         
         pickupLocationPicker.dataSource = self
         pickupLocationPicker.delegate = self
         
         pickupText.inputView = pickupLocationPicker
-        pickupText.placeholder = pickupLocationValues[0]
-        
-        
-        // Do any additional setup after loading the view.
-        
+ 
         imagePicker.delegate = self
 
+        
+        
         // Looks for single or multiple taps. FOr dismissing keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -75,33 +82,54 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         
         // UI Stuff : make photo icon white color, not original black color
+        
         photoIcon.image = photoIcon.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
         photoIcon.tintColor = UIColor.whiteColor()
         
         photoIcon.hidden = false
         
-        // Add save button fucntion
-        
-        saveButton.addTarget(self, action: #selector(savePostButton), forControlEvents: .TouchUpInside)
-        
         
         // Code to handle pickup location text field tap gesture
+        
         let tapOnPickup = UITapGestureRecognizer(target: self, action: #selector(selectPickupLocation))
         
         pickupText.addGestureRecognizer(tapOnPickup)
-       
-
-        // Code to close the new item viewcontroller
-        closeButton.addTarget(self, action: #selector(closeModal), forControlEvents: .TouchUpInside)
+        
         
     }
     
    
     
-    // Function attached to pickupText
+    // Function attached to pickupTextField
     func selectPickupLocation(gesture: UIGestureRecognizer) {
         
         pickupLocationPicker.hidden = false
+    }
+    
+    // Function to setup pickup Segment Control option
+    func setupPickupSegmentControl() {
+        
+        pickupSwitch.addTarget(self, action: #selector(clickPickupSwitch), forControlEvents: UIControlEvents.ValueChanged)
+        
+         // Set default segment that is Selected upon load
+        pickupSwitch.selectedSegmentIndex = 0
+    }
+    
+    func clickPickupSwitch() {
+        switch pickupSwitch.selectedSegmentIndex {
+        case 0:
+            print("select MRT")
+            // bring up choose mrt list
+            pickupText.becomeFirstResponder()
+            
+        case 1:
+            print("select choose from Map")
+            pickupText.text = nil
+            // bring up map view
+            
+           
+        default: break;
+        }
     }
     
     // Function attached to UIImageview for selecting photo from photolibrary
@@ -126,7 +154,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
 
         })
         
-        let cameraOption = UIAlertAction(title: "Take a photo", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
+        let cameraOption = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
             
             print(" > clicked to selectImage FROM take a photo")
             
@@ -152,7 +180,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         optionMenu.addAction(cancelOption)
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) == true {
             optionMenu.addAction(cameraOption)} else {
-            print ("I don't have a camera.")
+            print("I don't have a camera.")
         }
         
         //Now that the action sheet is set up, we present it.
@@ -193,15 +221,14 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
     }
     
-    func savePostButton() {
+    func clickSavePost() {
         
         // Create STORAGE ref for images only (not database reference)
         
         let imageName = NSUUID().UUIDString
     
         let storageRef = FIRStorage.storage().reference().child("post_images").child("\(imageName).png")
-        
-        
+
         
         // Do error checking for all fields to make sure before saving
         
@@ -247,34 +274,30 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
                 return
             }
             
+            
+            // Actual save happens here, after the checking
             // use separate function to save all info into firebase database (including the url string of the image)
             
-            self.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice)
+            self.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.acceptShippingOptionSwitch.on)
             
         }
         
-        /// if the root view controller is the login page....this dismissing doesnt' work becuase it closes teh whole thing
-        /// if the root veiw controllers is the posts page... it doesn't even dsmiss (can't dismiss itslef, it'sattached to the posts page)
-        
-        // self.dismissViewControllerAnimated(true, completion: nil)
-     
-        
-//       // ok instead of moving, just do a pop up saying it's posted. 
-        // Move view after the save is done
-//        self.tabBarController?.selectedIndex = 0
+        // Notify user when post is successfully posted/saved
         
         popupNotifyPosted()
         
+        
         // Reset all the fields after save is done
-        photoIcon.hidden = false
-        imageView.image = nil
-        titleText.text = ""
-        descriptionText.text = ""
-        priceText.text = ""
+        // DELETE THIS IF DISMISSING AFTER SAVED?
+        
+        
         
     }
     
-    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: String){
+    
+    // Function for saving to Firebase with all POST INFO
+    
+    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: String, onlinePaymentOption: Bool, shippingOption: Bool){
         // do saving into firebase here
         // TODO fix this so that it doesn't save the image first into database before checking all fields?
         
@@ -297,7 +320,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         // Set the dictionary of values to be saved in database for "POSTS"
         
-        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL ]
+        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL, "accept_onlinepay": onlinePaymentOption, "accept_shipping": shippingOption]
         
         newPostRef.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {
@@ -307,46 +330,40 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             
             print("saved POSTinfo successfly in firebase DB")
             
-
         })
     }
     
     
+    // Popup alert if missing fields
+    
     func popupNotifyIncomplete(){
-        
-        // add popup alert if missing fields
-        
+
         let alertController = UIAlertController(title: "Wait!", message:
             "You need to fill out all fields", preferredStyle: UIAlertControllerStyle.Alert)
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            print("test: pressed Dismiss")
+        }))
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    
+    
+    // Popup alert if Post Successful
+    //completion completion: ()?
     func popupNotifyPosted(){
-        
-        // add popup alert if missing fields
-        
+
         let alertController = UIAlertController(title: "Post Completed", message:
             "Your item has been posted!", preferredStyle: UIAlertControllerStyle.Alert)
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in self.closeModal() } ))
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
-
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
+    // UIPickerView functions for selecting location from a picker
     func numberOfComponentsInPickerView(pickerView: UIPickerView)->Int {
         
         return 1
@@ -374,37 +391,46 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     
     }
     
+    // Keyboard functions
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
-    func closeModal() {
+    // I dont think this one works (supposed to dismiss keyboard upeon hitting enter - only for UITextField)
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // Reset all fields function 
+    
+    func resetAllFields() {
         
+        photoIcon.hidden = false
+        imageView.image = nil
+        titleText.text = ""
+        descriptionText.text = ""
+        priceText.text = ""
+        
+        pickupText.text = nil
+        pickupSwitch.selectedSegmentIndex = 0
+        acceptOnlinePaymentSwitch.on = false
+        acceptShippingOptionSwitch.on = false
+    }
+    
+    
+    // Close this view controller
+    
+    func closeModal() {
         if let parent = self.presentingViewController as? UITabBarController {
-            
             parent.selectedIndex = 0
-            
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
-    
-    
-//    
-//    func textFieldDidBeginEditing(textField: UITextField) {
-//        
-//        pickupLocationPicker.hidden = false
-//    }
-    
-//    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-//        
-//        pickupLocationPicker.hidden = false
-//        return false
-//        
-//    }
     
     
     deinit {
