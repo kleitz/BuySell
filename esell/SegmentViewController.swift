@@ -7,14 +7,19 @@
 //
 
 import UIKit
-import Firebase
+
 
 enum Segment: Int {
     case table = 0
     case collection = 1
 }
 
-class SegmentViewController: UIViewController {
+protocol FirebaseManagerDelegate: class {
+    func returnData(manager: FirebaseManager, data: ItemListing?)
+    func returnError(manager: FirebaseManager, error: NSError?)
+}
+
+class SegmentViewController: UIViewController, FirebaseManagerDelegate {
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
@@ -26,108 +31,69 @@ class SegmentViewController: UIViewController {
         super.viewDidLoad()
         
         // Set up segment control images and attach function
+        
         setupSegmentControl()
         
         
         // Set up title
-        self.navigationItem.title = "Browse Items"
         
+        self.navigationItem.title = "Browse Items"
         
         
         // Fetch data
         
-        self.fetchPostsFromFirebase()
+        let firebaseInstance = FirebaseManager()
         
+        firebaseInstance.delegate = self
         
-        
-    }
-    
-    // MARK: functions
-    
-    func fetchPostsFromFirebase() {
-        
-        print("\n > running fetchPosts()...")
-        
-        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
-    
-        // you can use queryLimitedToFirst(3) to limit to max number of results returned
-        
-        // TODO how to order by reverse created_at ? it doesn't work.... tried queryOrderedByChild("created_at")
-        
-        ref.child("posts").queryOrderedByChild("created_at").observeEventType(.ChildAdded, withBlock: { (snapshot
-            ) in
-            
-            print(snapshot)
-            
-            
-            guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("error unwrapping post")
-                fatalError()
-            }
-            
-            let post = ItemListing()
-            
-            // parse all the data and store in Post class
-            post.title = dictionary["title"] as? String
-            post.itemDescription = dictionary["description"] as? String
-            post.price = dictionary["price"] as? String
-            post.author = dictionary["author"] as? String
-            post.imageURL = dictionary["image_url"] as? String
-            post.pickupLatitude = dictionary["latitude"] as? Double
-            post.pickupLongitude = dictionary["longitude"] as? Double
-            
-            //TODO add the online payment stuff here. and shipping.
-            
-            
-            // test print the date ...
-            guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
-                fatalError("error getting time out")
-            }
-            
-            // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
-            
-            post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
-            print("postDate -> \(post.createdDate)")
-            
-            
-            // PUT INTO LOCAL ARRAY
-            // TODO could use .insert(post, atIndex: 0) if you wanted reverse order locally but it's not perfect, still better to find a way to query it from Firebase in reverse order of date
-
-
-            // Store the posts in TabBarController (data will be sourced from there)
-            
-            let postTabBarController = self.tabBarController as! PostTabBarController
-            postTabBarController.posts.append(post)
-            
-            print("INSERTED in array. posts.count: \(postTabBarController.posts.count)")
-
-            
-            // Reload UI after data update
-            
-            //dispatch_async(dispatch_get_main_queue(), {
-                self.tableViewController.tableView.reloadData()
-            
-                self.collectionViewController.collectionView.reloadData()
-            
-            //})
-        
-            print(" > \(postTabBarController.posts.first?.coordinate)")
-     
-            }, withCancelBlock: { (error) in
-                print("fetchPosts error: \(error.localizedDescription)")
-        })
-        
+        firebaseInstance.fetchPosts()
         
         
     }
     
+    
+    // Delegate methods
+    
+    func returnData(manager: FirebaseManager, data: ItemListing?) {
+
+        guard let post = data else {
+            fatalError("fail to unwrap post from data call")
+        }
+        
+        // Store the posts in TabBarController (data will be sourced from there)
+        
+        let postTabBarController = self.tabBarController as! PostTabBarController
+        postTabBarController.posts.append(post)
+        
+        print("INSERTED in array. posts.count: \(postTabBarController.posts.count)")
+        print(" > testprint. \(postTabBarController.posts.first?.coordinate)")
+        
+        // Reload UI after data update
+        
+        self.tableViewController.tableView.reloadData()
+        
+        self.collectionViewController.collectionView.reloadData()
+    }
+    
+    
+    func returnError(manager: FirebaseManager, error: NSError?) {
+        
+        /// TODO BETTER ERROR HANDLING
+        
+        if let error = error {
+            print("fetchPosts error: \(error.localizedDescription)")
+        }
+        
+    }
+    
+    // Setup segment control methods
     
     func setupSegmentControl() {
 
         // attach function to segmentControl UI
         
         segmentControl.addTarget(self, action: #selector(setupSegmentSwitchView), forControlEvents: UIControlEvents.ValueChanged)
-        
+
 
         // Set default segment that is Selected upon load
         
@@ -135,9 +101,7 @@ class SegmentViewController: UIViewController {
         
         tableViewController.view.hidden = false
         collectionViewController.view.hidden = true
-        
-        
-        
+
     }
     
     func setupSegmentSwitchView() {

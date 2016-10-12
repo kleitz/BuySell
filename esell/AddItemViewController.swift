@@ -145,6 +145,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             
             print(" > clicked to selectImage FROM LIBRARY")
             
+            //shows the image picker
             if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum){
                 self.imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
                 self.imagePicker.allowsEditing = true
@@ -170,7 +171,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             (alert: UIAlertAction!) -> Void in
             print("Cancel")
 
-            self.dismissViewControllerAnimated(true, completion: nil)
         })
         
         //Adding the actions to the action sheet. Here, camera will only show up as an option if the camera is available in the first place.
@@ -255,6 +255,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             popupNotifyIncomplete()
             return
         }
+        // note: don't need to guard for selectors for credit card and shipping
+        
         
         // After checking is ok, store in storage (the image gets its own url)
         
@@ -318,7 +320,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         // Set the dictionary of values to be saved in database for "POSTS"
         
-        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL, "accept_onlinepay": onlinePaymentOption, "accept_shipping": shippingOption]
+        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL, "can_accept_credit": onlinePaymentOption, "can_ship": shippingOption]
         
         newPostRef.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {

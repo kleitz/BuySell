@@ -48,9 +48,9 @@ class ItemListing: NSObject {
         return itemDescription
     }
     
-    var acceptOnlinePayment: Bool?
+    var canAcceptCreditCard: Bool?
     
-    var acceptShippingOption: Bool?
+    var canShip: Bool?
     
     
 }
