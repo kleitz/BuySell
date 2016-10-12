@@ -169,9 +169,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Cancel")
-//            if let parent = self.presentingViewController as? UITabBarController {
-//                parent.selectedIndex = 0
-//            }
+
             self.dismissViewControllerAnimated(true, completion: nil)
         })
         
@@ -423,8 +421,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     // Close this view controller
     
     func closeModal() {
-        if let parent = self.presentingViewController as? UITabBarController {
-            parent.selectedIndex = 0
+        if let parent = self.presentingViewController as? PostTabBarController {
+            parent.selectedIndex = parent.previousIndex
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
