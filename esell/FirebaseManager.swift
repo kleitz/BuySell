@@ -80,8 +80,10 @@ class FirebaseManager {
         post.price = dictionary["price"] as? String
         post.author = dictionary["author"] as? String
         post.imageURL = dictionary["image_url"] as? String
-        post.pickupLatitude = dictionary["latitude"] as? Double
-        post.pickupLongitude = dictionary["longitude"] as? Double
+        post.pickupLatitude = dictionary["pickup_latitude"] as? Double
+        post.pickupLongitude = dictionary["pickup_longitude"] as? Double
+        post.canAcceptCreditCard = dictionary["can_accept_credit"] as? Bool ?? false
+        post.canShip = dictionary["can_ship"] as? Bool ?? false
         
         //TODO add the online payment stuff here. and shipping.
         

@@ -251,10 +251,18 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             return
         }
         
-        guard let itemPrice = priceText.text where itemPrice != "" else {
+        
+        
+        /// TODO need to add a better check for this NUMBER input
+        
+        guard let itemPriceString = priceText.text where itemPriceString != "" else {
             popupNotifyIncomplete()
             return
         }
+        
+        /// TODO FIX this 0 error handling later
+        let itemPrice = Double(itemPriceString) ?? 0
+        
         // note: don't need to guard for selectors for credit card and shipping
         
         
@@ -297,7 +305,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     
     // Function for saving to Firebase with all POST INFO
     
-    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: String, onlinePaymentOption: Bool, shippingOption: Bool){
+    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool){
         // do saving into firebase here
         // TODO fix this so that it doesn't save the image first into database before checking all fields?
         
@@ -317,6 +325,10 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             return
         }
         
+        /// TODO Fix this coordinate recording later.
+        let placeholderLat = 25.0217026
+        
+        let placeholderLon = 121.2086617
         
         // Set the dictionary of values to be saved in database for "POSTS"
         
@@ -328,7 +340,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             "created_at": FIRServerValue.timestamp(),
             "image_url": imageURL,
             "can_accept_credit": onlinePaymentOption,
-            "can_ship": shippingOption
+            "can_ship": shippingOption,
+            "pickup_latitude": placeholderLat,
+            "pickup_longitude": placeholderLon
         ]
         
         newPostRefID.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
