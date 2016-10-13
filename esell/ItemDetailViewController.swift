@@ -28,6 +28,9 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     @IBOutlet weak var sellerInfoButton: UIButton!
     
     
+    @IBAction func unwindToDetail(segue: UIStoryboardSegue) {}
+    
+    
     var post = ItemListing()
     var image = UIImage()
     
@@ -84,116 +87,91 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         // Attach function for click seller info button
         sellerInfoButton.addTarget(self, action: #selector(showSellerInfo), forControlEvents: .TouchUpInside)
         
+        
+        // Handle date
+        
+        guard let postDate = self.post.createdDate else {
+            print("error")
+            return
+        }
+        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let now: NSDate = NSDate()
+        
+        var daysAgo = "less than 1 day"
+        
+        switch now.daysFrom(postDate) {
+        case 0: daysAgo = "today"
+        case 1: daysAgo = "1 day ago"
+        default: daysAgo = String("\(now.daysFrom(postDate)) days ago")
+        }
+        
+
+        
+        print("the current date (NSDate()) is : \(now)")
+        
+      
+        
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
-
-        fetchUserInfoFromFirebase(sellerUID: seller)
-
+        let fireBase = FirebaseManager()
         
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    
-    // MARK: Functions
-    
-    // Find a specific seller by UID
-
-    func fetchUserInfoFromFirebase(sellerUID uid: String){
-        
-        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/").child("users")
-        
-        ref.queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
-
-            guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                
-                print("Error: failed getting top level keyID dict out of user query")
-                return
-            }
-            print("test print full dictionary w/ toplevel ID: \(dictionary)")
+        fireBase.fetchUserInfoFromFirebase(sellerUID: seller) { (getUser) -> (Void) in
+            self.sellerInfo = getUser
             
-            
-            guard let childDictionary = dictionary[uid] as? [String: AnyObject] else {
-                print("Error: failed getting the bottom level dict out of user query")
-                return
-            }
-            
-            print("childDict value: \(childDictionary)")
-            print("GETTING THE NAME OUT -> \(childDictionary["name"])")
-            
-            
-            // Get the name & email
-            
-            
-            guard let name = childDictionary["name"] as? String,
-                let email = childDictionary["email"] as? String else {
-                    print("error")
-                    return
-            }
-            self.sellerInfo.name = name
-            self.sellerInfo.email = email
-            
-            guard let postDate = self.post.createdDate else {
-                print("error")
-                return
-            }
-            
-            //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-            let now: NSDate = NSDate()
-            
-            var daysAgo = "less than 1 day"
-            
-            switch now.daysFrom(postDate) {
-            case 0: daysAgo = "today"
-            case 1: daysAgo = "1 day ago"
-            default: daysAgo = String("\(now.daysFrom(postDate)) days ago")
-            }
-            
-            print("the current date (NSDate()) is : \(now)")
-
             // USE MAIN QUEUE for UI updates
             
             dispatch_async(dispatch_get_main_queue(), {
                 
                 // Get picture for UI, may be optional
                 
-                if let imageURL = childDictionary["fb_pic_url"] as? String {
-                    self.sellerInfo.imageURL = imageURL
-                }
-            
                 self.itemSeller.text = ("Posted \(daysAgo) by \(self.sellerInfo.name ?? "")")
                 
-                // TODO put the seller info as a button or somwhere else so that it can be clicked on & user can view the seller info separately
-                // maybe as a drag down arrow to view it down...
                 
-                print("TESTPRINT seller text: \(self.itemSeller.text)")
-                
-                print("TESTPRINT SELER INFO VAR: -> \(self.sellerInfo). name: \(self.sellerInfo.name!) email: \(self.sellerInfo.email)")
-
             })
-        
-        })
- 
+            
+            
+            print("TESTPRINT seller displaytext.  \(self.itemSeller.text)")
+            
+            print("TESTPRINT Seller Info. name: \(self.sellerInfo.name!) email: \(self.sellerInfo.email)")
+
+        }
     }
+
+    
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "segueToCheckout" {
+            print("---- segue identifer is correct")
+            guard let nextController = segue.destinationViewController as? CreditCardTableViewController else {
+                
+                print("segue failed")
+                return
+            }
+            
+            nextController.post = self.post
+            print("TEST PRINT POST ID being sent: \(self.post.id)")
+        }
+        
+    }
+    
+
     
     func showSellerInfo() {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let pvc = storyboard.instantiateViewControllerWithIdentifier("SellerInfoViewController") as UIViewController
+        let popupViewController = storyboard.instantiateViewControllerWithIdentifier("SellerInfoViewController") as! SellerInfoViewController
         
-        pvc.modalPresentationStyle = UIModalPresentationStyle.Custom
-        pvc.transitioningDelegate = self
-        pvc.view.backgroundColor = UIColor.blackColor()
-        pvc.view.alpha = 0.75
+        popupViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        popupViewController.transitioningDelegate = self
         
-        self.presentViewController(pvc, animated: true, completion: nil)
+        //red: 67.0/255.0, green: 86.0/255.0, blue: 97.0/255.0,
+        popupViewController.view.backgroundColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 0.9)
+        //pvc.view.alpha = 0.75
+            
+        self.presentViewController(popupViewController, animated: true, completion: nil)
         
 
         
@@ -201,6 +179,8 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     
     func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
         
+        //presented.sellerInfo = self.sellerInfo
+        //
         return HalfSizePresentationController(presentedViewController: presented, presentingViewController: presenting)
         
     }

@@ -55,7 +55,9 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     // Delegate methods
     
     func returnData(manager: FirebaseManager, data: ItemListing?) {
-
+        
+        print("\n [>> delegate method.] 1 PostData returned.")
+        
         guard let post = data else {
             fatalError("fail to unwrap post from data call")
         }
@@ -65,8 +67,8 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         let postTabBarController = self.tabBarController as! PostTabBarController
         postTabBarController.posts.append(post)
         
-        print("INSERTED in array. posts.count: \(postTabBarController.posts.count)")
-        print(" > testprint. \(postTabBarController.posts.first?.coordinate)")
+        print("INSERTED in array in TBController. posts.count: \(postTabBarController.posts.count)")
+        
         
         // Reload UI after data update
         

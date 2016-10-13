@@ -305,14 +305,14 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         let postsRef = ref.child("posts")
         
-        let newPostRef = postsRef.childByAutoId()
+        let newPostRefID = postsRef.childByAutoId()
         
         
         // Get the userID from userdefaults to save as "author" key
         
         let defaults = NSUserDefaults.standardUserDefaults()
         
-        guard let uid = defaults.stringForKey("uid") else {
+        guard let userID = defaults.stringForKey("uid") else {
             print("failed getting nsuserdefaults uid")
             return
         }
@@ -320,9 +320,18 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         
         // Set the dictionary of values to be saved in database for "POSTS"
         
-        let values = [ "title": itemTitle, "price": itemPrice, "description": itemDescription, "author": uid, "created_at": FIRServerValue.timestamp(), "image_url": imageURL, "can_accept_credit": onlinePaymentOption, "can_ship": shippingOption]
+        let values = [
+            "title": itemTitle,
+            "price": itemPrice,
+            "description": itemDescription,
+            "author": userID,
+            "created_at": FIRServerValue.timestamp(),
+            "image_url": imageURL,
+            "can_accept_credit": onlinePaymentOption,
+            "can_ship": shippingOption
+        ]
         
-        newPostRef.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
+        newPostRefID.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {
                 print(err?.localizedDescription)
                 return

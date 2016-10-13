@@ -10,6 +10,9 @@
 		848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */; };
 		848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F681B1DABA8B900AED515 /* PostTabBarController.swift */; };
 		848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68211DACF5D000AED515 /* FirebaseManager.swift */; };
+		848F68241DAE9B6100AED515 /* PlaceBidViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68231DAE9B6100AED515 /* PlaceBidViewController.swift */; };
+		848F68261DAE9C5800AED515 /* CreditCardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */; };
+		848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68271DAF59FF00AED515 /* CreditCard.swift */; };
 		849993881D9904BA006C050C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849993871D9904BA006C050C /* GoogleService-Info.plist */; };
 		8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849993891D992451006C050C /* ListingsTableViewController.swift */; };
 		8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938B1D9ABD92006C050C /* AddItemViewController.swift */; };
@@ -38,6 +41,9 @@
 		848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemBackgroundViewController.swift; sourceTree = "<group>"; };
 		848F681B1DABA8B900AED515 /* PostTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTabBarController.swift; sourceTree = "<group>"; };
 		848F68211DACF5D000AED515 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		848F68231DAE9B6100AED515 /* PlaceBidViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceBidViewController.swift; sourceTree = "<group>"; };
+		848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardTableViewController.swift; sourceTree = "<group>"; };
+		848F68271DAF59FF00AED515 /* CreditCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCard.swift; sourceTree = "<group>"; };
 		849993871D9904BA006C050C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		849993891D992451006C050C /* ListingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsTableViewController.swift; sourceTree = "<group>"; };
 		8499938B1D9ABD92006C050C /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
@@ -102,7 +108,6 @@
 			isa = PBXGroup;
 			children = (
 				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
-				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
 				848F681B1DABA8B900AED515 /* PostTabBarController.swift */,
@@ -116,7 +121,10 @@
 				848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */,
 				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
 				84E299471DA5DDFC00A7E7DB /* SellerInfoViewController.swift */,
+				848F68231DAE9B6100AED515 /* PlaceBidViewController.swift */,
+				848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */,
 				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
+				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,
 				84DFB0F61D98F15E00111668 /* Info.plist */,
@@ -129,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				8499938D1D9B5701006C050C /* User.swift */,
+				848F68271DAF59FF00AED515 /* CreditCard.swift */,
 				8499938F1D9B5715006C050C /* ItemListing.swift */,
 				848F68211DACF5D000AED515 /* FirebaseManager.swift */,
 			);
@@ -270,6 +279,7 @@
 			files = (
 				84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */,
 				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
+				848F68241DAE9B6100AED515 /* PlaceBidViewController.swift in Sources */,
 				84F554801DA24F0F00D7BDA5 /* CollectionViewCell.swift in Sources */,
 				84F5547C1DA223A900D7BDA5 /* SegmentViewController.swift in Sources */,
 				84EA54271D9E474800DE34EF /* ItemDetailViewController.swift in Sources */,
@@ -278,10 +288,12 @@
 				8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,
 				84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */,
+				848F68261DAE9C5800AED515 /* CreditCardTableViewController.swift in Sources */,
 				848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */,
 				848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */,
 				84E299481DA5DDFC00A7E7DB /* SellerInfoViewController.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
+				848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 				84F445251DA7713800429AE7 /* MapViewController.swift in Sources */,
 				848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */,

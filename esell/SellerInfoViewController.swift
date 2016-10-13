@@ -10,13 +10,30 @@ import UIKit
 
 class SellerInfoViewController: UIViewController {
 
+    @IBOutlet weak var profileImage: UIImageView!
     
     @IBOutlet weak var closeButton: UIButton!
     
+    var sellerInfo = User()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(self.presentingViewController)
+        
+//        
+//        guard let vc = self.presentingViewController as? ItemDetailViewController else {
+//            fatalError()
+//        }
+//        
+//        
+//        
+//        print(vc.sellerInfo)
+//        
+//        if vc.sellerInfo.imageURL != nil {
+//            profileImage.image = UIImage(contentsOfFile: vc.sellerInfo.imageURL!)
+//        }
 
-        // Do any additional setup after loading the view.
         
         closeButton.addTarget(self, action: #selector(closeView), forControlEvents: .TouchUpInside)
         
@@ -40,5 +57,10 @@ class SellerInfoViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    deinit {
+        
+        print("(deinit) -> [SELLERViewController]")
+    }
 
 }

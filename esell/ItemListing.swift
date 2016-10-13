@@ -12,6 +12,8 @@ import MapKit
 
 class ItemListing: NSObject {
     
+    var id: String?
+    
     var title: String?
     
     var imageURL: String?
