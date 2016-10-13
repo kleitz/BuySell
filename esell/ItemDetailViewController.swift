@@ -144,7 +144,8 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "segueToCheckout" {
-            print("---- segue identifer is correct")
+            print(" >> prepare SEGUE to CheckoutView")
+            
             guard let nextController = segue.destinationViewController as? CreditCardTableViewController else {
                 
                 print("segue failed")
@@ -152,7 +153,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
             }
             
             nextController.post = self.post
-            print("TEST PRINT POST ID being sent: \(self.post.id)")
+            print("  >> POST ID being sent: \(self.post.id ?? "")")
         }
         
     }

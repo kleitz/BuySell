@@ -58,22 +58,10 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         return true
     }
     
-    // FUNCTIONS
+    // MARK: = FUNCTIONS
     
     func prepareSaveBid() {
-        
-        // test SOME VALIDIATON HERE
-        
-        if isStringNumerical(creditCardTextField.text!) == false {
-            print("it's NOT Numberical, it has LETTErs as part of it")
-            return
-        } else {
-            print("OK IT PASSES")
-            return
-        }
-        
-        
-        
+
         // guard for non nil values
         
         guard let postID = post.id,
@@ -84,18 +72,51 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         }
         
         guard let name = nameTextField.text where name != "",
-        let cardNumber = creditCardTextField.text where cardNumber != "",
-        let month = expiryMonthTextField.text where month != "",
-            let year = expiryYearTextField.text where year != "" else {
-            
-                print("POPUP ERROR HALDING HERE")
+            let cardNumber = creditCardTextField.text where cardNumber != "",
+            let month = expiryMonthTextField.text where month != "",
+            let year = expiryYearTextField.text where year != "",
+            let cvcNumber = CvcTextField.text where cvcNumber != "" else {
+                
+                print("Error filling out checkout form")
+                
+                popupNotifyIncomplete("Please fill out all fields")
+                
                 return
         }
         
-
+        // Test some validation here for numerical fields  &  character lengths
+        // TODO ... or just wait to use a real API or 3rd party that has validation built in?
+        
+        if isStringNumerical(creditCardTextField.text!) == false {
+            print("Error: CC Number is NOT Numerical")
+            popupNotifyIncomplete("Invalid credit card entry, please re-enter")
+            return
+        } else {
+            print("OK CC Number PASSES")
+        }
+        
+        if isStringNumerical(month) == false || isStringNumerical(year) == false || month.characters.count != 2 || year.characters.count != 2  {
+            print("Error: CC Expiry Month or Year is NOT Numerical")
+            popupNotifyIncomplete("Invalid expiration date, please re-enter")
+            return
+        } else {
+            print("OK CC Date PASSES")
+        }
+        if isStringNumerical(cvcNumber) == false || cvcNumber.characters.count > 4 {
+            print("Error: CVC is NOT Numerical")
+            popupNotifyIncomplete("Invalid CVC code, please re-enter")
+            return
+        } else {
+            print("OK CC CVc PASSES")
+        }
+        
+        
+        // Get complete Object of CreditCard if all infomration passes
         
         let creditCardInfo = CreditCard(nameOnCard: name, cardNumber: cardNumber, expiryMonth: month, expiryYear: year)
         
+        
+        // Pass to Firebase
         
         let fireBase = FirebaseManager()
         
@@ -112,6 +133,24 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
             popupNotifyPosted(title: "Error sending bid", message: "Please try again, something went wrong")
         }
     }
+    
+    
+    
+    // Popup alert if missing fields
+    
+    func popupNotifyIncomplete(errorMessage: String){
+        
+        let alertController = UIAlertController(title: "Wait!", message:
+            errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            print("test: pressed Dismiss")
+        }))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    
     
     // Popup alert if Post Successful
 

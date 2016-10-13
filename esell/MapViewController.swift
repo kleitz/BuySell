@@ -67,6 +67,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
         for post in sourceViewController.posts {
             // for now only show if the post has a NON NIL value for lat/long
+            
             if post.pickupLatitude != nil {
                 posts.append(post)
             }
