@@ -62,6 +62,20 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     
     func prepareSaveBid() {
         
+        // test SOME VALIDIATON HERE
+        
+        if isStringNumerical(creditCardTextField.text!) == false {
+            print("it's NOT Numberical, it has LETTErs as part of it")
+            return
+        } else {
+            print("OK IT PASSES")
+            return
+        }
+        
+        
+        
+        // guard for non nil values
+        
         guard let postID = post.id,
         let unwrappedPrice = post.price,
         let postPrice = Double(unwrappedPrice) else {
@@ -78,9 +92,9 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
                 return
         }
         
+
+        
         let creditCardInfo = CreditCard(nameOnCard: name, cardNumber: cardNumber, expiryMonth: month, expiryYear: year)
-        
-        
         
         
         let fireBase = FirebaseManager()
@@ -116,6 +130,11 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     }
     
     
+    func isStringNumerical(string : String) -> Bool {
+        // Only allow numbers. Look for anything not a number.
+        let range = string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        return (range == nil)
+    }
     
     deinit {
         
@@ -123,3 +142,5 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     }
     
 }
+
+
