@@ -42,11 +42,11 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
                 previousIndex = oldIndex
             }
             
-            print("[DIDset] old tab#: \(oldIndex)")
+            print("[tab.DidSet] prev: \(TabIndex(rawValue: oldIndex))")
         }
         
         willSet(incomingIndex) {
-            print("[WILLset] new tab#: \(incomingIndex)")
+            print("[tab.WillSet] current: \(TabIndex(rawValue:incomingIndex))")
         }
         
     }

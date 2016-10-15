@@ -8,6 +8,8 @@
 
 import UIKit
 
+import Firebase
+
 class ProfileViewController: UIViewController {
 
     @IBOutlet weak var logoutButton: UIButton!
@@ -26,6 +28,21 @@ class ProfileViewController: UIViewController {
         logoutButton.addTarget(self, action: #selector(logout), forControlEvents: .TouchUpInside)
         
         
+    let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+        
+        ref.child("posts").queryOrderedByKey().queryEqualToValue("-KTDGjOubxVLqwm3P2mt").observeSingleEventOfType(.ChildAdded, withBlock:  { (snapshot) in
+            
+            print("snapshot -> \(snapshot)")
+            print("snapshot JKEY-> \(snapshot.key)")
+            print("snapshot VAL -> \(snapshot.value)")
+        })
+        
+        
+//        let test = ref.child("posts").observeEventOfType(.Value) { (snapshot) in
+//            print("snapshot print here: \(snapshot)")
+//        }
+        
+        //print("TESTING QUERY : equal to post vlaue:  \(test)")
 
     }
 

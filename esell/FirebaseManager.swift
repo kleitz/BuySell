@@ -56,7 +56,8 @@ class FirebaseManager {
         ref.child("posts").queryOrderedByChild("created_at").observeEventType(.ChildAdded, withBlock: { (snapshot
             ) in
             
-            print(snapshot)
+            //TESTPRINT
+            //print(snapshot)
             
             // This is the key or UID for each "post"
             let snapshotID = snapshot.key
@@ -129,7 +130,7 @@ class FirebaseManager {
                 post.canShip = canShip
         }
 
-        print("> test print. postDate: \(post.createdDate)")
+        //print("> test print parsePOSTsnapshot. postDate: \(post.createdDate)")
         
         //print("> test print. post PARSED result: price: \(post.price) || lat: \(post.pickupLatitude) & lon:\(post.pickupLongitude)")
         
@@ -137,9 +138,38 @@ class FirebaseManager {
     }
     
     
-    ///TODO
-    //func parseBidSnapshot()
-    
+    func parseBidSnapshot(bidID bidID: String, data dictionary: [String:AnyObject]) -> BidForItem {
+        
+        // Parse all core firebase data
+        
+        guard let bidderID = dictionary["bidder_id"] as? String,
+            let parentPostID = dictionary["parent_post_id"] as? String,
+            let amount = dictionary["amount"] as? Double,
+            let isAcceptedBySeller = dictionary["bid_accepted"] as? Bool,
+            let isPaidOnline = dictionary["has_paid_online"] as? Bool else {
+                fatalError("Error parsing")
+        }
+        
+        // Convert date from NSTimeInterval (from json) into readable NSDate
+        
+        guard let postRawDate = dictionary["created_at"] as? NSTimeInterval else {
+            fatalError("Error getting time out")
+        }
+        let postDate = self.convertNSTimeIntervaltoNSDate(date: postRawDate)
+        
+        
+        // Create new bid to store all this.
+        
+        let bid = BidForItem(bidID: bidID, parentPostID: parentPostID, bidderID: bidderID, amount: amount, date: postDate)
+
+        bid.isAcceptedBySeller = isAcceptedBySeller
+        bid.isPaidOnline = isPaidOnline
+        
+        
+        //print("> test print. post PARSED result: price: \(post.price) || lat: \(post.pickupLatitude) & lon:\(post.pickupLongitude)")
+        
+        return bid
+    }
     
     
     // Find a specific seller by UID
@@ -160,7 +190,6 @@ class FirebaseManager {
                 print("[QUERY] Error: failed getting seller key's values")
                 return
             }
-            
             
             
             // Get the name & email
@@ -228,16 +257,40 @@ class FirebaseManager {
             print("saved BID info successfly in firebase DB")
         })
     }
+    
+    
+    // TODO NEW FUNCTION
+
+    func fetchSinglePostByPostID(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
+        
+        var post = ItemListing(id: postID)
+        
+        ref.child("posts").queryOrderedByKey().queryEqualToValue(postID).observeSingleEventOfType(.ChildAdded, withBlock:  { (snapshot) in
+            
+            print("snapshot JKEY-> \(snapshot.key)")
+            print("snapshot VAL -> \(snapshot.value)\n")
+            
+            // This is the childvalues for each "post"
+            guard let dataSnapshot = snapshot.value as? [String:AnyObject] else {
+                print("error unwrapping post")
+                fatalError()
+            }
+            
+            post = self.parsePostSnapshot(postID: postID, data: dataSnapshot)
+            
+            withCompletionHandler(returnedPost: post)
+        })
+        
+    }
 
     
-    
-    func queryForPostsCreated(byUserID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
+    func fetchPostsByUserID(userID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
         
-        print(">>> RUnning query for posts created by user.")
+        print(">>> RUnning query for POSTS created by user.")
         
         // note: limit to 25
         
-        ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+        ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
             
             
@@ -286,17 +339,57 @@ class FirebaseManager {
     }
     
     
-    func queryForBidsCreated(byUserID uid: String){
+    func fetchBidsByUserID(userID uid: String, withCompletionHandler: (bidsCreated: [BidForItem])-> Void ){
         // wront way of writing query
         // ref.child("bids").queryEqualToValue(uid).observeSingleEventOfType(.Value)
         
         // correct way
-        ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).observeSingleEventOfType(.Value) { (snapshot
+        
+        // note: limit to 25
+        
+        ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
-            print(snapshot)
             
             
-        }
+            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+            
+            for item in [snapshot.value] {
+                
+                // Create a dictinoary for each item in the array
+                guard let itemDictionary = item as? NSDictionary else {
+                    fatalError()
+                }
+                
+                // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                    fatalError()
+                }
+                
+                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                    fatalError()
+                }
+                
+                
+                var bidArray = [BidForItem]()
+                
+                for (index,item) in firebaseItemValue.enumerate() {
+                    
+                    let bidID = firebaseItemKey[index]
+                    
+                    // Parse all firebase data
+                    
+                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                    
+                    // Append to the array of posts to be returned from function
+                    print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
+                    
+                    bidArray.append(bid)
+                }
+                withCompletionHandler(bidsCreated: bidArray)
+            }
+            
+        })
         
     }
     

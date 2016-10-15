@@ -19,6 +19,7 @@
 		8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938B1D9ABD92006C050C /* AddItemViewController.swift */; };
 		8499938E1D9B5701006C050C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938D1D9B5701006C050C /* User.swift */; };
 		849993901D9B5715006C050C /* ItemListing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938F1D9B5715006C050C /* ItemListing.swift */; };
+		84BE85181DB24C0B0001FEF8 /* BidForItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BE85171DB24C0B0001FEF8 /* BidForItem.swift */; };
 		84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EA1D98F15E00111668 /* AppDelegate.swift */; };
 		84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EC1D98F15E00111668 /* LoginViewController.swift */; };
 		84DFB0F01D98F15E00111668 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0EE1D98F15E00111668 /* Main.storyboard */; };
@@ -51,6 +52,7 @@
 		8499938B1D9ABD92006C050C /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
 		8499938D1D9B5701006C050C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8499938F1D9B5715006C050C /* ItemListing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListing.swift; sourceTree = "<group>"; };
+		84BE85171DB24C0B0001FEF8 /* BidForItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BidForItem.swift; sourceTree = "<group>"; };
 		84DFB0E71D98F15C00111668 /* esell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = esell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DFB0EA1D98F15E00111668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84DFB0EC1D98F15E00111668 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				8499938D1D9B5701006C050C /* User.swift */,
 				848F68271DAF59FF00AED515 /* CreditCard.swift */,
 				8499938F1D9B5715006C050C /* ItemListing.swift */,
+				84BE85171DB24C0B0001FEF8 /* BidForItem.swift */,
 				848F68211DACF5D000AED515 /* FirebaseManager.swift */,
 			);
 			name = ModelObjects;
@@ -301,6 +304,7 @@
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 				84F445251DA7713800429AE7 /* MapViewController.swift in Sources */,
 				848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */,
+				84BE85181DB24C0B0001FEF8 /* BidForItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
