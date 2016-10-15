@@ -16,7 +16,13 @@ class AddItemBackgroundViewController: UIViewController {
         
     }
     
-    /// TODO not sure if this is correct. the popup view controller is set here, otherwise it only pops up once if you put it under viewDidLoad (the tab only loads once)
+    
+    // MARK: - Navigation. Pop up separate view controller
+    
+    
+    /// TODO not sure if this is correct. the popup view controller is set here, otherwise it doesnt work.. but it's slow when you load it the FIRST TIME>
+    // can't use viewDidLoad - only pops up once if you put it under viewDidLoad (the tab only loads once).
+    // can't use viewWillAppear - makes it continuously pop up once you cloes it
     
     override func viewDidAppear(animated: Bool) {
         
@@ -27,16 +33,5 @@ class AddItemBackgroundViewController: UIViewController {
         self.presentViewController(newItemModal, animated: true, completion: nil)
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+  
 }

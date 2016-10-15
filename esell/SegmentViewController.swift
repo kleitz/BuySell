@@ -37,7 +37,7 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
         // Set up title
         
-        self.navigationItem.title = "Browse Items"
+        self.navigationItem.title = "Browse"
         
         
         // Fetch data
@@ -66,6 +66,8 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
         let postTabBarController = self.tabBarController as! PostTabBarController
         postTabBarController.posts.append(post)
+        self.tableViewController.posts.append(post)
+        
         
         print("INSERTED in array in TBController. posts.count: \(postTabBarController.posts.count)")
         

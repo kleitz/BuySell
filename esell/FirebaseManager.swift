@@ -25,6 +25,24 @@ class FirebaseManager {
     let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
     
     
+    func createNewUserInFirebase(uid: String, name: String, email: String, createdAt: NSObject, fbID: String, fbPicURL: String, fbURL: String ) {
+        
+        let usersRef = ref.child("users").child(uid)
+        
+        let values: [NSObject:AnyObject] = ["name": name, "email": email, "created_at": FIRServerValue.timestamp(), "fb_id": fbID, "fb_url": fbURL , "fb_pic_url": fbPicURL]
+        
+        usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err?.localizedDescription)
+                return
+            }
+            
+            print("[LoginControl] user info -> in firebase DB")
+            
+        })
+        
+    }
+    
     func fetchPosts() {
         
         print(" > running fetchPosts()...")
@@ -51,7 +69,7 @@ class FirebaseManager {
             
             // Parse each snapshot dictionary & return as an Itemlisting class type
             
-            let post = self.parseDictionarySnapshot(postID: snapshotID, data: dataSnapshot)
+            let post = self.parsePostSnapshot(postID: snapshotID, data: dataSnapshot)
             
             
             // Return each post gotten to the delegate in view controller
@@ -69,38 +87,59 @@ class FirebaseManager {
 
     }
     
-    func parseDictionarySnapshot(postID postID: String, data dictionary: [String:AnyObject]) -> ItemListing {
+    func parsePostSnapshot(postID postID: String, data dictionary: [String:AnyObject]) -> ItemListing {
         
-        let post = ItemListing()
+        // Parse all core firebase data
         
-        // parse all the data and store in Post class
-        post.id = postID
-        post.title = dictionary["title"] as? String
-        post.itemDescription = dictionary["description"] as? String
-        post.price = dictionary["price"] as? String
-        post.author = dictionary["author"] as? String
-        post.imageURL = dictionary["image_url"] as? String
-        post.pickupLatitude = dictionary["pickup_latitude"] as? Double
-        post.pickupLongitude = dictionary["pickup_longitude"] as? Double
-        post.canAcceptCreditCard = dictionary["can_accept_credit"] as? Bool ?? false
-        post.canShip = dictionary["can_ship"] as? Bool ?? false
-        
-        //TODO add the online payment stuff here. and shipping.
-        
-        
-        // test print the date ...
-        guard let postDate = dictionary["created_at"] as? NSTimeInterval else {
-            fatalError("error getting time out")
+        guard let postTitle = dictionary["title"] as? String,
+            let postImageURL = dictionary["image_url"] as? String,
+            let postDescription = dictionary["description"] as? String,
+            let postAuthor = dictionary["author"] as? String,
+            let postPrice = dictionary["price"] as? Double,
+            let pickupLatitude = dictionary["pickup_latitude"] as? Double,
+            let pickupLongitude = dictionary["pickup_longitude"] as? Double else {
+                fatalError("Error parsing")
         }
         
-        // Date conversion.. need to convert the NSTimeInterval and use timeIntervalSince1970 (do Not use timeIntervalSinceReferenceDate)
+        // Convert date from NSTimeInterval (from json) into readable NSDate
         
-        post.createdDate = NSDate(timeIntervalSince1970: postDate/1000)
-        print("postDate converted: \(post.createdDate)")
+        guard let postRawDate = dictionary["created_at"] as? NSTimeInterval else {
+            fatalError("Error getting time out")
+        }
+        let postDate = self.convertNSTimeIntervaltoNSDate(date: postRawDate)
+
         
+        // Create new post to store all this.
+        
+        let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude)
+        
+        post.imageURL = postImageURL
+
+        
+        // Handle the temporary optional fields (TODO Fix later since firebase has inconsistent data these are optional)
+        
+        if
+            let canAcceptCreditCard = dictionary["can_accept_credit"] as? Bool,
+            let canShip = dictionary["can_ship"] as? Bool  {
+                
+            
+                post.pickupLatitude = pickupLatitude
+                post.pickupLongitude = pickupLongitude
+                post.canAcceptCreditCard = canAcceptCreditCard
+                post.canShip = canShip
+        }
+
+        print("> test print. postDate: \(post.createdDate)")
+        
+        //print("> test print. post PARSED result: price: \(post.price) || lat: \(post.pickupLatitude) & lon:\(post.pickupLongitude)")
         
         return post
     }
+    
+    
+    ///TODO
+    //func parseBidSnapshot()
+    
     
     
     // Find a specific seller by UID
@@ -123,25 +162,22 @@ class FirebaseManager {
             }
             
             
-            // Prep the User object to return
-            let sellerInfo = User()
-            
-            
-            if let imageURL = sellerData["fb_pic_url"] as? String {
-                sellerInfo.imageURL = imageURL
-            }
-            
             
             // Get the name & email
             
             guard let name = sellerData["name"] as? String,
-                let email = sellerData["email"] as? String else {
+                let email = sellerData["email"] as? String,
+                let imageURL = sellerData["fb_pic_url"] as? String else {
                     print("error")
                     return
             }
-            sellerInfo.name = name
-            sellerInfo.email = email
+
    
+            // Prep the User object to return
+            
+            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
+            
+            
             print("sellerData dict value: \(sellerData)")
     
             withCompletionHandler(getUser: sellerInfo)
@@ -151,7 +187,7 @@ class FirebaseManager {
 
     
     
-    func saveBid(parentPostID postID: String, bidAmount: Double, creditCardInfo: CreditCard) {
+    func saveBid(parentPostID postID: String, bidAmount: Double, hasPaidOnline: Bool) {
         
         let bidsRef = ref.child("bids")
         
@@ -173,10 +209,11 @@ class FirebaseManager {
                        "amount": bidAmount,
                        "created_at": FIRServerValue.timestamp(),
                        "bid_accepted": "false",
-                       "cc_name_on_card": creditCardInfo.nameOnCard,
-                       "cc_number": creditCardInfo.cardNumber,
-                       "cc_exp_month": creditCardInfo.expiryMonth,
-                       "cc_exp_year": creditCardInfo.expiryYear,
+//                       "cc_name_on_card": creditCardInfo.nameOnCard,
+//                       "cc_number": creditCardInfo.cardNumber,
+//                       "cc_exp_month": creditCardInfo.expiryMonth,
+//                       "cc_exp_year": creditCardInfo.expiryYear,
+                        "has_paid_online": hasPaidOnline,
                        "bidder_id": userID ]
         
         newBidItem.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
@@ -192,6 +229,82 @@ class FirebaseManager {
         })
     }
 
+    
+    
+    func queryForPostsCreated(byUserID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
+        
+        print(">>> RUnning query for posts created by user.")
+        
+        // note: limit to 25
+        
+        ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+            ) in
+            
+            
+            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+            
+            for item in [snapshot.value] {
+                
+                // Create a dictinoary for each item in the array
+                guard let itemDictionary = item as? NSDictionary else {
+                    fatalError()
+                }
+                
+                // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                    fatalError()
+                }
+                
+                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                    fatalError()
+                }
+                
+                
+                var postArray = [ItemListing]()
+                
+                for (index,item) in firebaseItemValue.enumerate() {
+                    
+                    let postID = firebaseItemKey[index]
+                    
+                    // Parse all firebase data
+                    
+                    let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
+                    
+                    // Append to the array of posts to be returned from function
+                    print("POST to append: \(post.title)")
+                    postArray.append(post)
+                }
+                withCompletionHandler(postsCreated: postArray)
+            }
+
+        })
+        
+        
+        
+        
+    }
+    
+    
+    func queryForBidsCreated(byUserID uid: String){
+        // wront way of writing query
+        // ref.child("bids").queryEqualToValue(uid).observeSingleEventOfType(.Value)
+        
+        // correct way
+        ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).observeSingleEventOfType(.Value) { (snapshot
+            ) in
+            print(snapshot)
+            
+            
+        }
+        
+    }
+    
+    private func convertNSTimeIntervaltoNSDate(date date: NSTimeInterval) -> NSDate {
+    
+        return NSDate(timeIntervalSince1970: date/1000)
+        
+    }
     
     
 }

@@ -10,22 +10,31 @@ import Foundation
 
 class User: NSObject {
     
-    var name: String?
-    var email: String?
-    var imageURL: String?
-    var createdDate: NSDate?
+    var id: String
+    var name: String
+    var email: String
+    var imageURL: String
+    var createdDate: NSDate
     
-    var location: String?
+//    var location: String?
+//    
+//    var phone: String?
+
+    init(id: String, name: String, email: String, imageURL: String) {
+        self.id = id
+        self.name = name
+        self.email = email
+        self.imageURL = imageURL
+        self.createdDate = NSDate()
+        
+    }
     
-    var phone: String?
-    
-    
-    
-    //var role: [String]?
-    
-//    init(name: String, role: [String]) {
-//        self.name = name
-//        self.role = role
-//    }
+    init(id: String) {
+        self.id = id
+        self.name = ""
+        self.email = ""
+        self.imageURL = ""
+        self.createdDate = NSDate()
+    }
     
 }

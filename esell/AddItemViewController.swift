@@ -252,7 +252,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         }
         
         
-        
         /// TODO need to add a better check for this NUMBER input
         
         guard let itemPriceString = priceText.text where itemPriceString != "" else {

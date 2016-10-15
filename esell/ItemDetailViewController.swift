@@ -27,113 +27,56 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     
     @IBOutlet weak var sellerInfoButton: UIButton!
     
+    @IBOutlet weak var sellerProfileImage: UIImageView!
+    
     
     @IBAction func unwindToDetail(segue: UIStoryboardSegue) {}
     
     
-    var post = ItemListing()
+    var post = ItemListing(id: "temp")
     var image = UIImage()
     
-    var sellerInfo = User()
+    var sellerAsUser = User(id: "temp")
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        print("title test print: \(post.title)")
         
-        // set up the UI elements with ItemListing attributes passed in
+        
+        // Setup the UI elements with ItemListing attributes passed in
 
-        // OPTIONALS UNWRAP FOR ITEM INFO > make sure none of the post attributes are OPtional
+        itemTitle.text = post.title
         
-        if let title = post.title {
-            itemTitle.text = title
-        }
+        itemPrice.text = post.formattedPrice
         
-        if let price = post.price {
-            itemPrice.text = price
-        }
+        itemDescription.text = post.itemDescription
+    
+        print(" \n  -->: Title: \(title), Price: \(post.formattedPrice), Desc: \(description)")
         
-        if let description = post.itemDescription {
-            itemDescription.text = description
-        }
         
         itemImage.image = image
         itemImage.contentMode = .ScaleAspectFit
-        
-        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-        //
-        //            if let unwrappedImageURL: String = self.post.imageURL,
-        //                let url = NSURL(string: unwrappedImageURL),
-        //                let imageData = NSData(contentsOfURL: url) {
-        //
-        //                dispatch_async(dispatch_get_main_queue(), {
-        //                    self.itemImage.image = UIImage(data: imageData)
-        //                    self.itemImage.contentMode = .ScaleAspectFit
-        //                })
-        //            }
-        //        }
+     
+
+        // Attach function for click seller info button
+        sellerInfoButton.addTarget(self, action: #selector(popupSellerInfo), forControlEvents: .TouchUpInside)
         
         
         // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
-        
-        guard let seller = post.author else {
-            
-            print("Error getting seller")
-            return
-        }
-
-        // Attach function for click seller info button
-        sellerInfoButton.addTarget(self, action: #selector(showSellerInfo), forControlEvents: .TouchUpInside)
-        
-        
-        // Handle date
-        
-        guard let postDate = self.post.createdDate else {
-            print("error")
-            return
-        }
-        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let now: NSDate = NSDate()
-        
-        var daysAgo = "less than 1 day"
-        
-        switch now.daysFrom(postDate) {
-        case 0: daysAgo = "today"
-        case 1: daysAgo = "1 day ago"
-        default: daysAgo = String("\(now.daysFrom(postDate)) days ago")
-        }
-        
-
-        
-        print("the current date (NSDate()) is : \(now)")
-        
-      
-        
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
         let fireBase = FirebaseManager()
         
-        fireBase.fetchUserInfoFromFirebase(sellerUID: seller) { (getUser) -> (Void) in
-            self.sellerInfo = getUser
+        fireBase.fetchUserInfoFromFirebase(sellerUID: post.author) { (getUser) -> (Void) in
             
-            // USE MAIN QUEUE for UI updates
+            self.sellerAsUser = getUser
             
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                // Get picture for UI, may be optional
-                
-                self.itemSeller.text = ("Posted \(daysAgo) by \(self.sellerInfo.name ?? "")")
-                
-                
-            })
-            
-            
-            print("TESTPRINT seller displaytext.  \(self.itemSeller.text)")
-            
-            print("TESTPRINT Seller Info. name: \(self.sellerInfo.name!) email: \(self.sellerInfo.email)")
-
+            self.loadSellerInfo(self.sellerAsUser)
         }
+
+        
+        
     }
 
     
@@ -146,7 +89,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         if segue.identifier == "segueToCheckout" {
             print(" >> prepare SEGUE to CheckoutView")
             
-            guard let nextController = segue.destinationViewController as? CreditCardTableViewController else {
+            guard let nextController = segue.destinationViewController as? CheckoutViewController else {
                 
                 print("segue failed")
                 return
@@ -158,9 +101,89 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         
     }
     
+    func loadSellerInfo(sellerData: User) {
+        
+        // Background for get profile image
+        
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            
+            // Jump in to a background thread to get the image for this item
+
+            if let url = NSURL(string: sellerData.imageURL) {
+                
+                // Download an NSData representation of the image at the URL
+                let urlRequest = NSURLRequest(URL: url)
+                
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                    if error == nil {
+                        
+                        guard let unwrappedData = data else {
+                            print("Error converting image")
+                            return
+                        }
+                        
+                        guard let image = UIImage(data: unwrappedData) else {
+                            print("Error converting image")
+                            return
+                        }
+                        
+                        // Display image (using main thread
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            
+                            self.sellerProfileImage.image = image
+                            self.sellerProfileImage.contentMode = .ScaleAspectFill
+                            
+                            self.roundUIView(self.sellerProfileImage, cornerRadiusParams: self.sellerProfileImage.frame.size.width / 2)
+                            
+                        })
+                        
+                    } else {
+                        
+                        print(error?.localizedDescription)
+                    }
+                })
+                
+                task.resume()
+         
+            }
+        }
+        
+        
+        print("(TESTPRINT) Seller byline text.  \(self.itemSeller.text)")
+        
+        print("(TESTPRINT) Seller Info. name: \(self.sellerAsUser.name) email: \(self.sellerAsUser.email)")
+        
+
+        // Handle date
+
+        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let now: NSDate = NSDate()
+        
+        var daysAgo = "less than 1 day"
+        
+        switch now.daysFrom(self.post.createdDate) {
+            
+            case 0: daysAgo = "today"
+            case 1: daysAgo = "1 day ago"
+            
+        default: daysAgo = String("\(now.daysFrom(self.post.createdDate)) days ago")
+        
+        }
+        
+        
+        
+        print("the current date (NSDate()) is : \(now)")
+        // Display seller name as text
+        
+        self.itemSeller.text = ("Posted \(daysAgo) by \(self.sellerAsUser.name ?? "")")
+        
+        
+    }
 
     
-    func showSellerInfo() {
+    func popupSellerInfo() {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let popupViewController = storyboard.instantiateViewControllerWithIdentifier("SellerInfoViewController") as! SellerInfoViewController
@@ -175,7 +198,6 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         self.presentViewController(popupViewController, animated: true, completion: nil)
         
 
-        
     }
     
     func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
@@ -186,12 +208,23 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         
     }
     
+
+    // for image rounding
+    
+    private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
+        view.clipsToBounds = true
+        view.layer.cornerRadius = cornerRadiusParams
+    }
+    
+    
     deinit {
         
         print("(deinit) -> [ItemDetailViewController]")
     }
     
 }
+
+
 
 class HalfSizePresentationController : UIPresentationController {
     override func frameOfPresentedViewInContainerView() -> CGRect {

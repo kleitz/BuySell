@@ -21,6 +21,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     var screenHeight: CGFloat!
     
     
+    
     @IBOutlet var collectionView: UICollectionView!
    
 
@@ -76,7 +77,8 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CollectionViewCell
         
-        cell.labelText.text = post.price
+        
+        cell.labelText.text = post.formattedPrice
         
         cell.imageView.backgroundColor = UIColor.whiteColor()
         //cell.imageView.image = post.imageAsUIImage
@@ -231,3 +233,4 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     */
 
 }
+

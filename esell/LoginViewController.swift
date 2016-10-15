@@ -127,13 +127,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 // successful request, do work
                 
-                let userName: NSString = result.valueForKey("name") as! NSString
+                let userName = result.valueForKey("name") as! String
                 
-                let userID: NSString = result.valueForKey("id") as! NSString
+                let fbID = result.valueForKey("id") as! String
                 
-                let email: NSString = result.valueForKey("email") as! NSString
+                let email = result.valueForKey("email") as! String
                 
-                let fbLink: NSString = result.valueForKey("link") as! NSString
+                let fbLink = result.valueForKey("link") as! String
                 
                 guard let picture = result.valueForKey("picture") as? NSDictionary,
                 let pictureData = picture.valueForKey("data") as? NSDictionary,
@@ -147,21 +147,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 // do saving into firebase here
                 
-                let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+                let fireBase = FirebaseManager()
                 
-                let usersRef = ref.child("users").child(uid)
+                fireBase.createNewUserInFirebase(uid, name: userName, email: email, createdAt: FIRServerValue.timestamp(), fbID: fbID, fbPicURL: pictureURL, fbURL: fbLink as String)
                 
-                let values = ["name": userName, "fb_id": userID, "email": email, "created_at": FIRServerValue.timestamp(), "fb_url": fbLink , "fb_pic_url": pictureURL]
-                
-                usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                    if err != nil {
-                        print(err?.localizedDescription)
-                        return
-                    }
-                    
-                    print("[LoginControl] user info -> in firebase DB")
-                    
-                })
+
                 
             }
         })
@@ -177,6 +167,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 //        performSegueWithIdentifier(Constants.Segues.SignInToFp, sender: nil)
 //        
 //    }
+    
+    
     
     deinit {
         

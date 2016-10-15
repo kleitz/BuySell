@@ -14,7 +14,7 @@ class SellerInfoViewController: UIViewController {
     
     @IBOutlet weak var closeButton: UIButton!
     
-    var sellerInfo = User()
+    var sellerInfo = User(id: "temp")
     
     override func viewDidLoad() {
         super.viewDidLoad()

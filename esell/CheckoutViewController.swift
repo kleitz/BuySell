@@ -8,23 +8,30 @@
 
 import UIKit
 
-class PlaceBidViewController: UIViewController {
+class CheckoutViewController: UIViewController {
 
-    @IBOutlet weak var viewContainer: UIView!
+    
+    @IBOutlet weak var paymentMethodSegmentControl: UISegmentedControl!
+    
+    @IBOutlet weak var mainContainerView: UIView!
+    
+    
+    var post = ItemListing(id: "test")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let CC = storyboard.instantiateViewControllerWithIdentifier("CreditCardTableViewController") as? CreditCardTableViewController else {
-            fatalError("error")
-        }
-        
-        guard let ccview = CC.tableView else {
-            fatalError("this is nto working")
-        }
-        self.viewContainer.addSubview(ccview)
+        //guard let containerController = mainContainer as?
+//        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        guard let CC = storyboard.instantiateViewControllerWithIdentifier("CreditCardTableViewController") as? CreditCardTableViewController else {
+//            fatalError("error")
+//        }
+//        
+//        guard let ccview = CC.tableView else {
+//            fatalError("this is nto working")
+//        }
+//        self.viewContainer.addSubview(ccview)
         
         // Do any additional setup after loading the view.
     }

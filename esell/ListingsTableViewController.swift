@@ -13,6 +13,8 @@ import UIKit
 class ListingsTableViewController: UITableViewController {
     
     var sourceViewController = PostTabBarController()
+    var posts = [ItemListing]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,7 @@ class ListingsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return sourceViewController.posts.count
+        return posts.count
         
     }
     
@@ -42,21 +44,12 @@ class ListingsTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("PostCell", forIndexPath: indexPath) as! PostCell
         
-        let post = sourceViewController.posts[indexPath.row]
+        let post = posts[indexPath.row]
         
-        
-        // TODO IMplement better error handling/checking for this cell part
-        
-        if let title = post.title,
-            let price = post.price,
-            let desc = post.itemDescription {
-            
-            // set up the data gotten
-            
-            cell.titleText.text = title
-            cell.priceText.text = price
-            cell.descriptionText.text = desc
-        }
+        cell.priceText.text = post.formattedPrice
+        cell.titleText.text = post.title
+        cell.descriptionText.text = post.itemDescription
+   
         
         // do image stuff here TODO make load separately
         // does adding dispatch help load when get FIRdatabase data?
@@ -189,10 +182,12 @@ class ListingsTableViewController: UITableViewController {
                         fatalError("seg failed")
                     }
                     
-                    itemDetailController.post = sourceViewController.posts[rowIndex]
+                    itemDetailController.post = posts[rowIndex]
+                    
+                    print("PRINT DATA before sgue: \(itemDetailController.post.title): \(itemDetailController.post.formattedPrice)")
                     
                     // for passing image
-                    if let image: UIImage = sourceViewController.imageCache[sourceViewController.posts[rowIndex].imageURL!] {
+                    if let image: UIImage = sourceViewController.imageCache[posts[rowIndex].imageURL!] {
                         itemDetailController.image = image
                     }
                 }

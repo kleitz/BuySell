@@ -66,11 +66,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
     
         for post in sourceViewController.posts {
-            // for now only show if the post has a NON NIL value for lat/long
+
+            posts.append(post)
             
-            if post.pickupLatitude != nil {
-                posts.append(post)
-            }
         }
         
         print("print posts \(posts)")
@@ -107,6 +105,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             print("Error getting location")
             return
         }
+        
         
         // stop updating because should have gotten location at least once
 

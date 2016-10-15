@@ -35,7 +35,13 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
     var currentIndex: Int = 0 {
         
         didSet(oldIndex) {
-            previousIndex = oldIndex
+            // added conditional because previous should never equal the tab that is newItem
+            if oldIndex == TabIndex.NewItem.rawValue {
+                previousIndex = TabIndex.BrowseList.rawValue
+            } else {
+                previousIndex = oldIndex
+            }
+            
             print("[DIDset] old tab#: \(oldIndex)")
         }
         

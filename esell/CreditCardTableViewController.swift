@@ -34,12 +34,22 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
 
     
     
-    var post = ItemListing()
+    var post = ItemListing(id: "test")
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
+        // get post info from parent container/controller
+        
+//        guard let parent = self.parentViewController as? PlaceBidViewController else {
+//            fatalError("this iddn't work gettin gparent")
+//            
+//        }
+//        
+//        parent.post = post
+//        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -64,12 +74,8 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
 
         // guard for non nil values
         
-        guard let postID = post.id,
-        let unwrappedPrice = post.price,
-        let postPrice = Double(unwrappedPrice) else {
-            print("error getting POST INFO from segue")
-            return
-        }
+        let postID = post.id
+        let price = post.price
         
         guard let name = nameTextField.text where name != "",
             let cardNumber = creditCardTextField.text where cardNumber != "",
@@ -91,9 +97,14 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
             print("Error: CC Number is NOT Numerical")
             popupNotifyIncomplete("Invalid credit card entry, please re-enter")
             return
+        } else if creditCardTextField.text?.characters.count != 16 {
+            print("Error: CC Number needs 16 digits")
+            popupNotifyIncomplete("Invalid credit card entry, please check again")
+            return
         } else {
             print("OK CC Number PASSES")
         }
+        
         
         if isStringNumerical(month) == false || isStringNumerical(year) == false || month.characters.count != 2 || year.characters.count != 2  {
             print("Error: CC Expiry Month or Year is NOT Numerical")
@@ -115,6 +126,14 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         
         let creditCardInfo = CreditCard(nameOnCard: name, cardNumber: cardNumber, expiryMonth: month, expiryYear: year)
         
+        print("temp print creditCardInfo: \(creditCardInfo)")
+        
+        // Decide here whether it's cash or credit
+        let hasPaidOnline: Bool  = false
+        // if segmetn control == on the cash
+        // then false
+        // if segmetn on credit car dand the above balidaiton passes, then it's true
+        
         
         // Pass to Firebase
         
@@ -122,7 +141,11 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         
         fireBase.delegateForBid = self
         
-        fireBase.saveBid(parentPostID: postID, bidAmount: postPrice, creditCardInfo: creditCardInfo)
+        
+        
+        // Save the bid to firebase. Removed credit card info as the parameter because shouldn't actually store it - just store the payment method (cash or credit), not the actual card info
+        
+        fireBase.saveBid(parentPostID: postID, bidAmount: price, hasPaidOnline: hasPaidOnline)
         
     }
     
