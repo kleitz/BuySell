@@ -15,5 +15,7 @@ pod 'Firebase/Database'
 pod 'Firebase/RemoteConfig'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
+pod 'Fabric'
+pod 'Crashlytics'
 
 end
