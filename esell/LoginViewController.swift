@@ -74,6 +74,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     }
                     
                     // save FIRAuth's uid in UserDefaults
+                    print("CURRENT USER IS \(uid)")
                     
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.setObject(uid, forKey: "uid")

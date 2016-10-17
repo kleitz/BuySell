@@ -15,18 +15,21 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var tableView: UITableView!
     
     
-    var bidList = [BidForItem]()
     
-    var buyList = [ItemListing]()
+    // for section/header
+    var postsBuying = [ItemListing]()
+    var myBids = [BidForItem]()
     
-    var sellList = [ItemListing]()
+    // for each section/header cell
+    var postsSelling = [ItemListing]()
+    var otherBidsForMySale = [BidForItem]()
     
     let fireBase = FirebaseManager()
     
     
     enum Segment: Int {
-        case myBiddedPosts = 0
-        case myCreatedPosts = 1
+        case postsBidOn = 0
+        case postsCreated = 1
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,57 +42,105 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
 
         let currentUser = getUserID()
         
+        
+        // 1- fetch my bids
         fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
             
             
-            // this returns a list of bids (but not posts)
-            self.bidList = bidsCreated
+            // 1a -  this returns a list of my bids (but not posts)
+            self.myBids = bidsCreated
             
-            // this returns a list that is for the PARENT POSTS
+            // 1b  - this returns a list that is for the PARENT POSTS of my bids
             
-            for item in self.bidList {
+            for bid in self.myBids {
                 
             
-                print("SENDING THIS postiD \(item.parentPostID)")
+                print("SENDING THIS postiD \(bid.parentPostID)")
                 
                 // for each bid, look up the parent post so we can display post info in the table
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
-                    self.fireBase.fetchSinglePostByPostID(postID: item.parentPostID, withCompletionHandler: { (post) in
+                    self.fireBase.fetchSinglePostByPostID(postID: bid.parentPostID, withCompletionHandler: { (post) in
                         
                         print("post returned from handler: \(post.title)")
-                        self.buyList.append(post)
+                        self.postsBuying.append(post)
                         
-                        print("count of buyList . \(self.buyList.count)")
+                        print("count of buyList . \(self.postsBuying.count)")
                         
                         dispatch_async(dispatch_get_main_queue()){
                             self.tableView.reloadData()
                         }
+                    })
+                }
+            }
+        }
+        
+        // 2 - Fetch my posts
+        
+        fireBase.fetchPostsByUserID(userID: currentUser) { (postsCreated) in
+            
+            // 2a -  this returns a list of my created posts
+            
+            self.postsSelling = postsCreated
+            
+           // 2b - the bids for my posts.
+            
+            for post in self.postsSelling {
+                
+                print("sending this postID to get the child bids: \(post.id)")
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    
+                    self.fireBase.fetchBidsByParentPost(postID: post.id, withCompletionHandler: { (bidsCreated) in
                         
+                        if let bidsCreated = bidsCreated  {
+                            self.otherBidsForMySale = bidsCreated
+                            
+                            print("count of other bids for my item: \(self.otherBidsForMySale.count)")
+                            
+                            dispatch_async(dispatch_get_main_queue()){
+                                self.tableView.reloadData()
+                            }
+
+                        }
+                        if bidsCreated == nil {
+                        print("returned but there is no bids for this post")
+                            
+                        }
                         
                     })
                     
                 }
                 
+                
             }
-            
-        }
-        
-        fireBase.fetchPostsByUserID(userID: currentUser) { (postsCreated) in
-            
-            self.sellList = postsCreated
 
         }
         
         // TODO. Remove listeners in viewDidDisappear with a FirebaseHandle  - do need to remove event listener in this view???
         
         
+        // 2 - Fetch my posts &
+        
+        
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         setupSegmentedControl()
+        
+        
+        self.tableView.rowHeight = 90.0
+        
+        //self.tableView.tableHeaderView <- for fixed header, not sectino header?
+        
+        // ****** Do Step One for header custom view in tableview
+        
+        tableView.registerClass(HeaderViewCell.self, forHeaderFooterViewReuseIdentifier: "headerCell")
     
     }
 
@@ -110,14 +161,14 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         
         switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.myBiddedPosts.rawValue:
+        case Segment.postsBidOn.rawValue:
             
             print("  > selected segment: BIDS")
             
             self.tableView.reloadData()
             
             
-        case Segment.myCreatedPosts.rawValue:
+        case Segment.postsCreated.rawValue:
             
             print("  > selected segment: POSTS")
 
@@ -131,50 +182,138 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     // MARK - Table view functions
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         var tableSourceArray = []
         switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.myBiddedPosts.rawValue:
-            tableSourceArray = buyList
+        case Segment.postsBidOn.rawValue:
+            tableSourceArray = postsBuying
             //return buyList.count
             
             
-        case Segment.myCreatedPosts.rawValue:
-            tableSourceArray = sellList
+        case Segment.postsCreated.rawValue:
+            tableSourceArray = postsSelling
             //return sellList.count
             
         default: break
         }
-
+        
         return tableSourceArray.count
+    }
+    
+    
+    // Table view SECTION/HEADER - [posts] go under here
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40.0
+    }
+    
+ 
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let sectionHeaderReuseID = "headerCell"
+        
+        // ****** Do Step Two
+        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(sectionHeaderReuseID) as! HeaderViewCell
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+        case Segment.postsBidOn.rawValue:
+            
+            let postIBidOn = postsBuying[section]
+            header.textLabel?.text = ("\(postIBidOn.title): \(postIBidOn.formattedPrice)")
+            header.detailTextLabel?.text = postIBidOn.itemDescription
+            
+            
+        case Segment.postsCreated.rawValue:
+            
+            let myPost = postsSelling[section]
+            header.textLabel?.text = ("\(myPost.title): \(myPost.formattedPrice)")
+            header.detailTextLabel?.text = myPost.itemDescription
+            
+        default: break }
+        
+        return header
+        
+    }
+    
+    
+    // Table view CELLS - [bids] go under here. because each bid has a parent post
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        var numberOfRows: Int = 0
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+        case Segment.postsBidOn.rawValue:
+            
+            numberOfRows = self.postsBuying.count/self.myBids.count
+            
+            
+        case Segment.postsCreated.rawValue:
+            
+            numberOfRows = self.otherBidsForMySale.count
+            
+        default: break }
+        
+        if numberOfRows != 0 {
+            return numberOfRows
+        } else {
+            return 1
+        }
         
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        //
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
         
         switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.myBiddedPosts.rawValue:
+        case Segment.postsBidOn.rawValue:
             
-            let postIBidOn = buyList[indexPath.row]
-            cell.textLabel?.text = postIBidOn.title
-            cell.detailTextLabel?.text = postIBidOn.itemDescription
+            // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
             
+            let postIBidOn = myBids[indexPath.section]
             
-        case Segment.myCreatedPosts.rawValue:
+            cell.bidderNameLabel.text = ("My bid amount")
+            cell.bidAmount.text = postIBidOn.formattedAmount
             
-            let myPost = sellList[indexPath.row]
-            cell.textLabel?.text = myPost.title
-            cell.detailTextLabel?.text = myPost.itemDescription
+            // settings for UI hidden
+            cell.bidAmount.hidden = false
+            
+            // hide the buttons in this case
+            cell.acceptButton.hidden = true
+            cell.rejectButton.hidden = true
+
+            
+        case Segment.postsCreated.rawValue:
+            
+            // if there is a bid for a particular section
+            
+            if otherBidsForMySale.count != 0 && indexPath.row == indexPath.section {
+                
+                
+                let otherBid = otherBidsForMySale[indexPath.section]
+                
+                cell.bidderNameLabel.text = otherBid.bidderID
+                cell.bidAmount.text = otherBid.formattedAmount
+                
+            } else {
+                cell.bidderNameLabel.text = "You have no bids for this item"
+                
+                // settings for UI hidden
+                cell.bidAmount.hidden = true
+                
+                // hide the buttons in this case
+                cell.acceptButton.hidden = true
+                cell.rejectButton.hidden = true
+            }
             
         default: break }
  
@@ -187,8 +326,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         let defaults = NSUserDefaults.standardUserDefaults()
         
         guard let userID = defaults.stringForKey("uid") else {
-            print("failed getting nsuserdefaults uid")
-            return ""
+            fatalError("failed getting nsuserdefaults uid")
         }
         
         return userID
@@ -204,5 +342,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
 
 }

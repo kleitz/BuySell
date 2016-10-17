@@ -50,7 +50,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         
         itemDescription.text = post.itemDescription
     
-        print(" \n  -->: Title: \(title), Price: \(post.formattedPrice), Desc: \(description)")
+        print(" \n  -->: Title: \(post.title), Price: \(post.formattedPrice), Desc: \(post.itemDescription)")
         
         
         itemImage.image = image
@@ -91,7 +91,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
             }
             
             nextController.post = self.post
-            print("  >> POST ID being sent: \(self.post.id ?? "")")
+            print("  >> POST ID being sent: \(self.post.id ?? "") andt hte price is \(self.post.price)")
         }
         
     }

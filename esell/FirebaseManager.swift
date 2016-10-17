@@ -237,7 +237,7 @@ class FirebaseManager {
         let values = [ "parent_post_id": postID,
                        "amount": bidAmount,
                        "created_at": FIRServerValue.timestamp(),
-                       "bid_accepted": "false",
+                       "bid_accepted": false,
 //                       "cc_name_on_card": creditCardInfo.nameOnCard,
 //                       "cc_number": creditCardInfo.cardNumber,
 //                       "cc_exp_month": creditCardInfo.expiryMonth,
@@ -259,8 +259,9 @@ class FirebaseManager {
     }
     
     
-    // TODO NEW FUNCTION
-
+    
+    // This function is used to grab the original 1 post from the parent_post_id (PostID) in Bid Info. Lookup return value in "posts".
+    
     func fetchSinglePostByPostID(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
         
         var post = ItemListing(id: postID)
@@ -282,7 +283,71 @@ class FirebaseManager {
         })
         
     }
-
+    
+    // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
+    
+    func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsCreated: [BidForItem]?) -> Void) {
+        
+        // note: limit to 25
+        
+        print("runnihg fetch Bids fucntion ->> look up this post id: \(postID)")
+        
+            
+        ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+            ) in
+            
+            print(" test print snapshot exists \(snapshot.exists())")
+            
+            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+            
+            
+            if snapshot.exists() != false {
+            for item in [snapshot.value] {
+                
+                print("TEST ITEM PRINT \(item)")
+                // Create a dictinoary for each item in the array
+                guard let itemDictionary = item as? NSDictionary else {
+                    fatalError()
+                }
+                
+                // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                    fatalError()
+                }
+                
+                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                    fatalError()
+                }
+                
+                
+                var postArray = [BidForItem]()
+                
+                for (index,item) in firebaseItemValue.enumerate() {
+                    
+                    let bidID = firebaseItemKey[index]
+                    
+                    // Parse all firebase data
+                    
+                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                    
+                    // Append to the array of posts to be returned from function
+                    print("BID to append (var amt): \(bid.amount)")
+                    postArray.append(bid)
+                }
+                withCompletionHandler(bidsCreated: postArray)
+                }
+            } else {
+                withCompletionHandler(bidsCreated: nil)
+            }
+            
+        })
+        
+        
+    }
+    
+    
+    // This function is used to grab ALL POSTS from a UserID. Lookup return value in "posts".
     
     func fetchPostsByUserID(userID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
         

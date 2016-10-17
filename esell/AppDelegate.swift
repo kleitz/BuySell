@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FIRApp.configure()
         
-        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) (if nil then login page shows by default)")
+        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) // \(FIRAuth.auth()?.currentUser?.uid) ")
         
         // Go to main view if alreayd has auth
         

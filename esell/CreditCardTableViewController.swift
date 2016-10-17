@@ -33,31 +33,35 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     @IBOutlet weak var checkoutButton: UIButton!
 
     
-    
     var post = ItemListing(id: "test")
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        // get post info from parent container/controller
+        // Get post info from parent container/controller
         
-//        guard let parent = self.parentViewController as? PlaceBidViewController else {
-//            fatalError("this iddn't work gettin gparent")
-//            
-//        }
-//        
-//        parent.post = post
-//        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        guard let parent = self.parentViewController as? CheckoutViewController else {
+            fatalError("this iddn't work gettin gparent")
+            
+        }
         
+        self.post = parent.post
+        
+        print("post received??? in CreditCardController \(self.post.id) & price: \(self.post.price)")
+        
+        
+        // Add function to button
         
         checkoutButton.addTarget(self, action: #selector(prepareSaveBid), forControlEvents: .TouchUpInside)
+        
+        
+        // Looks for single or multiple taps. FOr dismissing keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        
     }
 
 
@@ -129,7 +133,7 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         print("temp print creditCardInfo: \(creditCardInfo)")
         
         // Decide here whether it's cash or credit
-        let hasPaidOnline: Bool  = false
+        let hasPaidOnline: Bool = false
         // if segmetn control == on the cash
         // then false
         // if segmetn on credit car dand the above balidaiton passes, then it's true
@@ -197,6 +201,13 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         let range = string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
         return (range == nil)
     }
+    
+    // Dismiss Keyboard functions
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
     
     deinit {
         

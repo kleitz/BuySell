@@ -21,19 +21,30 @@ class CheckoutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //guard let containerController = mainContainer as?
-//        
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        guard let CC = storyboard.instantiateViewControllerWithIdentifier("CreditCardTableViewController") as? CreditCardTableViewController else {
-//            fatalError("error")
-//        }
-//        
-//        guard let ccview = CC.tableView else {
-//            fatalError("this is nto working")
-//        }
-//        self.viewContainer.addSubview(ccview)
+        print("post received??? in CheckoutViewController \(post.id) & price: \(post.price)")
         
-        // Do any additional setup after loading the view.
+        
+        // Add the credit card table into the viewcontroller
+        
+        let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
+        
+        let ccViewController = storyboard.instantiateViewControllerWithIdentifier("CreditCardTableViewController") as! CreditCardTableViewController
+            
+        // Add child view controller
+        self.addChildViewController(ccViewController)
+        
+        // Add child view as subview [of parent]
+        self.mainContainerView.addSubview(ccViewController.view)
+        
+        // Configure child view
+        ccViewController.view.frame = self.mainContainerView.bounds
+        ccViewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        
+        // Notify the child view controller
+        ccViewController.didMoveToParentViewController(self)
+        
+        
+
     }
 
     override func didReceiveMemoryWarning() {

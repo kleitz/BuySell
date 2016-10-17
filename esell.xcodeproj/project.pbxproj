@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840D3C571DB49D6A0052D8B7 /* BodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D3C561DB49D6A0052D8B7 /* BodyCell.swift */; };
+		840D3C5C1DB4B1B50052D8B7 /* HeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D3C5B1DB4B1B50052D8B7 /* HeaderViewCell.swift */; };
 		848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */; };
 		848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F681B1DABA8B900AED515 /* PostTabBarController.swift */; };
 		848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68211DACF5D000AED515 /* FirebaseManager.swift */; };
@@ -40,6 +42,8 @@
 		15F194C66E73071165440AD3 /* Pods-esell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-esell.release.xcconfig"; path = "Pods/Target Support Files/Pods-esell/Pods-esell.release.xcconfig"; sourceTree = "<group>"; };
 		21CCE51F04529112EBFDE571 /* Pods-esell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-esell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-esell/Pods-esell.debug.xcconfig"; sourceTree = "<group>"; };
 		26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_esell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		840D3C561DB49D6A0052D8B7 /* BodyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyCell.swift; sourceTree = "<group>"; };
+		840D3C5B1DB4B1B50052D8B7 /* HeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewCell.swift; sourceTree = "<group>"; };
 		848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemBackgroundViewController.swift; sourceTree = "<group>"; };
 		848F681B1DABA8B900AED515 /* PostTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTabBarController.swift; sourceTree = "<group>"; };
 		848F68211DACF5D000AED515 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
@@ -90,6 +94,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		840D3C581DB49D810052D8B7 /* Custom Tableview Cells */ = {
+			isa = PBXGroup;
+			children = (
+				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
+				840D3C5B1DB4B1B50052D8B7 /* HeaderViewCell.swift */,
+				840D3C561DB49D6A0052D8B7 /* BodyCell.swift */,
+			);
+			name = "Custom Tableview Cells";
+			sourceTree = "<group>";
+		};
 		84DFB0DE1D98F15C00111668 = {
 			isa = PBXGroup;
 			children = (
@@ -128,7 +142,7 @@
 				848F68231DAE9B6100AED515 /* CheckoutViewController.swift */,
 				848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */,
 				848F682B1DB0C25600AED515 /* TransactionsViewController.swift */,
-				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
+				840D3C581DB49D810052D8B7 /* Custom Tableview Cells */,
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,
@@ -311,7 +325,9 @@
 				848F68261DAE9C5800AED515 /* CreditCardTableViewController.swift in Sources */,
 				848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */,
 				848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */,
+				840D3C5C1DB4B1B50052D8B7 /* HeaderViewCell.swift in Sources */,
 				848F682C1DB0C25600AED515 /* TransactionsViewController.swift in Sources */,
+				840D3C571DB49D6A0052D8B7 /* BodyCell.swift in Sources */,
 				84E299481DA5DDFC00A7E7DB /* SellerInfoViewController.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
 				848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */,

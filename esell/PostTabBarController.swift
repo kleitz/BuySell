@@ -42,11 +42,11 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
                 previousIndex = oldIndex
             }
             
-            print("[tab.DidSet] prev: \(TabIndex(rawValue: oldIndex))")
+            print("[tab.DidSet] prev: \(TabIndex(rawValue: oldIndex)!)")
         }
         
         willSet(incomingIndex) {
-            print("[tab.WillSet] current: \(TabIndex(rawValue:incomingIndex))")
+            print("[tab.WillSet] current: \(TabIndex(rawValue:incomingIndex)!)")
         }
         
     }
@@ -60,12 +60,12 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-      
+        
     }
     
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
 
-        print("[TabBarControl]: you selected another tab: \(self.selectedIndex)")
+        print("\n\n [TabBarControl]: you selected another tab: \(self.selectedIndex)")
         
         currentIndex = self.selectedIndex
 
