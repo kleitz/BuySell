@@ -22,7 +22,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     // for each section/header cell
     var postsSelling = [ItemListing]()
-    var otherBidsForMySale = [BidForItem]()
+    var otherBidsForMySale = [[BidForItem]]()
     
     let fireBase = FirebaseManager()
     
@@ -92,22 +92,21 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
-                    self.fireBase.fetchBidsByParentPost(postID: post.id, withCompletionHandler: { (bidsCreated) in
+                    self.fireBase.fetchBidsByParentPost(postID: post.id, withCompletionHandler: { (bidsArrayForOnePost) in
                         
-                        if let bidsCreated = bidsCreated  {
-                            self.otherBidsForMySale = bidsCreated
-                            
-                            print("count of other bids for my item: \(self.otherBidsForMySale.count)")
+                        print("this si what is returning : \(bidsArrayForOnePost.count)")
+                        self.otherBidsForMySale.append(bidsArrayForOnePost)
+                        
+                        print("count of other bids for my item: \(self.otherBidsForMySale.count)")
                             
                             dispatch_async(dispatch_get_main_queue()){
                                 self.tableView.reloadData()
-                            }
-
-                        }
-                        if bidsCreated == nil {
-                        print("returned but there is no bids for this post")
                             
                         }
+//                        if bidsCreated == nil {
+//                        print("returned but there is no bids for this post")
+//                            
+//                        }
                         
                     })
                     
@@ -129,8 +128,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
+
         setupSegmentedControl()
         
         
@@ -247,13 +245,15 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         switch segmentedControl.selectedSegmentIndex {
             
         case Segment.postsBidOn.rawValue:
-            
+            print("test print postsBidOn section#: \(section)")
             numberOfRows = self.postsBuying.count/self.myBids.count
             
             
         case Segment.postsCreated.rawValue:
+            print("test print postsCreated section## array: \(otherBidsForMySale.count)")
+            print("test print postsCreated section##: \(section)")
             
-            numberOfRows = self.otherBidsForMySale.count
+            numberOfRows = self.otherBidsForMySale[section].count
             
         default: break }
         
@@ -267,11 +267,8 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        
-        //
-        
+
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
-        
         
         switch segmentedControl.selectedSegmentIndex {
             
@@ -296,25 +293,24 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             // if there is a bid for a particular section
             
-            if otherBidsForMySale.count != 0 && indexPath.row == indexPath.section {
-                
-                
-                let otherBid = otherBidsForMySale[indexPath.section]
-                
-                cell.bidderNameLabel.text = otherBid.bidderID
-                cell.bidAmount.text = otherBid.formattedAmount
-                
-            } else {
+            
+            let bidsForOnePost = otherBidsForMySale[indexPath.section][indexPath.row]
+            
+            if bidsForOnePost.bidID == "placeholder" {
                 cell.bidderNameLabel.text = "You have no bids for this item"
                 
                 // settings for UI hidden
                 cell.bidAmount.hidden = true
-                
-                // hide the buttons in this case
                 cell.acceptButton.hidden = true
                 cell.rejectButton.hidden = true
+                
+            } else{
+               
+                cell.bidderNameLabel.text = bidsForOnePost.bidderID
+                cell.bidAmount.text = bidsForOnePost.formattedAmount
+                
             }
-            
+        
         default: break }
  
         return cell

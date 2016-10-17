@@ -286,7 +286,7 @@ class FirebaseManager {
     
     // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
     
-    func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsCreated: [BidForItem]?) -> Void) {
+    func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsArrayForOnePost: [BidForItem]) -> Void) {
         
         // note: limit to 25
         
@@ -296,49 +296,56 @@ class FirebaseManager {
         ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
             ) in
             
+            // This will loop through each query (snapshot)
+            
             print(" test print snapshot exists \(snapshot.exists())")
             
-            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-            
-            
             if snapshot.exists() != false {
-            for item in [snapshot.value] {
                 
-                print("TEST ITEM PRINT \(item)")
-                // Create a dictinoary for each item in the array
-                guard let itemDictionary = item as? NSDictionary else {
-                    fatalError()
-                }
+                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
                 
-                // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                    fatalError()
-                }
-                
-                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                    fatalError()
-                }
-                
-                
-                var postArray = [BidForItem]()
-                
-                for (index,item) in firebaseItemValue.enumerate() {
+                for item in [snapshot.value] {
                     
-                    let bidID = firebaseItemKey[index]
+                    print("TEST ITEM PRINT bid: \(item)")
+                    // Create a dictinoary for each item in the array
+                    guard let itemDictionary = item as? NSDictionary else {
+                        fatalError()
+                    }
                     
-                    // Parse all firebase data
+                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                        fatalError()
+                    }
                     
-                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                        fatalError()
+                    }
                     
-                    // Append to the array of posts to be returned from function
-                    print("BID to append (var amt): \(bid.amount)")
-                    postArray.append(bid)
+                    var bidArray = [BidForItem]()
+                    
+                    for (index,item) in firebaseItemValue.enumerate() {
+                        
+                        let bidID = firebaseItemKey[index]
+                        
+                        // Parse all firebase data
+                        
+                        let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                        
+                        // Append to the array of posts to be returned from function
+                        print("BID to append (var amt): \(bid.amount)")
+                        bidArray.append(bid)
+                    }
+    
+                    withCompletionHandler(bidsArrayForOnePost: bidArray)
                 }
-                withCompletionHandler(bidsCreated: postArray)
-                }
+                
             } else {
-                withCompletionHandler(bidsCreated: nil)
+                print("IN THE ELSE >>")
+                var bidArray = [BidForItem]()
+                bidArray.append(BidForItem(bidID: "placeholder"))
+
+                withCompletionHandler(bidsArrayForOnePost: bidArray)
             }
             
         })

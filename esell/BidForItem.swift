@@ -38,6 +38,17 @@ class BidForItem: NSObject {
         self.isPaidOnline = false
     }
     
+    init(bidID: String){
+        
+        self.bidID = bidID
+        self.parentPostID = ""
+        self.bidderID = ""
+        self.amount = 0
+        self.date = NSDate()
+        self.isAcceptedBySeller = false
+        self.isPaidOnline = false
+    }
+    
     ///TODO add bidder name for this. otherwise how to get the name on UI???
     
 //    var parentPost: ItemListing {
