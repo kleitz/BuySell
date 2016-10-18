@@ -9,29 +9,38 @@
 import UIKit
 
 class TransactionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    
+    enum Segment: Int {
+        case postsBuying = 0
+        case postsSelling = 1
+    }
+    
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var tableView: UITableView!
     
-    
-    
+
     // for section/header
     var postsBuying = [ItemListing]()
-    var myBids = [BidForItem]()
+    var postsSelling = [ItemListing]()
+    
     
     // for each section/header cell
-    var postsSelling = [ItemListing]()
+    var myBids = [BidForItem]()
     var otherBidsForMySale = [[BidForItem]]()
     
+    // create a user array/dict? to store bidder info
+    var otherBidsUserInfoDictionary = [String:User]()
+    
+    
+    
     let fireBase = FirebaseManager()
+
     
     
-    enum Segment: Int {
-        case postsBidOn = 0
-        case postsCreated = 1
-    }
-    
+    /// View WILL Appear
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
@@ -41,7 +50,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         // 2: list of things I posted
 
         let currentUser = getUserID()
-        
+        print("\n [CURRENTUSER var]: \(currentUser)")
         
         // 1- fetch my bids
         fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
@@ -49,13 +58,13 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             // 1a -  this returns a list of my bids (but not posts)
             self.myBids = bidsCreated
+            print("\n__[1.lower]__ [bidsCreated array]: \(self.myBids.count)")
             
             // 1b  - this returns a list that is for the PARENT POSTS of my bids
             
             for bid in self.myBids {
                 
-            
-                print("SENDING THIS postiD \(bid.parentPostID)")
+                print(" __[1.upper]__ [fetchBidsByUserID] Sending this bidID to get posts: \(bid.parentPostID)")
                 
                 // for each bid, look up the parent post so we can display post info in the table
                 
@@ -63,12 +72,13 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                     
                     self.fireBase.fetchSinglePostByPostID(postID: bid.parentPostID, withCompletionHandler: { (post) in
                         
-                        print("post returned from handler: \(post.title)")
+                        print(" __[1.upper]__  -> post returned from handler: \(post.title)")
                         self.postsBuying.append(post)
                         
-                        print("count of buyList . \(self.postsBuying.count)")
+                        print(" __[1.upper]__-> [fetchBidsByUserID] returned count of posts, set to [postsBuying]: \(self.postsBuying.count)")
                         
                         dispatch_async(dispatch_get_main_queue()){
+                            
                             self.tableView.reloadData()
                         }
                     })
@@ -84,64 +94,67 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             self.postsSelling = postsCreated
             
-           // 2b - the bids for my posts.
+            print("\n___[2.upper]_ [postsSelling array]: \(self.postsSelling.count)")
+            
+            // 2b - the bids for my posts.
             
             for post in self.postsSelling {
                 
-                print("sending this postID to get the child bids: \(post.id)")
+                print(" ___[2.upper]_ >> [fetchPostsByUserID] sending this postID to get bids: \(post.id)")
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
                     self.fireBase.fetchBidsByParentPost(postID: post.id, withCompletionHandler: { (bidsArrayForOnePost) in
-                        
-                        print("this si what is returning : \(bidsArrayForOnePost.count)")
+                       
                         self.otherBidsForMySale.append(bidsArrayForOnePost)
                         
-                        print("count of other bids for my item: \(self.otherBidsForMySale.count)")
+                        // get the user info out of each bid Set
+                        for eachBid in bidsArrayForOnePost {
+                            
+                            //TODO add conditional to prevent fetching for USERID="placeholder" (well.. it fails anyway so maybe it doesn't matter)
+                            
+                            self.fireBase.fetchUserInfoFromFirebase(sellerUID: eachBid.bidderID, withCompletionHandler: { (getUser) in
+                                
+                                self.otherBidsUserInfoDictionary.updateValue(getUser, forKey: eachBid.bidderID)
+                                
+                            })
+                        }
+                        
+                        
+                        print(" ___[2.upper]_ >> [fetchPostsByUserID] returned count, set to [2.lower][otherBidsForMySale]: \(self.otherBidsForMySale.count)")
                             
                             dispatch_async(dispatch_get_main_queue()){
+                                
                                 self.tableView.reloadData()
-                            
                         }
-//                        if bidsCreated == nil {
-//                        print("returned but there is no bids for this post")
-//                            
-//                        }
-                        
                     })
-                    
                 }
-                
-                
             }
-
         }
-        
         // TODO. Remove listeners in viewDidDisappear with a FirebaseHandle  - do need to remove event listener in this view???
-        
-        
-        // 2 - Fetch my posts &
-        
-        
-        
     }
+    // end of ViewWillAppear
+    
+    
+    
+    /// VIEW DID LOAD
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-
+        self.navigationItem.title = "My Offers"
+        
         setupSegmentedControl()
         
-        
         self.tableView.rowHeight = 90.0
-        
-        //self.tableView.tableHeaderView <- for fixed header, not sectino header?
-        
-        // ****** Do Step One for header custom view in tableview
-        
-        tableView.registerClass(HeaderViewCell.self, forHeaderFooterViewReuseIdentifier: "headerCell")
     
+        
     }
 
+    
+    // MARK - Functions for Segmented Control
+    
     func setupSegmentedControl(){
         
         // attach function to segmentControl UI FOR WHEN VALUE CHANGED
@@ -156,23 +169,21 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     func setupSegmentSwitchView() {
         
-        
         switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.postsBidOn.rawValue:
+        case Segment.postsBuying.rawValue:
             
             print("  > selected segment: BIDS")
             
             self.tableView.reloadData()
             
             
-        case Segment.postsCreated.rawValue:
+        case Segment.postsSelling.rawValue:
             
             print("  > selected segment: POSTS")
 
             self.tableView.reloadData()
-            
-            
+
         default: break }
     }
     
@@ -181,88 +192,125 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         var tableSourceArray = []
+        
         switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.postsBidOn.rawValue:
+        case Segment.postsBuying.rawValue:
             tableSourceArray = postsBuying
-            //return buyList.count
-            
-            
-        case Segment.postsCreated.rawValue:
+
+        case Segment.postsSelling.rawValue:
             tableSourceArray = postsSelling
-            //return sellList.count
             
         default: break
         }
         
+        print(" ** number of SECTIONS for tablesourceArray: \(tableSourceArray.count)")
+        
         return tableSourceArray.count
+
     }
     
     
-    // Table view SECTION/HEADER - [posts] go under here
+    // Table view: SECTION/HEADER - [posts] go under here
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40.0
     }
     
- 
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let sectionHeaderReuseID = "headerCell"
+        // Create UIView from the custom nib
         
-        // ****** Do Step Two
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(sectionHeaderReuseID) as! HeaderViewCell
+        let headerView = UINib(nibName: "SectionHeaderView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as!SectionHeaderView
+        
+        // Use autolayout resizing
+        
+        headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+
+        
         
         switch segmentedControl.selectedSegmentIndex {
+                
+            case Segment.postsBuying.rawValue:
             
-        case Segment.postsBidOn.rawValue:
+                let postIBidOn = postsBuying[section]
+                
+                print("returning postIBidOn: \(postIBidOn)")
+                headerView.titleLabel.text = postIBidOn.title
+                headerView.priceLabel.text = postIBidOn.formattedPrice
+                
+                
+            case Segment.postsSelling.rawValue:
+                
+                let myPost = postsSelling[section]
+                
+                // Only check if the 1st post is a placeholder, if it is, then the section info should be hidden
+                guard let myFirstPost = postsSelling.first else {
+                    print("ERROR GETTING first post created")
+                    return headerView
+                }
+                
+                if myFirstPost.id == "placeholder" {
+                    
+                    headerView.titleLabel.text = "You have no posts!"
+                    
+                    // TODO. need to set up quick functions for adjusting UI color and hiding and everything
+                    headerView.titleLabel.backgroundColor = UIColor.orangeColor()
+                    
+                    headerView.priceLabel.hidden = true
+                    
+                
+                    // If the 1st post is not placeholder
+                } else {
+                    
+                    headerView.titleLabel.text = myPost.title
+                    headerView.priceLabel.text = myPost.formattedPrice
+                    
+                    headerView.priceLabel.hidden = false
+                }
+
+                
+            default: break }
             
-            let postIBidOn = postsBuying[section]
-            header.textLabel?.text = ("\(postIBidOn.title): \(postIBidOn.formattedPrice)")
-            header.detailTextLabel?.text = postIBidOn.itemDescription
-            
-            
-        case Segment.postsCreated.rawValue:
-            
-            let myPost = postsSelling[section]
-            header.textLabel?.text = ("\(myPost.title): \(myPost.formattedPrice)")
-            header.detailTextLabel?.text = myPost.itemDescription
-            
-        default: break }
-        
-        return header
+
+        return headerView
         
     }
     
     
-    // Table view CELLS - [bids] go under here. because each bid has a parent post
+    // Table view: CELLS - [bids] go under here. because each bid has a parent post
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var numberOfRows: Int = 0
-        
-        switch segmentedControl.selectedSegmentIndex {
-            
-        case Segment.postsBidOn.rawValue:
-            print("test print postsBidOn section#: \(section)")
-            numberOfRows = self.postsBuying.count/self.myBids.count
-            
-            
-        case Segment.postsCreated.rawValue:
-            print("test print postsCreated section## array: \(otherBidsForMySale.count)")
-            print("test print postsCreated section##: \(section)")
-            
-            numberOfRows = self.otherBidsForMySale[section].count
-            
-        default: break }
-        
-        if numberOfRows != 0 {
+  
+            switch segmentedControl.selectedSegmentIndex {
+                
+            case Segment.postsBuying.rawValue:
+                
+                
+                print("[1.lower]postsBidOn section#: \(section). ")
+                
+                
+                
+                // when is this not 1? I can only bid once for another person's post.
+                
+                numberOfRows = 1
+                
+                
+            case Segment.postsSelling.rawValue:
+                
+                print("[2.lower]postsCreated section## arrayCOunt: \(otherBidsForMySale.count)")
+                print("[2.lower] postsCreated section##: \(section). ")
+                //if self.postsBuying.count != 0 && self.otherBidsForMySale.count != 0 {
+                numberOfRows = self.otherBidsForMySale[section].count
+                //}
+                
+            default: break }
+
             return numberOfRows
-        } else {
-            return 1
-        }
-        
+
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -270,51 +318,132 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
 
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
-        switch segmentedControl.selectedSegmentIndex {
             
-        case Segment.postsBidOn.rawValue:
-            
-            // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
-            
-            let postIBidOn = myBids[indexPath.section]
-            
-            cell.bidderNameLabel.text = ("My bid amount")
-            cell.bidAmount.text = postIBidOn.formattedAmount
-            
-            // settings for UI hidden
-            cell.bidAmount.hidden = false
-            
-            // hide the buttons in this case
-            cell.acceptButton.hidden = true
-            cell.rejectButton.hidden = true
-
-            
-        case Segment.postsCreated.rawValue:
-            
-            // if there is a bid for a particular section
-            
-            
-            let bidsForOnePost = otherBidsForMySale[indexPath.section][indexPath.row]
-            
-            if bidsForOnePost.bidID == "placeholder" {
-                cell.bidderNameLabel.text = "You have no bids for this item"
+            switch segmentedControl.selectedSegmentIndex {
+                
+            case Segment.postsBuying.rawValue:
+                
+                
+                // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
+                
+                let postIBidOn = myBids[indexPath.section]
+                
+                cell.bidderNameLabel.text = ("My bid amount")
+                cell.bidAmount.text = postIBidOn.formattedAmount
                 
                 // settings for UI hidden
-                cell.bidAmount.hidden = true
+                cell.bidAmount.hidden = false
                 cell.acceptButton.hidden = true
-                cell.rejectButton.hidden = true
                 
-            } else{
-               
-                cell.bidderNameLabel.text = bidsForOnePost.bidderID
-                cell.bidAmount.text = bidsForOnePost.formattedAmount
                 
-            }
+            case Segment.postsSelling.rawValue:
+                
+                // If there is an empty query then it will return "placeholder" id for the post
+                
+                // Only check if the 1st post is a placeholder
+                guard let myFirstPost = postsSelling.first else {
+                    print("ERROR GETTING first post created")
+                    return cell
+                }
+                
+                if myFirstPost.id == "placeholder" {
+                    
+                    cell.bidderNameLabel.text = "" //message can go here but I put it in the header
+                    
+                    // settings for UI hidden
+                    cell.bidAmount.hidden = true
+                    cell.acceptButton.hidden = true
+                    
+                    
+                    // If the 1st post is not placeholder
+                } else {
+                    
+                    let bidsForOnePost = otherBidsForMySale[indexPath.section][indexPath.row]
+                    
+                    // If the bids is a placeholder, then return message
+                    
+                    if bidsForOnePost.bidID == "placeholder" {
+                        cell.bidderNameLabel.text = "You have no bids for this item"
+                        
+                        // settings for UI hidden
+                        cell.bidAmount.hidden = true
+                        cell.acceptButton.hidden = true
+                        
+                    }
+                        
+                        
+                        // Else if bids exist for a particular section then return the BID INFO
+                        
+                    else {
+                        
+                        cell.bidAmount.text = bidsForOnePost.formattedAmount
+                        // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC.
+                        
+                        if let profileURL = otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.imageURL {
+                            
+                            // Background for get profile image
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                                
+                                // Jump in to a background thread to get the image for this item
+                                
+                                if let url = NSURL(string: profileURL) {
+                                    
+                                    // Download an NSData representation of the image at the URL
+                                    let urlRequest = NSURLRequest(URL: url)
+                                    
+                                    let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                                        if error == nil {
+                                            
+                                            guard let unwrappedData = data else {
+                                                print("Error converting image")
+                                                return
+                                            }
+                                            
+                                            guard let image = UIImage(data: unwrappedData) else {
+                                                print("Error converting image")
+                                                return
+                                            }
+                                            
+                                            // Display image (using main thread
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), {
+                                                
+                                                cell.profileImage.image = image
+                                                cell.profileImage.contentMode = .ScaleAspectFill
+                                                
+                                                self.roundUIView(cell.profileImage, cornerRadiusParams: cell.profileImage.frame.size.width / 2)
+                                                
+                                            })
+                                            
+                                        } else {
+                                            
+                                            print(error?.localizedDescription)
+                                        }
+                                    })
+                                    
+                                    task.resume()
+                                }
+                            }
+                        }
+                    }
+                        
+                        let sellerName = self.otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.name
+                        
+                        cell.bidderNameLabel.text = sellerName
+                        
+                        // settings for UI hidden
+                        cell.bidAmount.hidden = false
+                        cell.acceptButton.hidden = false
+                        
+                        
+                    }
+                    default: break }
+                
+                return cell
+        }
         
-        default: break }
  
-        return cell
-    }
+
     
     // Get user ID function
     
@@ -329,16 +458,15 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    // for image rounding
+    
+    private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
+        view.clipsToBounds = true
+        view.layer.cornerRadius = cornerRadiusParams
     }
-    */
-    
-    
 
+
+    
 }

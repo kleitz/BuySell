@@ -46,7 +46,7 @@ class ItemListing: NSObject {
     }
     
     var formattedPrice: String {
-        let currencyLabel: String = "NT$ "
+        let currencyLabel: String = "$ "
         
         //"%@%.2f ", [replace with var name],
         return String.localizedStringWithFormat("%@%.0f", currencyLabel, price)

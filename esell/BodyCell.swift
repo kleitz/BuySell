@@ -8,6 +8,12 @@
 
 import UIKit
 
+//protocol BodyCellDelegate {
+//    
+//    func buttonClicked(manager: BodyCell, wasClicked: Bool)
+//    
+//}
+
 class BodyCell: UITableViewCell {
     
     
@@ -17,10 +23,10 @@ class BodyCell: UITableViewCell {
     
     @IBOutlet weak var bidAmount: UILabel!
     
-    @IBOutlet weak var rejectButton: UIButton!
-    
+ 
     @IBOutlet weak var acceptButton: UIButton!
     
+
 
     
     // need to get the bidder image url here [USER]
@@ -30,6 +36,12 @@ class BodyCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        
+        // set up button functions
+        
+        acceptButton.addTarget(self, action: #selector(acceptBid), forControlEvents: .TouchUpInside)
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -37,5 +49,33 @@ class BodyCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
+    
+    // OTHER FUNCS
+    
+    func acceptBid() {
+        
+        print("clicked accept")
+        // error Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UIAlertController: 0x7fbf85b2add0>)
+       
+        //popupNotifyPosted(title: "Asdf", message: "asdf")
+    }
+    
+    
+    func rejectBid() {
+        
+        print("clicked reject")
+        
+        //popupNotifyPosted(title: "Asdf", message: "asdf")
+    }
+    
+    func popupNotifyPosted(title title: String, message: String){
+        
+        let alertController = UIAlertController(title: title, message:
+            message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+    }
+
 
 }

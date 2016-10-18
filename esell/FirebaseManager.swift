@@ -179,7 +179,7 @@ class FirebaseManager {
         ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
             
             guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("[QUERY] Error: failed getting all users call in database")
+                print("[QUERY] Error: failed getting user in database")
                 return
             }
             
@@ -268,8 +268,8 @@ class FirebaseManager {
         
         ref.child("posts").queryOrderedByKey().queryEqualToValue(postID).observeSingleEventOfType(.ChildAdded, withBlock:  { (snapshot) in
             
-            print("snapshot JKEY-> \(snapshot.key)")
-            print("snapshot VAL -> \(snapshot.value)\n")
+//            print("[singlePostByID] KEY-> \(snapshot.key)")
+//            print("[singlePostByID] VAL -> \(snapshot.value)\n")
             
             // This is the childvalues for each "post"
             guard let dataSnapshot = snapshot.value as? [String:AnyObject] else {
@@ -290,23 +290,23 @@ class FirebaseManager {
         
         // note: limit to 25
         
-        print("runnihg fetch Bids fucntion ->> look up this post id: \(postID)")
+        print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
         
-            
-        ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+            ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
             ) in
             
             // This will loop through each query (snapshot)
             
-            print(" test print snapshot exists \(snapshot.exists())")
+            print("   [fetchBidsbyPost] snapshot exists?= \(snapshot.exists())")
             
             if snapshot.exists() != false {
                 
                 // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
                 
                 for item in [snapshot.value] {
+                    print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
+                    //print("TEST ITEM PRINT bid: \(item)")
                     
-                    print("TEST ITEM PRINT bid: \(item)")
                     // Create a dictinoary for each item in the array
                     guard let itemDictionary = item as? NSDictionary else {
                         fatalError()
@@ -333,7 +333,6 @@ class FirebaseManager {
                         let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
                         
                         // Append to the array of posts to be returned from function
-                        print("BID to append (var amt): \(bid.amount)")
                         bidArray.append(bid)
                     }
     
@@ -341,7 +340,7 @@ class FirebaseManager {
                 }
                 
             } else {
-                print("IN THE ELSE >>")
+                print("   [fetchBidsbyPost] >> IN THE ELSE >>")
                 var bidArray = [BidForItem]()
                 bidArray.append(BidForItem(bidID: "placeholder"))
 
@@ -365,6 +364,10 @@ class FirebaseManager {
         ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
             
+            
+            print("   [fetchPostsByUserID] snapshot exists?= \(snapshot.exists())")
+            
+            if snapshot.exists() != false {
             
             // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
             
@@ -402,7 +405,12 @@ class FirebaseManager {
                 }
                 withCompletionHandler(postsCreated: postArray)
             }
-
+            }
+            var postArray = [ItemListing]()
+            
+            postArray.append(ItemListing(id: "placeholder"))
+            withCompletionHandler(postsCreated: postArray)
+            
         })
         
         
