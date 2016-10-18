@@ -178,8 +178,9 @@ class FirebaseManager {
         
         ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
             
+            print("testprint snapshot: \(snapshot)")
             guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("[QUERY] Error: failed getting user in database")
+                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
                 return
             }
             
@@ -187,7 +188,7 @@ class FirebaseManager {
             
             
             guard let sellerData = dictionary[uid] as? [String: AnyObject] else {
-                print("[QUERY] Error: failed getting seller key's values")
+                print("[fetchUserInfoFromFirebase] Error: failed getting seller key's values")
                 return
             }
             
@@ -207,7 +208,7 @@ class FirebaseManager {
             let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
             
             
-            print("sellerData dict value: \(sellerData)")
+            print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")
     
             withCompletionHandler(getUser: sellerInfo)
         })
@@ -368,48 +369,50 @@ class FirebaseManager {
             print("   [fetchPostsByUserID] snapshot exists?= \(snapshot.exists())")
             
             if snapshot.exists() != false {
-            
-            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-            
-            for item in [snapshot.value] {
                 
-                // Create a dictinoary for each item in the array
-                guard let itemDictionary = item as? NSDictionary else {
-                    fatalError()
+                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+                
+                for item in [snapshot.value] {
+                    
+                    // Create a dictinoary for each item in the array
+                    guard let itemDictionary = item as? NSDictionary else {
+                        fatalError()
+                    }
+                    
+                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                        fatalError()
+                    }
+                    
+                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                        fatalError()
+                    }
+                    
+                    
+                    var postArray = [ItemListing]()
+                    
+                    for (index,item) in firebaseItemValue.enumerate() {
+                        
+                        let postID = firebaseItemKey[index]
+                        
+                        // Parse all firebase data
+                        
+                        let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
+                        
+                        // Append to the array of posts to be returned from function
+                        print("POST to append: \(post.title)")
+                        postArray.append(post)
+                    }
+                    withCompletionHandler(postsCreated: postArray)
                 }
-                
-                // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                    fatalError()
-                }
-                
-                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                    fatalError()
-                }
-                
-                
+            } else {
                 var postArray = [ItemListing]()
                 
-                for (index,item) in firebaseItemValue.enumerate() {
-                    
-                    let postID = firebaseItemKey[index]
-                    
-                    // Parse all firebase data
-                    
-                    let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
-                    
-                    // Append to the array of posts to be returned from function
-                    print("POST to append: \(post.title)")
-                    postArray.append(post)
-                }
+                postArray.append(ItemListing(id: "placeholder"))
                 withCompletionHandler(postsCreated: postArray)
             }
-            }
-            var postArray = [ItemListing]()
             
-            postArray.append(ItemListing(id: "placeholder"))
-            withCompletionHandler(postsCreated: postArray)
             
         })
         

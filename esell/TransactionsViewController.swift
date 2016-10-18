@@ -256,7 +256,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                     headerView.titleLabel.text = "You have no posts!"
                     
                     // TODO. need to set up quick functions for adjusting UI color and hiding and everything
-                    headerView.titleLabel.backgroundColor = UIColor.orangeColor()
                     
                     headerView.priceLabel.hidden = true
                     
@@ -289,10 +288,8 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 
             case Segment.postsBuying.rawValue:
                 
-                
                 print("[1.lower]postsBidOn section#: \(section). ")
-                
-                
+
                 
                 // when is this not 1? I can only bid once for another person's post.
                 
@@ -301,11 +298,13 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 
             case Segment.postsSelling.rawValue:
                 
-                print("[2.lower]postsCreated section## arrayCOunt: \(otherBidsForMySale.count)")
-                print("[2.lower] postsCreated section##: \(section). ")
-                //if self.postsBuying.count != 0 && self.otherBidsForMySale.count != 0 {
+                print("[2.lower] bidsForCreatedPost section##: \(section). BIGarrayCOunt: \(otherBidsForMySale.count). InnerArrayCount: \(otherBidsForMySale[section].count) ")
+                
+                if self.postsBuying.count != 0 && self.otherBidsForMySale.count != 0 {
+                    
                 numberOfRows = self.otherBidsForMySale[section].count
-                //}
+                
+                }
                 
             default: break }
 
@@ -413,6 +412,15 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                                                 
                                                 self.roundUIView(cell.profileImage, cornerRadiusParams: cell.profileImage.frame.size.width / 2)
                                                 
+                                                let sellerName = self.otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.name
+                                                
+                                                cell.bidderNameLabel.text = sellerName
+                                                cell.bidAmount.text = bidsForOnePost.formattedAmount
+                                                
+                                                // settings for UI hidden
+                                                cell.bidAmount.hidden = false
+                                                cell.acceptButton.hidden = false
+
                                             })
                                             
                                         } else {
@@ -427,14 +435,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         }
                     }
                         
-                        let sellerName = self.otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.name
-                        
-                        cell.bidderNameLabel.text = sellerName
-                        
-                        // settings for UI hidden
-                        cell.bidAmount.hidden = false
-                        cell.acceptButton.hidden = false
-                        
+                    
                         
                     }
                     default: break }

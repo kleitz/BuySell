@@ -209,35 +209,56 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ph1-Fm-SgL">
                                                     <rect key="frame" x="0.0" y="-5" width="229" height="206"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$test123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JdF-Lw-Rif">
-                                                    <rect key="frame" x="161" y="180" width="68" height="21"/>
-                                                    <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.99607843139999996" green="0.94509803920000002" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SPS-tf-9wB">
+                                                    <rect key="frame" x="0.0" y="171" width="229" height="30"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$test123" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JdF-Lw-Rif">
+                                                            <rect key="frame" x="10" y="5" width="68" height="21"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="73" id="IEq-Nx-W0U"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" red="0.23921568630000001" green="0.20392156859999999" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <variation key="default">
+                                                                <mask key="constraints">
+                                                                    <exclude reference="IEq-Nx-W0U"/>
+                                                                </mask>
+                                                            </variation>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="centerY" secondItem="SPS-tf-9wB" secondAttribute="centerY" id="Cdz-7D-MaC"/>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="centerY" secondItem="SPS-tf-9wB" secondAttribute="centerY" id="TK1-2H-0Sx"/>
+                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="JdF-Lw-Rif" secondAttribute="trailing" constant="10" id="UnC-f1-2I7"/>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SPS-tf-9wB" secondAttribute="leading" constant="20" id="Yyr-aX-YFA"/>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="leading" secondItem="SPS-tf-9wB" secondAttribute="leading" constant="10" id="Z0K-NH-jCR"/>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="trailing" secondItem="SPS-tf-9wB" secondAttribute="trailingMargin" id="aqA-zi-mva"/>
+                                                        <constraint firstItem="JdF-Lw-Rif" firstAttribute="top" secondItem="SPS-tf-9wB" secondAttribute="top" constant="5" id="fMB-cU-SmS"/>
+                                                        <constraint firstAttribute="height" constant="30" id="gQm-no-GIP"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="TK1-2H-0Sx"/>
+                                                            <exclude reference="Yyr-aX-YFA"/>
+                                                            <exclude reference="aqA-zi-mva"/>
+                                                            <exclude reference="fMB-cU-SmS"/>
+                                                        </mask>
+                                                    </variation>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="JdF-Lw-Rif" firstAttribute="top" secondItem="Ph1-Fm-SgL" secondAttribute="bottom" constant="30" id="70N-3B-Nch"/>
                                             <constraint firstItem="Ph1-Fm-SgL" firstAttribute="leading" secondItem="RWa-em-kc7" secondAttribute="leading" id="BUM-mg-lNL"/>
+                                            <constraint firstItem="SPS-tf-9wB" firstAttribute="bottom" secondItem="Ph1-Fm-SgL" secondAttribute="bottom" id="CzD-Hl-eLd"/>
+                                            <constraint firstItem="SPS-tf-9wB" firstAttribute="trailing" secondItem="Ph1-Fm-SgL" secondAttribute="trailing" id="ImQ-Fl-WMH"/>
                                             <constraint firstAttribute="trailing" secondItem="Ph1-Fm-SgL" secondAttribute="trailing" id="KSm-Cs-Les"/>
                                             <constraint firstAttribute="bottom" secondItem="Ph1-Fm-SgL" secondAttribute="bottom" id="Tzg-s2-C4g"/>
-                                            <constraint firstAttribute="bottom" secondItem="JdF-Lw-Rif" secondAttribute="bottom" id="VdV-4W-fDP"/>
                                             <constraint firstItem="Ph1-Fm-SgL" firstAttribute="top" secondItem="RWa-em-kc7" secondAttribute="topMargin" constant="-13" id="b0O-Xn-TpO"/>
-                                            <constraint firstAttribute="trailing" secondItem="JdF-Lw-Rif" secondAttribute="trailing" id="dfm-3K-bJW"/>
-                                            <constraint firstItem="JdF-Lw-Rif" firstAttribute="leading" secondItem="Ph1-Fm-SgL" secondAttribute="trailing" constant="30" id="ng4-Cw-MET"/>
-                                            <constraint firstItem="JdF-Lw-Rif" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RWa-em-kc7" secondAttribute="leadingMargin" id="nj3-3F-OzZ"/>
-                                            <constraint firstItem="JdF-Lw-Rif" firstAttribute="leading" secondItem="Ph1-Fm-SgL" secondAttribute="trailing" constant="-146" id="wds-8x-Ocg"/>
+                                            <constraint firstItem="SPS-tf-9wB" firstAttribute="leading" secondItem="Ph1-Fm-SgL" secondAttribute="leading" id="m1U-Zm-NWe"/>
                                         </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="70N-3B-Nch"/>
-                                                <exclude reference="ng4-Cw-MET"/>
-                                                <exclude reference="wds-8x-Ocg"/>
-                                            </mask>
-                                        </variation>
                                         <connections>
                                             <outlet property="imageView" destination="Ph1-Fm-SgL" id="HwT-Ry-XUF"/>
                                             <outlet property="labelText" destination="JdF-Lw-Rif" id="XiA-Aw-dDo"/>
@@ -1441,6 +1462,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0mr-9A-yhx"/>
-        <segue reference="dhz-Qj-gpd"/>
+        <segue reference="43f-so-zT2"/>
     </inferredMetricsTieBreakers>
 </document>
