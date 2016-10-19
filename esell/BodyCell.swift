@@ -8,11 +8,7 @@
 
 import UIKit
 
-//protocol BodyCellDelegate: class {
-//    
-//    func presentView(manager: BodyCell, wasClicked: Bool)
-//    
-//}
+
 
 class BodyCell: UITableViewCell {
     

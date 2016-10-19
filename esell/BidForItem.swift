@@ -17,6 +17,7 @@ class BidForItem: NSObject {
     var date: NSDate
     var isAcceptedBySeller: Bool
     var isPaidOnline: Bool
+    var isRespondedBySeller: Bool
     
     var formattedAmount: String {
         let currencyLabel: String = "$ "
@@ -36,6 +37,7 @@ class BidForItem: NSObject {
         
         self.isAcceptedBySeller = false
         self.isPaidOnline = false
+        self.isRespondedBySeller = false
     }
     
     init(bidID: String, parentPostID: String, bidderID: String, amount: Double, date: NSDate, isAccepted: Bool, isPaidOnline: Bool){
@@ -49,6 +51,7 @@ class BidForItem: NSObject {
         
         self.isAcceptedBySeller = isAccepted
         self.isPaidOnline = isPaidOnline
+        self.isRespondedBySeller = false
     }
     
     
@@ -61,14 +64,10 @@ class BidForItem: NSObject {
         self.date = NSDate()
         self.isAcceptedBySeller = false
         self.isPaidOnline = false
+        self.isRespondedBySeller = false
     }
     
-    ///TODO add bidder name for this. otherwise how to get the name on UI???
-    
-//    var parentPost: ItemListing {
-//        return ItemListing(i
-//    }
-    
+    // Add these stored type Vars -  easier get data out like sller name, image, etc
     
     var parentPostInfo: ItemListing? { didSet { print("       -> bid got post.Info")} }
     

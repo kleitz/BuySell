@@ -319,10 +319,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
         
-//        // SET DELEGATE TO SELF
-//            cell.delegate = self
-        
-        
         // settings for UI hide/show
         self.setupUIForCell(cell)
         
@@ -510,9 +506,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                             }
                         }
                     }
-                    
-                    
-                    
+    
                 }
             default: break }
         
@@ -549,19 +543,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     // OTHER FUNCS
-    ///
-    //    func viewMap(sender: UIButton) {
-    //        guard let senderCell = sender.superview?.superview as? UITableViewCell,
-    //            cellIndexPath = tableView?.indexPathForCell(senderCell) else {
-    //                fatalError()
-    //        }
-    //
-    //        let selectedRow = cellIndexPath.row
-    //
-    //        print(">> Clicked cellButton #\(selectedRow) \(coredataStations[selectedRow].name)")
-    //
-    //    }
-
+    
     func acceptBid(sender: UIButton) {
         
         print("clicked accept")
@@ -571,47 +553,33 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 fatalError()
         }
         
-        print("cellindexpath : \(cellIndexPath)")
-        
-        
-        //self.delegate?.presentView(self, wasClicked: true)
-        // error Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UIAlertController: 0x7fbf85b2add0>)
+       
+        let acceptedBid = self.otherBidsForMySale[cellIndexPath.section][cellIndexPath.row]
+
+        // print("cellindexpath : \(cellIndexPath.row).\n   accepted bid?? \(acceptedBid.amount) \n    person bidding?? \(acceptedBid.parentPostUserInfo?.name)")
         
         popupNotifyPosted()
-    }
-    
-    
-    func rejectBid() {
-        
-        print("clicked reject")
-        
-        //popupNotifyPosted(title: "Asdf", message: "asdf")
-    }
-    
-    
-    ///
-    
-    // DELEGATE FUnction from BodyCell
 
-//    func presentView(manager: BodyCell, wasClicked: Bool) {
-//        print(">> runing dlelegate function in TransactionView")
-//        if wasClicked == true {
-//            
-//            popupNotifyPosted()
-//            
-//            
-//            // after the popup, it should save the accepted as TRUE and set all the others ones as false
-//            // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
-//
-//            fireBase.updateAllBidsOfOnePost(parentPostID: String, acceptedBidID: <#T##String#>, withCompletionHandler: <#T##(isUpdated: Bool) -> Void#>)
-//            
-//        }
-//    }
+        fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID) { (isUpdated) in
+            if isUpdated == true {
+                
+                print("TransctionViewControler: firebase completetionhalder ---> UPDATED DB")
+                
+                self.tableView.reloadData()
+                
+                // TODO need to write the conditionals
+            }
+        }
+        
+        
+        
+    }
     
+
     func popupNotifyPosted(){
         
-        let alertController = UIAlertController(title: "Post Completed", message:
-            "Your item has been posted!", preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "Accept Complete", message:
+            "Your buyer is notified - contact them to set up delivery!", preferredStyle: UIAlertControllerStyle.Alert)
         
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         
@@ -619,8 +587,15 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         
         
     }
-    
-    
+//    
+//    func confirmUpdateBid(){
+//        
+//        // after the popup, it should save the accepted as TRUE and set all the others ones as false
+//                    // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
+//        
+//        
+//    }
+//    
     
     // MARK: Functions for Segmented Control
     

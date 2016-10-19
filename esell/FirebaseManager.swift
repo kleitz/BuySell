@@ -96,17 +96,11 @@ class FirebaseManager {
 
     // MARK: Functions for UPDATING Data (overwrite) 
     
-    func updateAllBidsOfOnePost(parentPostID parentPostID: String, acceptedBidID bidID: String, withCompletionHandler: (isUpdated: Bool ) -> Void) {
+    func updateAllBidsOfOnePost(parentPostID parentPostID: String, acceptedBidID: String, withCompletionHandler: (isUpdated: Bool ) -> Void) {
         
         // before this, both bid_accepted and bid_responded should be 'false'
         
         
-        // set 1 of the bids to true
-        
-        ref.child("bids").child(bidID).setValue(["bid_accepted":true])
-        ref.child("bids").child(bidID).setValue(["bid_responded":true])
-        
-        print("[updateAllBids...] set accepted Bid status -> TRUE ")
         
         // set all other ones as rejected???
         // loop for query of all bids under parent_post_id
@@ -116,14 +110,26 @@ class FirebaseManager {
             print("[updateAllBids...] total bids in array: \(bidsArrayForOnePost.count)")
             for eachBid in bidsArrayForOnePost {
                 
-                print("[updateAllBids...] setting bid statuses -> false")
-                self.ref.child("bids").child(eachBid.bidID).setValue(["bid_accepted":false])
-                self.ref.child("bids").child(eachBid.bidID).setValue(["bid_responded":true])
+                // add conditional so that it doesn't equal to the original
                 
+                // set ALL BIDS' bid_responded = true
+                self.ref.child("bids/\(eachBid.bidID)/bid_responded").setValue(true)
+                
+                // set the ACCEPTED ONLY for bid_accepted = true,  all others = false (remains false)
+                
+                print("[updateAllBids...] running array: BIDID: \(eachBid.bidID) compareTO parentpost\(parentPostID)")
+                if eachBid.bidID == acceptedBidID {
+                    
+                    self.ref.child("bids/\(acceptedBidID)/bid_accepted").setValue(true)
+                    
+                }
+//                else {
+//                    // uh this hsould already be false so maybe just delete this? TODO
+//                    self.ref.child("bids/\(eachBid.bidID)/bid_accepted").setValue(false)
+//                }
             }
+            withCompletionHandler(isUpdated: true)
         }
-
-        
     }
     
     
@@ -209,7 +215,9 @@ class FirebaseManager {
         
         print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
         
-        ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+        // TODO can use regular event here? or use SINGLE is better? I don't see it refresh when someone bids for the item even when I use eregular eventType, not single eventType
+        
+        ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
             
             // This will loop through each query (snapshot)
