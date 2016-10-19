@@ -8,11 +8,11 @@
 
 import UIKit
 
-//protocol BodyCellDelegate {
-//    
-//    func buttonClicked(manager: BodyCell, wasClicked: Bool)
-//    
-//}
+protocol BodyCellDelegate: class {
+    
+    func presentView(manager: BodyCell, wasClicked: Bool)
+    
+}
 
 class BodyCell: UITableViewCell {
     
@@ -27,7 +27,7 @@ class BodyCell: UITableViewCell {
     @IBOutlet weak var acceptButton: UIButton!
     
 
-
+    weak var delegate: BodyCellDelegate?
     
     // need to get the bidder image url here [USER]
     // need to get the bidder name here [USER]
@@ -56,6 +56,8 @@ class BodyCell: UITableViewCell {
     func acceptBid() {
         
         print("clicked accept")
+        
+        self.delegate?.presentView(self, wasClicked: true)
         // error Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UIAlertController: 0x7fbf85b2add0>)
        
         //popupNotifyPosted(title: "Asdf", message: "asdf")
@@ -69,13 +71,8 @@ class BodyCell: UITableViewCell {
         //popupNotifyPosted(title: "Asdf", message: "asdf")
     }
     
-    func popupNotifyPosted(title title: String, message: String){
-        
-        let alertController = UIAlertController(title: title, message:
-            message, preferredStyle: UIAlertControllerStyle.Alert)
-        
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-    }
+    
+    
 
 
 }

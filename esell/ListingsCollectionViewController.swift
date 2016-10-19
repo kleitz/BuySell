@@ -134,7 +134,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                         
                         dispatch_async(dispatch_get_main_queue(), {
                             cell.imageView.image = image
-                            cell.imageView.contentMode = .ScaleAspectFit
+                            cell.imageView.contentMode = .ScaleAspectFill
                         })
                         
                     } else {
@@ -151,7 +151,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     cell.imageView.image = image
-                    cell.imageView.contentMode = .ScaleAspectFit
+                    cell.imageView.contentMode = .ScaleAspectFill
                 })
             }
         }

@@ -249,6 +249,7 @@ class FirebaseManager {
         newBidItem.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {
                 print(err?.localizedDescription)
+                self.delegateForBid?.bidComplete(self, didComplete: false)
                 return
             }
             

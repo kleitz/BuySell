@@ -10,8 +10,8 @@ import UIKit
 
 
 enum Segment: Int {
-    case table = 0
-    case collection = 1
+    case collection = 0
+    case table = 1
 }
 
 protocol FirebaseManagerDelegate: class {
@@ -101,28 +101,27 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
 
         // Set default segment that is Selected upon load
         
-        segmentControl.selectedSegmentIndex = Segment.table.rawValue
+        segmentControl.selectedSegmentIndex = Segment.collection.rawValue
         
-        tableViewController.view.hidden = false
-        collectionViewController.view.hidden = true
+//        tableViewController.view.hidden = false
+//        collectionViewController.view.hidden = true
 
     }
     
     func setupSegmentSwitchView() {
         switch segmentControl.selectedSegmentIndex
         {
-        case Segment.table.rawValue:
-            print(" > select table")
-            tableViewController.view.hidden = false
-            collectionViewController.view.hidden = true
-            
             
         case Segment.collection.rawValue:
             print(" > select collection")
             tableViewController.view.hidden = true
             collectionViewController.view.hidden = false
             
-            
+        case Segment.table.rawValue:
+            print(" > select table")
+            tableViewController.view.hidden = false
+            collectionViewController.view.hidden = true
+
         default: break;
         }
     }

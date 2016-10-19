@@ -8,7 +8,9 @@
 
 import UIKit
 
-class TransactionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+
+class TransactionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BodyCellDelegate {
     
     
     enum Segment: Int {
@@ -317,7 +319,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
 
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
-            
+        
+        // SET DELEGATE TO SELF
+            cell.delegate = self
+        
+        // SWITCH CASE
             switch segmentedControl.selectedSegmentIndex {
                 
             case Segment.postsBuying.rawValue:
@@ -330,7 +336,12 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 cell.bidderNameLabel.text = ("My bid amount")
                 cell.bidAmount.text = postIBidOn.formattedAmount
                 
+                
+                // profile iamge should equal = the sleler
+                // TODO later. cell.profileImage.image =
+                
                 // settings for UI hidden
+                cell.profileImage.hidden = true
                 cell.bidAmount.hidden = false
                 cell.acceptButton.hidden = true
                 
@@ -418,6 +429,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                                                 cell.bidAmount.text = bidsForOnePost.formattedAmount
                                                 
                                                 // settings for UI hidden
+                                                cell.profileImage.hidden = false
                                                 cell.bidAmount.hidden = false
                                                 cell.acceptButton.hidden = false
 
@@ -468,6 +480,31 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         view.layer.cornerRadius = cornerRadiusParams
     }
 
-
     
+    // DELEGATE FUnction
+
+    func presentView(manager: BodyCell, wasClicked: Bool) {
+        print(">> runing dlelegate function in TransactionView")
+        if wasClicked == true {
+            
+            popupNotifyPosted()
+            
+        }
+    }
+    
+    func popupNotifyPosted(){
+        
+        let alertController = UIAlertController(title: "Post Completed", message:
+            "Your item has been posted!", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+        
+        // after the popup, it should save the accepted as TRUE and set all the others ones as false
+        // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
+    }
+    
+
 }
