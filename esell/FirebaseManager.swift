@@ -20,10 +20,14 @@ class FirebaseManager {
     
     weak var delegateForBid: FirebaseManagerBidDelegate?
     
-    // MARK: functions
+    
     
     let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
     
+    
+    // MARK: Functions for write Data to Firebase
+    
+    // save user in database
     
     func createNewUserInFirebase(uid: String, name: String, email: String, createdAt: NSObject, fbID: String, fbPicURL: String, fbURL: String ) {
         
@@ -42,6 +46,89 @@ class FirebaseManager {
         })
         
     }
+    
+    
+    // save bid in database
+    
+    func saveBid(parentPostID postID: String, bidAmount: Double, hasPaidOnline: Bool) {
+        
+        let bidsRef = ref.child("bids")
+        
+        //let refUnderCurrentPost = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com").child("posts")
+        
+        let newBidItem = bidsRef.childByAutoId()
+        
+        
+        // Get the userID from userdefaults to save as "author" key
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        guard let userID = defaults.stringForKey("uid") else {
+            print("failed getting nsuserdefaults uid")
+            return
+        }
+        
+        let values = [ "parent_post_id": postID,
+                       "amount": bidAmount,
+                       "created_at": FIRServerValue.timestamp(),
+                       "bid_accepted": false,
+                       //                       "cc_name_on_card": creditCardInfo.nameOnCard,
+            //                       "cc_number": creditCardInfo.cardNumber,
+            //                       "cc_exp_month": creditCardInfo.expiryMonth,
+            //                       "cc_exp_year": creditCardInfo.expiryYear,
+            "has_paid_online": hasPaidOnline,
+            "bidder_id": userID ]
+        
+        newBidItem.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err?.localizedDescription)
+                self.delegateForBid?.bidComplete(self, didComplete: false)
+                return
+            }
+            
+            //TODO anoterh delegate to let kCController know it's done saving??
+            self.delegateForBid?.bidComplete(self, didComplete: true)
+            
+            print("saved BID info successfly in firebase DB")
+        })
+    }
+    
+
+    // MARK: Functions for UPDATING Data (overwrite) 
+    
+    func updateAllBidsOfOnePost(parentPostID parentPostID: String, acceptedBidID bidID: String, withCompletionHandler: (isUpdated: Bool ) -> Void) {
+        
+        // before this, both bid_accepted and bid_responded should be 'false'
+        
+        
+        // set 1 of the bids to true
+        
+        ref.child("bids").child(bidID).setValue(["bid_accepted":true])
+        ref.child("bids").child(bidID).setValue(["bid_responded":true])
+        
+        print("[updateAllBids...] set accepted Bid status -> TRUE ")
+        
+        // set all other ones as rejected???
+        // loop for query of all bids under parent_post_id
+        
+        self.fetchBidsByParentPost(postID: parentPostID) { (bidsArrayForOnePost) in
+            
+            print("[updateAllBids...] total bids in array: \(bidsArrayForOnePost.count)")
+            for eachBid in bidsArrayForOnePost {
+                
+                print("[updateAllBids...] setting bid statuses -> false")
+                self.ref.child("bids").child(eachBid.bidID).setValue(["bid_accepted":false])
+                self.ref.child("bids").child(eachBid.bidID).setValue(["bid_responded":true])
+                
+            }
+        }
+
+        
+    }
+    
+    
+    
+    // MARK: Functions for fetching Data
     
     func fetchPosts() {
         
@@ -87,6 +174,269 @@ class FirebaseManager {
         })
 
     }
+    
+    
+    // Grab the original 1 post from the parent_post_id (PostID) in Bid Info. Lookup return value in "posts".
+    
+    func fetchSinglePostByPostID(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
+        
+        var post = ItemListing(id: postID)
+        
+        ref.child("posts").queryOrderedByKey().queryEqualToValue(postID).observeSingleEventOfType(.ChildAdded, withBlock:  { (snapshot) in
+            
+            //            print("[singlePostByID] KEY-> \(snapshot.key)")
+            //            print("[singlePostByID] VAL -> \(snapshot.value)\n")
+            
+            // This is the childvalues for each "post"
+            guard let dataSnapshot = snapshot.value as? [String:AnyObject] else {
+                print("error unwrapping post")
+                fatalError()
+            }
+            
+            post = self.parsePostSnapshot(postID: postID, data: dataSnapshot)
+            
+            withCompletionHandler(returnedPost: post)
+        })
+        
+    }
+    
+    
+    // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
+    
+    func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsArrayForOnePost: [BidForItem]) -> Void) {
+        
+        // note: limit to 25
+        
+        print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
+        
+        ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
+            ) in
+            
+            // This will loop through each query (snapshot)
+            
+            print("   [fetchBidsbyPost] snapshot exists?= \(snapshot.exists())")
+            
+            if snapshot.exists() != false {
+                
+                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+                
+                for item in [snapshot.value] {
+                    print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
+                    //print("TEST ITEM PRINT bid: \(item)")
+                    
+                    // Create a dictinoary for each item in the array
+                    guard let itemDictionary = item as? NSDictionary else {
+                        fatalError()
+                    }
+                    
+                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                        fatalError()
+                    }
+                    
+                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                        fatalError()
+                    }
+                    
+                    var bidArray = [BidForItem]()
+                    
+                    for (index,item) in firebaseItemValue.enumerate() {
+                        
+                        let bidID = firebaseItemKey[index]
+                        
+                        // Parse all firebase data
+                        
+                        let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                        
+                        // Append to the array of posts to be returned from function
+                        bidArray.append(bid)
+                    }
+                    
+                    withCompletionHandler(bidsArrayForOnePost: bidArray)
+                }
+                
+            } else {
+                print("   [fetchBidsbyPost] >> IN THE ELSE >>")
+                var bidArray = [BidForItem]()
+                bidArray.append(BidForItem(bidID: "placeholder"))
+                
+                withCompletionHandler(bidsArrayForOnePost: bidArray)
+            }
+            
+        })
+        
+        
+    }
+    
+    
+    // Grab ALL POSTS from a UserID. Lookup return value in "posts".
+    
+    func fetchPostsByUserID(userID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
+        
+        print(">>> RUnning query for POSTS created by user.")
+        
+        // note: limit to 25
+        
+        ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
+            ) in
+            
+            
+            print("   [fetchPostsByUserID] snapshot exists?= \(snapshot.exists())")
+            
+            if snapshot.exists() != false {
+                
+                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+                
+                for item in [snapshot.value] {
+                    
+                    // Create a dictinoary for each item in the array
+                    guard let itemDictionary = item as? NSDictionary else {
+                        fatalError()
+                    }
+                    
+                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                        fatalError()
+                    }
+                    
+                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                        fatalError()
+                    }
+                    
+                    
+                    var postArray = [ItemListing]()
+                    
+                    for (index,item) in firebaseItemValue.enumerate() {
+                        
+                        let postID = firebaseItemKey[index]
+                        
+                        // Parse all firebase data
+                        
+                        let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
+                        
+                        // Append to the array of posts to be returned from function
+                        print("POST to append: \(post.title)")
+                        postArray.append(post)
+                    }
+                    withCompletionHandler(postsCreated: postArray)
+                }
+            } else {
+                var postArray = [ItemListing]()
+                
+                postArray.append(ItemListing(id: "placeholder"))
+                withCompletionHandler(postsCreated: postArray)
+            }
+            
+            
+        })
+    }
+    
+    // Fetch all user info by UID (like to get seller info from a bid's post owner)
+    
+    func fetchUserInfoFromFirebase(sellerUID uid: String, withCompletionHandler: (getUser: User)-> Void ) {
+        
+        ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
+            
+            print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
+            guard let dictionary = snapshot.value as? [String:AnyObject] else {
+                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
+                return
+            }
+            
+            // print("test print full dictionary w/ toplevel ID: \(dictionary)")
+            
+            
+            guard let sellerData = dictionary[uid] as? [String: AnyObject] else {
+                print("[fetchUserInfoFromFirebase] Error: failed getting seller key's values")
+                return
+            }
+            
+            
+            // Get the name & email
+            
+            guard let name = sellerData["name"] as? String,
+                let email = sellerData["email"] as? String,
+                let imageURL = sellerData["fb_pic_url"] as? String else {
+                    print("error")
+                    return
+            }
+            
+            
+            // Prep the User object to return
+            
+            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
+            
+            
+            print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")
+            
+            withCompletionHandler(getUser: sellerInfo)
+        })
+        
+    }
+    
+
+    
+    // Grab ALL bids by a UID
+    
+    func fetchBidsByUserID(userID uid: String, withCompletionHandler: (bidsCreated: [BidForItem])-> Void ){
+        // wront way of writing query
+        // ref.child("bids").queryEqualToValue(uid).observeSingleEventOfType(.Value)
+        
+        // correct way
+        
+        // note: limit to 25
+        
+        ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
+            ) in
+            
+            
+            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+            
+            for item in [snapshot.value] {
+                
+                // Create a dictinoary for each item in the array
+                guard let itemDictionary = item as? NSDictionary else {
+                    fatalError()
+                }
+                
+                // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                    fatalError()
+                }
+                
+                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                    fatalError()
+                }
+                
+                
+                var bidArray = [BidForItem]()
+                
+                for (index,item) in firebaseItemValue.enumerate() {
+                    
+                    let bidID = firebaseItemKey[index]
+                    
+                    // Parse all firebase data
+                    
+                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                    
+                    // Append to the array of posts to be returned from function
+                    print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
+                    
+                    bidArray.append(bid)
+                }
+                withCompletionHandler(bidsCreated: bidArray)
+            }
+            
+        })
+        
+    }
+
+    
+    
+    // MARK: Functions for parsing snapshots
     
     func parsePostSnapshot(postID postID: String, data dictionary: [String:AnyObject]) -> ItemListing {
         
@@ -172,310 +522,12 @@ class FirebaseManager {
     }
     
     
-    // Find a specific seller by UID
-    
-    func fetchUserInfoFromFirebase(sellerUID uid: String, withCompletionHandler: (getUser: User)-> Void ) {
-        
-        ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
-            
-            print("testprint snapshot: \(snapshot)")
-            guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
-                return
-            }
-            
-            print("test print full dictionary w/ toplevel ID: \(dictionary)")
-            
-            
-            guard let sellerData = dictionary[uid] as? [String: AnyObject] else {
-                print("[fetchUserInfoFromFirebase] Error: failed getting seller key's values")
-                return
-            }
-            
-            
-            // Get the name & email
-            
-            guard let name = sellerData["name"] as? String,
-                let email = sellerData["email"] as? String,
-                let imageURL = sellerData["fb_pic_url"] as? String else {
-                    print("error")
-                    return
-            }
-
-   
-            // Prep the User object to return
-            
-            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
-            
-            
-            print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")
-    
-            withCompletionHandler(getUser: sellerInfo)
-        })
-        
-    }
-
-    
-    
-    func saveBid(parentPostID postID: String, bidAmount: Double, hasPaidOnline: Bool) {
-        
-        let bidsRef = ref.child("bids")
-        
-        //let refUnderCurrentPost = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com").child("posts")
-        
-        let newBidItem = bidsRef.childByAutoId()
-        
-        
-        // Get the userID from userdefaults to save as "author" key
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        guard let userID = defaults.stringForKey("uid") else {
-            print("failed getting nsuserdefaults uid")
-            return
-        }
-
-        let values = [ "parent_post_id": postID,
-                       "amount": bidAmount,
-                       "created_at": FIRServerValue.timestamp(),
-                       "bid_accepted": false,
-//                       "cc_name_on_card": creditCardInfo.nameOnCard,
-//                       "cc_number": creditCardInfo.cardNumber,
-//                       "cc_exp_month": creditCardInfo.expiryMonth,
-//                       "cc_exp_year": creditCardInfo.expiryYear,
-                        "has_paid_online": hasPaidOnline,
-                       "bidder_id": userID ]
-        
-        newBidItem.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
-            if err != nil {
-                print(err?.localizedDescription)
-                self.delegateForBid?.bidComplete(self, didComplete: false)
-                return
-            }
-            
-            //TODO anoterh delegate to let kCController know it's done saving??
-            self.delegateForBid?.bidComplete(self, didComplete: true)
-            
-            print("saved BID info successfly in firebase DB")
-        })
-    }
     
     
     
-    // This function is used to grab the original 1 post from the parent_post_id (PostID) in Bid Info. Lookup return value in "posts".
-    
-    func fetchSinglePostByPostID(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
-        
-        var post = ItemListing(id: postID)
-        
-        ref.child("posts").queryOrderedByKey().queryEqualToValue(postID).observeSingleEventOfType(.ChildAdded, withBlock:  { (snapshot) in
-            
-//            print("[singlePostByID] KEY-> \(snapshot.key)")
-//            print("[singlePostByID] VAL -> \(snapshot.value)\n")
-            
-            // This is the childvalues for each "post"
-            guard let dataSnapshot = snapshot.value as? [String:AnyObject] else {
-                print("error unwrapping post")
-                fatalError()
-            }
-            
-            post = self.parsePostSnapshot(postID: postID, data: dataSnapshot)
-            
-            withCompletionHandler(returnedPost: post)
-        })
-        
-    }
-    
-    // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
-    
-    func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsArrayForOnePost: [BidForItem]) -> Void) {
-        
-        // note: limit to 25
-        
-        print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
-        
-            ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(postID).queryLimitedToLast(25).observeSingleEventOfType(.Value, withBlock: { (snapshot
-            ) in
-            
-            // This will loop through each query (snapshot)
-            
-            print("   [fetchBidsbyPost] snapshot exists?= \(snapshot.exists())")
-            
-            if snapshot.exists() != false {
-                
-                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-                
-                for item in [snapshot.value] {
-                    print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
-                    //print("TEST ITEM PRINT bid: \(item)")
-                    
-                    // Create a dictinoary for each item in the array
-                    guard let itemDictionary = item as? NSDictionary else {
-                        fatalError()
-                    }
-                    
-                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                        fatalError()
-                    }
-                    
-                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                        fatalError()
-                    }
-                    
-                    var bidArray = [BidForItem]()
-                    
-                    for (index,item) in firebaseItemValue.enumerate() {
-                        
-                        let bidID = firebaseItemKey[index]
-                        
-                        // Parse all firebase data
-                        
-                        let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
-                        
-                        // Append to the array of posts to be returned from function
-                        bidArray.append(bid)
-                    }
-    
-                    withCompletionHandler(bidsArrayForOnePost: bidArray)
-                }
-                
-            } else {
-                print("   [fetchBidsbyPost] >> IN THE ELSE >>")
-                var bidArray = [BidForItem]()
-                bidArray.append(BidForItem(bidID: "placeholder"))
-
-                withCompletionHandler(bidsArrayForOnePost: bidArray)
-            }
-            
-        })
-        
-        
-    }
     
     
-    // This function is used to grab ALL POSTS from a UserID. Lookup return value in "posts".
-    
-    func fetchPostsByUserID(userID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
-        
-        print(">>> RUnning query for POSTS created by user.")
-        
-        // note: limit to 25
-        
-        ref.child("posts").queryOrderedByChild("author").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
-            ) in
-            
-            
-            print("   [fetchPostsByUserID] snapshot exists?= \(snapshot.exists())")
-            
-            if snapshot.exists() != false {
-                
-                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-                
-                for item in [snapshot.value] {
-                    
-                    // Create a dictinoary for each item in the array
-                    guard let itemDictionary = item as? NSDictionary else {
-                        fatalError()
-                    }
-                    
-                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                        fatalError()
-                    }
-                    
-                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                        fatalError()
-                    }
-                    
-                    
-                    var postArray = [ItemListing]()
-                    
-                    for (index,item) in firebaseItemValue.enumerate() {
-                        
-                        let postID = firebaseItemKey[index]
-                        
-                        // Parse all firebase data
-                        
-                        let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
-                        
-                        // Append to the array of posts to be returned from function
-                        print("POST to append: \(post.title)")
-                        postArray.append(post)
-                    }
-                    withCompletionHandler(postsCreated: postArray)
-                }
-            } else {
-                var postArray = [ItemListing]()
-                
-                postArray.append(ItemListing(id: "placeholder"))
-                withCompletionHandler(postsCreated: postArray)
-            }
-            
-            
-        })
-        
-        
-        
-        
-    }
-    
-    
-    func fetchBidsByUserID(userID uid: String, withCompletionHandler: (bidsCreated: [BidForItem])-> Void ){
-        // wront way of writing query
-        // ref.child("bids").queryEqualToValue(uid).observeSingleEventOfType(.Value)
-        
-        // correct way
-        
-        // note: limit to 25
-        
-        ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
-            ) in
-            
-            
-            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-            
-            for item in [snapshot.value] {
-                
-                // Create a dictinoary for each item in the array
-                guard let itemDictionary = item as? NSDictionary else {
-                    fatalError()
-                }
-                
-                // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                    fatalError()
-                }
-                
-                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                    fatalError()
-                }
-                
-                
-                var bidArray = [BidForItem]()
-                
-                for (index,item) in firebaseItemValue.enumerate() {
-                    
-                    let bidID = firebaseItemKey[index]
-                    
-                    // Parse all firebase data
-                    
-                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
-                    
-                    // Append to the array of posts to be returned from function
-                    print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
-                    
-                    bidArray.append(bid)
-                }
-                withCompletionHandler(bidsCreated: bidArray)
-            }
-            
-        })
-        
-    }
+    // MARK: Funciton other: convert time
     
     private func convertNSTimeIntervaltoNSDate(date date: NSTimeInterval) -> NSDate {
     

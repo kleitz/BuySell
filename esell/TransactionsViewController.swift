@@ -10,7 +10,7 @@ import UIKit
 
 
 
-class TransactionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BodyCellDelegate {
+class TransactionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     enum Segment: Int {
@@ -18,23 +18,26 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         case postsSelling = 1
     }
     
-
+    // MARK: IBOutlets
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var tableView: UITableView!
     
 
+    // MARK: Data Variables
+    
     // for section/header
-    var postsBuying = [ItemListing]()
-    var postsSelling = [ItemListing]()
+    var postsBuying = [ItemListing]() { didSet { tableView.reloadData() } }
+    var postsSelling = [ItemListing]() { didSet { tableView.reloadData() } }
     
     
     // for each section/header cell
-    var myBids = [BidForItem]()
-    var otherBidsForMySale = [[BidForItem]]()
+    var myBids = [BidForItem]() { didSet { tableView.reloadData() } }
+    var otherBidsForMySale = [[BidForItem]]() { didSet { tableView.reloadData() } }
     
-    // create a user array/dict? to store bidder info
-    var otherBidsUserInfoDictionary = [String:User]()
+    // create a user array/dict? to store ANY user info
+    var UserInfoDictionary = [String:User]() { didSet { tableView.reloadData() } }
     
     
     
@@ -42,7 +45,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
 
     
     
-    /// View WILL Appear
+    // MARK: View WILL Appear - data calling
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
@@ -54,7 +57,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         let currentUser = getUserID()
         print("\n [CURRENTUSER var]: \(currentUser)")
         
-        // 1- fetch my bids
+        // 1 - Fetch my bids
         fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
             
             
@@ -78,11 +81,27 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         self.postsBuying.append(post)
                         
                         print(" __[1.upper]__-> [fetchBidsByUserID] returned count of posts, set to [postsBuying]: \(self.postsBuying.count)")
+
                         
-                        dispatch_async(dispatch_get_main_queue()){
+                        /// 1c Fetch user info out of each POST Set - requires another QUERY
+                        // Then add returned info to local dictionary
+                        
+                        self.fireBase.fetchUserInfoFromFirebase(sellerUID: post.author, withCompletionHandler: { (getUser) in
                             
-                            self.tableView.reloadData()
-                        }
+                            
+                            print("~~~ in order for BUYSECTION try get userID:. sending this post.author: \(post.author)")
+                            
+                            // store this locally as the bidType's optional var
+                            
+                            bid.parentPostUserInfo = getUser
+                            
+                            // reload after setting optional var in Bid
+                            dispatch_async(dispatch_get_main_queue()) {
+                                print("reloaded data")
+                                self.tableView.reloadData()
+                            }
+                        })
+                        
                     })
                 }
             }
@@ -110,25 +129,38 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                        
                         self.otherBidsForMySale.append(bidsArrayForOnePost)
                         
-                        // get the user info out of each bid Set
+                        
+                        /// 2c Fetch user info out of each BID Set - requires another QUERY
+                        // Then add returned info to local dictionary
+                        
                         for eachBid in bidsArrayForOnePost {
                             
                             //TODO add conditional to prevent fetching for USERID="placeholder" (well.. it fails anyway so maybe it doesn't matter)
                             
                             self.fireBase.fetchUserInfoFromFirebase(sellerUID: eachBid.bidderID, withCompletionHandler: { (getUser) in
                                 
-                                self.otherBidsUserInfoDictionary.updateValue(getUser, forKey: eachBid.bidderID)
+                                
+                                // store in dictionary? TODO.not needd if used class. remove later?
+                                
+                                self.UserInfoDictionary.updateValue(getUser, forKey: eachBid.bidderID)
+                                
+                                
+                                // store this locally as the bidType's optional var
+                                
+                                eachBid.parentPostUserInfo = getUser
+                                
+                                // reload after setting optional var in Bid
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    print("reloaded data")
+                                    self.tableView.reloadData()
+                                }
                                 
                             })
+
                         }
-                        
-                        
+
                         print(" ___[2.upper]_ >> [fetchPostsByUserID] returned count, set to [2.lower][otherBidsForMySale]: \(self.otherBidsForMySale.count)")
-                            
-                            dispatch_async(dispatch_get_main_queue()){
-                                
-                                self.tableView.reloadData()
-                        }
+
                     })
                 }
             }
@@ -139,7 +171,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    /// VIEW DID LOAD
+    // MARK:  VIEW DID LOAD
     
     override func viewDidLoad() {
         
@@ -155,42 +187,10 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     
-    // MARK - Functions for Segmented Control
-    
-    func setupSegmentedControl(){
-        
-        // attach function to segmentControl UI FOR WHEN VALUE CHANGED
-        
-        segmentedControl.addTarget(self, action: #selector(setupSegmentSwitchView), forControlEvents: UIControlEvents.ValueChanged)
-        
-        // set default selected index
-        
-        segmentedControl.selectedSegmentIndex = 0
-        
-    }
-    
-    func setupSegmentSwitchView() {
-        
-        switch segmentedControl.selectedSegmentIndex {
-            
-        case Segment.postsBuying.rawValue:
-            
-            print("  > selected segment: BIDS")
-            
-            self.tableView.reloadData()
-            
-            
-        case Segment.postsSelling.rawValue:
-            
-            print("  > selected segment: POSTS")
 
-            self.tableView.reloadData()
-
-        default: break }
-    }
     
     
-    // MARK - Table view functions
+    // MARK: Table view functions
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         var tableSourceArray = []
@@ -238,7 +238,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
                 let postIBidOn = postsBuying[section]
                 
-                print("returning postIBidOn: \(postIBidOn)")
                 headerView.titleLabel.text = postIBidOn.title
                 headerView.priceLabel.text = postIBidOn.formattedPrice
                 
@@ -320,8 +319,13 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
         
-        // SET DELEGATE TO SELF
-            cell.delegate = self
+//        // SET DELEGATE TO SELF
+//            cell.delegate = self
+        
+        
+        // settings for UI hide/show
+        self.setupUIForCell(cell)
+        
         
         // SWITCH CASE
             switch segmentedControl.selectedSegmentIndex {
@@ -333,19 +337,66 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 
                 let postIBidOn = myBids[indexPath.section]
                 
-                cell.bidderNameLabel.text = ("My bid amount")
-                cell.bidAmount.text = postIBidOn.formattedAmount
+                cell.buyingSectionPriceAmount.text = ""
+                //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
                 
                 
-                // profile iamge should equal = the sleler
-                // TODO later. cell.profileImage.image =
+                // Set seller profile iamage
                 
-                // settings for UI hidden
-                cell.profileImage.hidden = true
-                cell.bidAmount.hidden = false
-                cell.acceptButton.hidden = true
+                print("~~~ BUYSECTION getting userID from async local var: #\(indexPath.row):: \(postsBuying[indexPath.row].author) print\(postIBidOn.parentPostUserInfo?.imageURL)\n ")
                 
-                
+                if let userCompleteFromBid: User = postIBidOn.parentPostUserInfo {
+                    
+                    cell.buyingSectionUserName.text = userCompleteFromBid.name
+                    
+
+                    // Start URL request for profile image in background thread
+                    
+                    let profileURL = userCompleteFromBid.imageURL
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+    
+                        if let url = NSURL(string: profileURL) {
+                            
+                            // Download an NSData representation of the image at the URL
+                            let urlRequest = NSURLRequest(URL: url)
+                            
+                            let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                                if error == nil {
+                                    
+                                    guard let unwrappedData = data else {
+                                        print("Error converting image")
+                                        return
+                                    }
+                                    
+                                    guard let image = UIImage(data: unwrappedData) else {
+                                        print("Error converting image")
+                                        return
+                                    }
+                                    
+                                    // Display image (using main thread
+                                    
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        
+
+                                        cell.buyingSectionUserImage.image = image
+                                        cell.buyingSectionUserImage.contentMode = .ScaleAspectFill
+                                        
+                                        self.roundUIView(cell.buyingSectionUserImage, cornerRadiusParams: cell.buyingSectionUserImage.frame.size.width / 2)
+                                        
+                                    })
+                                    
+                                } else {
+                                    
+                                    print(error?.localizedDescription)
+                                }
+                            })
+                            
+                            task.resume()
+                        }
+                    }
+                }
+
             case Segment.postsSelling.rawValue:
                 
                 // If there is an empty query then it will return "placeholder" id for the post
@@ -358,13 +409,9 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 
                 if myFirstPost.id == "placeholder" {
                     
-                    cell.bidderNameLabel.text = "" //message can go here but I put it in the header
+                    cell.sellingSectionUserName.text = "" //message can go here but I put it in the header
                     
-                    // settings for UI hidden
-                    cell.bidAmount.hidden = true
-                    cell.acceptButton.hidden = true
-                    
-                    
+
                     // If the 1st post is not placeholder
                 } else {
                     
@@ -373,11 +420,14 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                     // If the bids is a placeholder, then return message
                     
                     if bidsForOnePost.bidID == "placeholder" {
-                        cell.bidderNameLabel.text = "You have no bids for this item"
+                        cell.sellingSectionUserName.text = "You have no bids for this item"
+
+                        // UI settings NOTE: HAS plus special additional ones because NO RESPONSE SO HIDE A LOT OF STUFF
                         
-                        // settings for UI hidden
-                        cell.bidAmount.hidden = true
                         cell.acceptButton.hidden = true
+                        cell.sellingSectionPriceAmount.text = ""
+                        cell.sellingSectionStatusImage.hidden = true
+                        cell.sellingSectionUserImage.hidden = true
                         
                     }
                         
@@ -386,16 +436,40 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         
                     else {
                         
-                        cell.bidAmount.text = bidsForOnePost.formattedAmount
-                        // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC.
+                        // set up button functions acceptBid
                         
-                        if let profileURL = otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.imageURL {
+                        cell.acceptButton.addTarget(self, action: #selector(acceptBid(_:)), forControlEvents: .TouchUpInside)
+                        
+                        
+                        // set up other stuff
+                        
+                        cell.sellingSectionPriceAmount.text = bidsForOnePost.formattedAmount
+                        
+                        cell.sellingSectionStatusImage.contentMode = .ScaleAspectFill
+                        
+                        if bidsForOnePost.isPaidOnline {
+                            cell.sellingSectionStatusImage.image = UIImage(named: "crediticon")
+                        } else  {
+                            cell.sellingSectionStatusImage.image = UIImage(named: "cashicon")
+                        }
+                        
+                        
+                        // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC..
+                        
+                        if let userCompleteFromBid: User = bidsForOnePost.parentPostUserInfo {
+                        
+                            cell.sellingSectionUserName.text = userCompleteFromBid.name
                             
-                            // Background for get profile image
+                            
+                            
+                            
+                            
+                            // Start URL request for profile image in background thread
+                            
+                            let profileURL = userCompleteFromBid.imageURL
+                        
                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                                
-                                // Jump in to a background thread to get the image for this item
-                                
+      
                                 if let url = NSURL(string: profileURL) {
                                     
                                     // Download an NSData representation of the image at the URL
@@ -417,22 +491,12 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                                             // Display image (using main thread
                                             
                                             dispatch_async(dispatch_get_main_queue(), {
-                                                
-                                                cell.profileImage.image = image
-                                                cell.profileImage.contentMode = .ScaleAspectFill
-                                                
-                                                self.roundUIView(cell.profileImage, cornerRadiusParams: cell.profileImage.frame.size.width / 2)
-                                                
-                                                let sellerName = self.otherBidsUserInfoDictionary[bidsForOnePost.bidderID]?.name
-                                                
-                                                cell.bidderNameLabel.text = sellerName
-                                                cell.bidAmount.text = bidsForOnePost.formattedAmount
-                                                
-                                                // settings for UI hidden
-                                                cell.profileImage.hidden = false
-                                                cell.bidAmount.hidden = false
-                                                cell.acceptButton.hidden = false
 
+                                                cell.sellingSectionUserImage.image = image
+                                                cell.sellingSectionUserImage.contentMode = .ScaleAspectFill
+                                                
+                                                self.roundUIView(cell.sellingSectionUserImage, cornerRadiusParams: cell.sellingSectionUserImage.frame.size.width / 2)
+                                                
                                             })
                                             
                                         } else {
@@ -446,17 +510,17 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                             }
                         }
                     }
-                        
                     
-                        
-                    }
-                    default: break }
-                
-                return cell
+                    
+                    
+                }
+            default: break }
+        
+        return cell
         }
         
  
-
+    // MARK: Other functions
     
     // Get user ID function
     
@@ -470,8 +534,8 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         return userID
     }
     
-    
 
+    
     
     // for image rounding
     
@@ -481,16 +545,68 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     
-    // DELEGATE FUnction
+    // for the button in tableView for accepting bid
+    
+    
+    // OTHER FUNCS
+    ///
+    //    func viewMap(sender: UIButton) {
+    //        guard let senderCell = sender.superview?.superview as? UITableViewCell,
+    //            cellIndexPath = tableView?.indexPathForCell(senderCell) else {
+    //                fatalError()
+    //        }
+    //
+    //        let selectedRow = cellIndexPath.row
+    //
+    //        print(">> Clicked cellButton #\(selectedRow) \(coredataStations[selectedRow].name)")
+    //
+    //    }
 
-    func presentView(manager: BodyCell, wasClicked: Bool) {
-        print(">> runing dlelegate function in TransactionView")
-        if wasClicked == true {
-            
-            popupNotifyPosted()
-            
+    func acceptBid(sender: UIButton) {
+        
+        print("clicked accept")
+        
+        guard let senderCell = sender.superview?.superview as? UITableViewCell,
+            cellIndexPath = tableView?.indexPathForCell(senderCell) else {
+                fatalError()
         }
+        
+        print("cellindexpath : \(cellIndexPath)")
+        
+        
+        //self.delegate?.presentView(self, wasClicked: true)
+        // error Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UIAlertController: 0x7fbf85b2add0>)
+        
+        popupNotifyPosted()
     }
+    
+    
+    func rejectBid() {
+        
+        print("clicked reject")
+        
+        //popupNotifyPosted(title: "Asdf", message: "asdf")
+    }
+    
+    
+    ///
+    
+    // DELEGATE FUnction from BodyCell
+
+//    func presentView(manager: BodyCell, wasClicked: Bool) {
+//        print(">> runing dlelegate function in TransactionView")
+//        if wasClicked == true {
+//            
+//            popupNotifyPosted()
+//            
+//            
+//            // after the popup, it should save the accepted as TRUE and set all the others ones as false
+//            // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
+//
+//            fireBase.updateAllBidsOfOnePost(parentPostID: String, acceptedBidID: <#T##String#>, withCompletionHandler: <#T##(isUpdated: Bool) -> Void#>)
+//            
+//        }
+//    }
     
     func popupNotifyPosted(){
         
@@ -502,9 +618,87 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         self.presentViewController(alertController, animated: true, completion: nil)
         
         
-        // after the popup, it should save the accepted as TRUE and set all the others ones as false
-        // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
     }
     
+    
+    
+    // MARK: Functions for Segmented Control
+    
+    func setupSegmentedControl(){
+        
+        // attach function to segmentControl UI FOR WHEN VALUE CHANGED
+        
+        segmentedControl.addTarget(self, action: #selector(setupSegmentSwitchView), forControlEvents: UIControlEvents.ValueChanged)
+        
+        // set default selected index
+        
+        segmentedControl.selectedSegmentIndex = 0
+        
+    }
+    
+    func setupSegmentSwitchView() {
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+        case Segment.postsBuying.rawValue:
+            
+            print("  > selected segment: BIDS")
+            
+            // set seller
+            
+            self.tableView.reloadData()
+            
+            
+        case Segment.postsSelling.rawValue:
+            
+            print("  > selected segment: POSTS")
+            
+            
+            
+            self.tableView.reloadData()
+            
+        default: break }
+    }
+    
+    
+    func setupUIForCell(cell: BodyCell) {
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+        case Segment.postsBuying.rawValue:
+            
+            cell.sellingSectionUserName.hidden = true
+            cell.sellingSectionUserImage.hidden = true
+            cell.sellingSectionPriceAmount.hidden = true
+            cell.sellingSectionStatusImage.hidden = true
+            cell.acceptButton.hidden = true
+            
+            
+            cell.buyingSectionUserName.hidden = false
+            cell.buyingSectionUserImage.hidden = false
+            cell.buyingSectionPriceAmount.hidden = false
+            cell.buyingSectionStatus.hidden = false
+            cell.buyingSectionStatusImage.hidden = false
+            
+        case Segment.postsSelling.rawValue:
+            
+            cell.sellingSectionUserName.hidden = false
+            cell.sellingSectionUserImage.hidden = false
+            cell.sellingSectionPriceAmount.hidden = false
+            cell.sellingSectionStatusImage.hidden = false
+            cell.acceptButton.hidden = false
+            
+            cell.buyingSectionUserName.hidden = true
+            cell.buyingSectionUserImage.hidden = true
+            cell.buyingSectionPriceAmount.hidden = true
+            cell.buyingSectionStatus.hidden = true
+            cell.buyingSectionStatusImage.hidden = true
+            
+            
+        default: break
+            
+        }
+    }
 
+    
 }

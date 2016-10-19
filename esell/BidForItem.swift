@@ -38,6 +38,20 @@ class BidForItem: NSObject {
         self.isPaidOnline = false
     }
     
+    init(bidID: String, parentPostID: String, bidderID: String, amount: Double, date: NSDate, isAccepted: Bool, isPaidOnline: Bool){
+        
+        self.bidID = bidID
+        self.parentPostID = parentPostID
+        self.bidderID = bidderID
+        self.amount = amount
+        
+        self.date = date
+        
+        self.isAcceptedBySeller = isAccepted
+        self.isPaidOnline = isPaidOnline
+    }
+    
+    
     init(bidID: String){
         
         self.bidID = bidID
@@ -54,5 +68,10 @@ class BidForItem: NSObject {
 //    var parentPost: ItemListing {
 //        return ItemListing(i
 //    }
+    
+    
+    var parentPostInfo: ItemListing? { didSet { print("       -> bid got post.Info")} }
+    
+    var parentPostUserInfo: User?   { didSet { print("       -> bid got user.Info")} }
     
 }

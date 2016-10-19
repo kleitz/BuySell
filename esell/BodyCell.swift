@@ -8,39 +8,42 @@
 
 import UIKit
 
-protocol BodyCellDelegate: class {
-    
-    func presentView(manager: BodyCell, wasClicked: Bool)
-    
-}
+//protocol BodyCellDelegate: class {
+//    
+//    func presentView(manager: BodyCell, wasClicked: Bool)
+//    
+//}
 
 class BodyCell: UITableViewCell {
     
-    
-    @IBOutlet weak var profileImage: UIImageView!
+    // for selling
 
-    @IBOutlet weak var bidderNameLabel: UILabel!
+    @IBOutlet weak var sellingSectionUserImage: UIImageView!
+    @IBOutlet weak var sellingSectionUserName: UILabel!
+    @IBOutlet weak var sellingSectionPriceAmount: UILabel!
+    @IBOutlet weak var sellingSectionStatusImage: UIImageView!
     
-    @IBOutlet weak var bidAmount: UILabel!
     
- 
     @IBOutlet weak var acceptButton: UIButton!
     
-
-    weak var delegate: BodyCellDelegate?
     
-    // need to get the bidder image url here [USER]
-    // need to get the bidder name here [USER]
-    // need to get the offered price here [BID]
+    // for buying
+    
+    @IBOutlet weak var buyingSectionUserImage: UIImageView!
+    @IBOutlet weak var buyingSectionUserName: UILabel!
+    @IBOutlet weak var buyingSectionPriceAmount: UILabel!
+    @IBOutlet weak var buyingSectionStatus: UILabel!
+    @IBOutlet weak var buyingSectionStatusImage: UIImageView!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
         
-        // set up button functions
-        
-        acceptButton.addTarget(self, action: #selector(acceptBid), forControlEvents: .TouchUpInside)
+        // Set up button UI rounded
+        acceptButton.layer.cornerRadius = 10
         
     }
 
@@ -50,29 +53,8 @@ class BodyCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    
-    // OTHER FUNCS
-    
-    func acceptBid() {
-        
-        print("clicked accept")
-        
-        self.delegate?.presentView(self, wasClicked: true)
-        // error Attempting to load the view of a view controller while it is deallocating is not allowed and may result in undefined behavior (<UIAlertController: 0x7fbf85b2add0>)
-       
-        //popupNotifyPosted(title: "Asdf", message: "asdf")
-    }
-    
-    
-    func rejectBid() {
-        
-        print("clicked reject")
-        
-        //popupNotifyPosted(title: "Asdf", message: "asdf")
-    }
-    
-    
-    
+
 
 
 }
+
