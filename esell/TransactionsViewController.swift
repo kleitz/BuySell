@@ -347,15 +347,28 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             if myBids[indexPath.section].isRespondedBySeller {
                 
-                // attach function for button acceptBid
+                if myBids[indexPath.section].isAcceptedBySeller {
+                
                 print("~~ MY BID WAS ACCEPTED")
-                cell.buyingSectionStatus.text = "ACCEPTED"
+                cell.buyingSectionStatus.text = "has ACCEPTED YOUR OFFER!"
+                cell.buyingSectionStatus.textColor = UIColor.darkTextColor()
+                    
+                } else {
+                    
+                    print("~~ MY BID WAS REJECTED")
+                    cell.buyingSectionStatus.text = "has declined your offer"
+                    cell.buyingSectionStatus.textColor = UIColor.darkTextColor()
+                    
+                }
+                
+                
                 
             } else {
             
             /// if the bid is closed/responded. everything should still show, except for the button status
             
             cell.buyingSectionStatus.text = "no response yet"
+            cell.buyingSectionStatus.textColor = UIColor.lightGrayColor()
             
             }
             
@@ -543,6 +556,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         
                         cell.acceptButton.addTarget(self, action: #selector(acceptBid(_:)), forControlEvents: .TouchUpInside)
                         
+                        // set up all UI colors & text for this case
+                        
+                        cell.acceptButton.backgroundColor = UIColor(red: 143.0/255, green: 190.0/255, blue: 0/255, alpha: 1.0)
+                        cell.acceptButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+                        cell.acceptButton.setTitle("Accept Offer", forState: .Normal)
                         cell.acceptButton.enabled = true
                         
                         
@@ -552,6 +570,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         
                     else {
                         
+                        // set up all UI colors for this case
                         
                         cell.acceptButton.enabled = false
                         
@@ -559,13 +578,17 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         
                         if bidsForOnePost.isAcceptedBySeller {
                             
-                            cell.acceptButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
-                            cell.acceptButton.setTitle("O", forState: .Normal)
+                            // set up the text for this case
+                            
+                            cell.acceptButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+                            cell.acceptButton.setTitle("accepted", forState: .Normal)
                             
                         } else {
                             
+                            // set up the text for this case
+                            
                             cell.acceptButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-                            cell.acceptButton.setTitle("X", forState: .Normal)
+                            cell.acceptButton.setTitle("not accepted", forState: .Normal)
                         }
                         
                         

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import MapKit
+import Firebase
 
 
 // TODO Need to refactor. Fix handling of initiatlizing the post class later (don't use !). Or just add all guard let things in here so you don't have to write it every view controller.
@@ -23,15 +23,16 @@ class ItemListing: NSObject {
     var author: String
     
     var createdDate: NSDate
-    
+//    {
+//        return NSDate(timeIntervalSince1970: createdDateTimeInterval)
+//    }
+
     var price: Double
     var pickupLatitude: Double
     var pickupLongitude: Double
     
     var canAcceptCreditCard: Bool
     var canShip: Bool
-    
-    //var location: String?
     
     
     // Computed variables for coordinate, subtitle, formattedPrice
@@ -89,5 +90,29 @@ class ItemListing: NSObject {
         self.canShip = false
         
     }
+    
+//    init(snapshot: FIRDataSnapshot) {
+//        
+//        let snapshotValue = snapshot.value as! NSDictionary
+//        let key = snapshot.key
+//        
+//        id = key
+//        author = snapshotValue["author"] as! String
+//        title = snapshotValue["title"] as! String
+//        imageURL = snapshotValue["image_url"] as! String
+//        price = snapshotValue["price"] as! Double
+//        itemDescription = snapshotValue["description"] as! String
+//        //createdDate = snapshotValue["created_at"] as? NSTimeInterval
+//        
+//        pickupLatitude = snapshotValue["pickup_latitude"] as! Double
+//        pickupLongitude = snapshotValue["pickup_longitude"] as! Double
+//        canAcceptCreditCard = snapshotValue["can_accept_credit"] as! Bool
+//        canShip = snapshotValue["can_ship"] as! Bool
+//        
+//        
+//        
+//        let ref = snapshot.ref
+//        
+//    }
     
 }

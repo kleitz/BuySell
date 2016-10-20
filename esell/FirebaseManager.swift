@@ -71,6 +71,7 @@ class FirebaseManager {
         let values = [ "parent_post_id": postID,
                        "amount": bidAmount,
                        "created_at": FIRServerValue.timestamp(),
+                       "bid_responded": false,
                        "bid_accepted": false,
                        //                       "cc_name_on_card": creditCardInfo.nameOnCard,
             //                       "cc_number": creditCardInfo.cardNumber,
@@ -272,9 +273,11 @@ class FirebaseManager {
                 withCompletionHandler(bidsArrayForOnePost: bidArray)
             }
             
+            }, withCancelBlock: { (error) in
+                print("fetchBIDS error: \(error.localizedDescription)")
+                
         })
-        
-        
+
     }
     
     
@@ -398,7 +401,7 @@ class FirebaseManager {
         
         ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
-            
+            if snapshot.exists() != false {
             
             // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
             
@@ -437,7 +440,12 @@ class FirebaseManager {
                 }
                 withCompletionHandler(bidsCreated: bidArray)
             }
-            
+            }
+            }, withCancelBlock: { (error) in
+                print("fetchBIDS error: \(error.localizedDescription)")
+                
+                
+                // TODO
         })
         
     }
