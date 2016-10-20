@@ -12,6 +12,7 @@ import UIKit
 class BuyingTableViewController: UITableViewController {
     
     
+    // MARK: Data Variables
     
     // for section/header
     var sectionPostsArray = [ItemListing]()  // { didSet { tableView.reloadData() } }
@@ -22,6 +23,8 @@ class BuyingTableViewController: UITableViewController {
     
     let fireBase = FirebaseManager()
     
+    
+    // MARK:- Lifecycle ViewWillAPPEAR
     
     override func viewWillAppear(animated: Bool) {
         
@@ -77,7 +80,7 @@ class BuyingTableViewController: UITableViewController {
         
     }
     
-    
+    // MARK: Lifecycle ViewDIDLOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,6 +89,16 @@ class BuyingTableViewController: UITableViewController {
         self.tableView.rowHeight = 70.0
         
     }
+    
+    // MARK: Lifecycle ViewWillDISAPPEAR
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        print(" >> buyingTable is disappearing... removing observers ")
+        fireBase.ref.removeAllObservers()
+    }
+    
+    
     
     // Table view: SECTION/HEADER - [posts] go under here
     
@@ -283,6 +296,8 @@ class BuyingTableViewController: UITableViewController {
      // Pass the selected object to the new view controller.
      }
      */
+    
+    // MARK: - Other
     
     // for image rounding for the button in tableView for accepting bid
     

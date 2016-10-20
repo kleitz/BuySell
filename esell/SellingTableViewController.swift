@@ -11,6 +11,7 @@ import UIKit
 class SellingTableViewController: UITableViewController {
     
     
+    // MARK: Data Variables
     
     // for section/header
     var sectionPostsArray = [ItemListing]() //{ didSet { tableView.reloadData() } }
@@ -21,6 +22,8 @@ class SellingTableViewController: UITableViewController {
     let fireBase = FirebaseManager()
     
     
+    
+    // MARK: - Lifecycle ViewWillAPPEAR
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
@@ -88,7 +91,7 @@ class SellingTableViewController: UITableViewController {
     
     
     
-    
+    // MARK: Lifecycle ViewDIDLOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -98,6 +101,13 @@ class SellingTableViewController: UITableViewController {
         
     }
     
+    // MARK: Lifecycle ViewWillDISAPPEAR
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        print(" >> sellingTable is disappearing... removing observers ")
+        fireBase.ref.removeAllObservers()
+    }
     
     
     // MARK: - Table view data source
@@ -355,6 +365,7 @@ class SellingTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: - Other
     
     deinit {
         print("[DEINIT] SellingTable was killed")
@@ -397,7 +408,7 @@ class SellingTableViewController: UITableViewController {
      */
     
     /*
-     // MARK: - Navigation
+     // MARK:  Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
