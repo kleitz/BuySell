@@ -14,11 +14,15 @@ class ProfileViewController: UIViewController {
 
     @IBOutlet weak var logoutButton: UIButton!
     
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Set up title
+        
+        //let userInfo = User(id: "placeholder")
         
         self.navigationItem.title = "My Account"
         
@@ -28,6 +32,8 @@ class ProfileViewController: UIViewController {
         logoutButton.addTarget(self, action: #selector(logout), forControlEvents: .TouchUpInside)
         
     }
+
+    
 
     
     func logout() {
@@ -43,6 +49,8 @@ class ProfileViewController: UIViewController {
         //self.presentViewController(vc, animated: true, completion: nil)
         
     }
+    
+
     
     
 }

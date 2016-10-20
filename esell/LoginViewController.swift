@@ -126,6 +126,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             } else {
                 
+                
+                
                 // successful request, do work
                 
                 let userName = result.valueForKey("name") as! String
@@ -146,6 +148,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 print("[LoginControl] fetched user from fb: \(email)")
                 
                 
+                
+                // lets save user name & info in NSDefaults
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setObject(pictureURL, forKey: "userImageURL")
+                defaults.setObject(userName, forKey: "userName")
+                
+            
                 // do saving into firebase here
                 
                 let fireBase = FirebaseManager()
