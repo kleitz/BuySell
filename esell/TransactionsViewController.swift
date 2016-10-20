@@ -33,13 +33,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     // for each section/header cell
-    var myBids = [BidForItem]() { didSet { tableView.reloadData() ;  print("test if observer works here when I accept a bid.. err when I get a new bid, it's not auto updated either...")} }
+    var myBids = [BidForItem]() { didSet { tableView.reloadData() } }
     var otherBidsForMySale = [[BidForItem]]() { didSet { tableView.reloadData() } }
     
-    // create a user array/dict? to store ANY user info
-    var UserInfoDictionary = [String:User]() { didSet { tableView.reloadData() } }
     
-    
+    // create firebase instance
     
     let fireBase = FirebaseManager()
     
@@ -62,9 +60,10 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             
             // 1a -  this returns a list of my bids (but not posts)
+            
             self.myBids = bidsCreated
             print("")
-            print("NOTE~~(in fetchBids completion handler)~~ this should be where the BIDS ARRAY SHOULD BE UPDATED WITH THE bid_responded/accepted stuff")
+            print("NOTE~~(in fetchBids completion handler)~~ this should be where the myBids  is updated. ")
             
             
             
@@ -101,7 +100,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                             
                             bid.parentPostUserInfo = getUser
                             
-                            // reload after setting optional var in Bid
+                            //  reload after setting optional var in Bid
                             dispatch_async(dispatch_get_main_queue()) {
                                 print("reloaded data")
                                 self.tableView.reloadData()
@@ -146,20 +145,16 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                             self.fireBase.fetchUserInfoFromFirebase(sellerUID: eachBid.bidderID, withCompletionHandler: { (getUser) in
                                 
                                 
-                                // store in dictionary? TODO.not needd if used class. remove later?
-                                
-                                self.UserInfoDictionary.updateValue(getUser, forKey: eachBid.bidderID)
-                                
                                 
                                 // store this locally as the bidType's optional var
                                 
                                 eachBid.parentPostUserInfo = getUser
                                 
-                                //                                // reload after setting optional var in Bid
-                                //                                dispatch_async(dispatch_get_main_queue()) {
-                                //                                    print("reloaded data")
-                                //                                    self.tableView.reloadData()
-                                //                                }
+                                // reload after setting optional var in Bid
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    print("reloaded data")
+                                    self.tableView.reloadData()
+                                }
                                 
                             })
                             
@@ -196,7 +191,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    // MARK: Table view functions
+    // MARK: Table view functions.
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         var tableSourceArray = []
@@ -320,8 +315,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    // MARK: UITableViewCell
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         
@@ -347,6 +340,24 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             cell.buyingSectionPriceAmount.text = ""
             //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
             
+            // Add conditional for when bid is responded to and/or accepted
+            
+            /// if the bid is open
+            
+            
+            if myBids[indexPath.section].isRespondedBySeller {
+                
+                // attach function for button acceptBid
+                print("~~ MY BID WAS ACCEPTED")
+                cell.buyingSectionStatus.text = "ACCEPTED"
+                
+            } else {
+            
+            /// if the bid is closed/responded. everything should still show, except for the button status
+            
+            cell.buyingSectionStatus.text = "no response yet"
+            
+            }
             
             // Set seller profile iamage
             
@@ -536,11 +547,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         
                         
                     }
-
+                        
                         /// if the bid is closed/responded. everything should still show, except for the button status
-
+                        
                     else {
-
+                        
                         
                         cell.acceptButton.enabled = false
                         
@@ -549,13 +560,12 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                         if bidsForOnePost.isAcceptedBySeller {
                             
                             cell.acceptButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
-                            cell.acceptButton.titleLabel?.text = "ACCEPTED!"
+                            cell.acceptButton.setTitle("O", forState: .Normal)
                             
                         } else {
                             
                             cell.acceptButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-                            
-                            cell.acceptButton.titleLabel?.text = "Rejected"
+                            cell.acceptButton.setTitle("X", forState: .Normal)
                         }
                         
                         
