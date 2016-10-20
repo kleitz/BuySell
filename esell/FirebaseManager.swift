@@ -21,7 +21,6 @@ class FirebaseManager {
     weak var delegateForBid: FirebaseManagerBidDelegate?
     
     
-    
     let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
     
     
@@ -201,6 +200,7 @@ class FirebaseManager {
             }
             
             post = self.parsePostSnapshot(postID: postID, data: dataSnapshot)
+            
             
             withCompletionHandler(returnedPost: post)
         })
@@ -437,8 +437,13 @@ class FirebaseManager {
                     print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
                     
                     bidArray.append(bid)
+                    
+                    
                 }
+                // Return data
+ 
                 withCompletionHandler(bidsCreated: bidArray)
+                
             }
             }
             }, withCancelBlock: { (error) in

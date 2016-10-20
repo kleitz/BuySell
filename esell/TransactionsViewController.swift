@@ -24,8 +24,12 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var containerView: UIView!
+    
     
     // MARK: Data Variables
+    
+    weak var currentViewController: UITableViewController?
     
     // for section/header
     var postsBuying = [ItemListing]() { didSet { tableView.reloadData() } }
@@ -41,7 +45,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     let fireBase = FirebaseManager()
     
-    
+    ///var bidsDelegate: ?
     
     // MARK: View WILL Appear - data calling
     override func viewWillAppear(animated: Bool) {
@@ -62,6 +66,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             // 1a -  this returns a list of my bids (but not posts)
             
             self.myBids = bidsCreated
+            
             print("")
             print("NOTE~~(in fetchBids completion handler)~~ this should be where the myBids  is updated. ")
             
@@ -175,6 +180,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     // MARK:  VIEW DID LOAD
     
     override func viewDidLoad() {
+        
+        self.currentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BuyingTableViewController") as! BuyingTableViewController
+        self.currentViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+        self.addChildViewController(self.currentViewController!)
+        self.addSubview(self.currentViewController!.view, toView: self.containerView)
         
         super.viewDidLoad()
         
@@ -624,10 +634,40 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         view.layer.cornerRadius = cornerRadiusParams
     }
     
+    // Function for managing subview for container
+    
+    func addSubview(subView:UIView, toView parentView:UIView) {
+        parentView.addSubview(subView)
+        
+        var viewBindingsDict = [String: AnyObject]()
+        viewBindingsDict["subView"] = subView
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[subView]|",
+            options: [], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
+            options: [], metrics: nil, views: viewBindingsDict))
+    }
+    
+ 
+    func cycleFromViewController(oldViewController: UITableViewController, toViewController newViewController: UITableViewController) {
+        oldViewController.willMoveToParentViewController(nil)
+        self.addChildViewController(newViewController)
+        self.addSubview(newViewController.view, toView:self.containerView!)
+        newViewController.view.alpha = 0
+        newViewController.view.layoutIfNeeded()
+        UIView.animateWithDuration(0.5, animations: {
+            newViewController.view.alpha = 1
+            oldViewController.view.alpha = 0
+            },
+                                   completion: { finished in
+                                    oldViewController.view.removeFromSuperview()
+                                    //oldViewController.removeFromParentViewController()
+                                    newViewController.didMoveToParentViewController(self)
+        })
+    }
     
     
+    // MARK: Function to Accept Bid & confirm. UIAlertController
     
-    // MARK: Function to Accept Bid & confirm
     
     func acceptBid(sender: UIButton) {
         
@@ -646,7 +686,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         popupConfirmToAcceptBid(bid: acceptedBid)
         
     }
-    
     
     func popupConfirmToAcceptBid(bid acceptedBid: BidForItem) {
         
@@ -720,6 +759,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         
     }
     
+    
     func setupSegmentSwitchView() {
         
         switch segmentedControl.selectedSegmentIndex {
@@ -732,14 +772,26 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             self.tableView.reloadData()
             
+            // set container view content
+            
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BuyingTableViewController") as! BuyingTableViewController
+            newViewController.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(self.currentViewController!, toViewController: newViewController)
+            self.currentViewController = newViewController
+            
             
         case Segment.postsSelling.rawValue:
             
             print("  > selected segment: POSTS")
             
-            
-            
+
             self.tableView.reloadData()
+            
+            
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SellingTableViewController") as! SellingTableViewController
+            newViewController.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(self.currentViewController!, toViewController: newViewController)
+            self.currentViewController = newViewController
             
         default: break }
     }
