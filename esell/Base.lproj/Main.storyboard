@@ -1603,11 +1603,11 @@
             </objects>
             <point key="canvasLocation" x="422" y="2274"/>
         </scene>
-        <!--Local Map-->
+        <!--Map-->
         <scene sceneID="qO3-7c-oh2">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QbU-H2-dHx" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Local Map" image="map" id="Pq1-dQ-Ibs"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map" id="Pq1-dQ-Ibs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="A1M-ze-ymE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

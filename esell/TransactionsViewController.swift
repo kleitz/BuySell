@@ -24,7 +24,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
-
+    
     // MARK: Data Variables
     
     // for section/header
@@ -33,7 +33,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     // for each section/header cell
-    var myBids = [BidForItem]() { didSet { tableView.reloadData() } }
+    var myBids = [BidForItem]() { didSet { tableView.reloadData() ;  print("test if observer works here when I accept a bid.. err when I get a new bid, it's not auto updated either...")} }
     var otherBidsForMySale = [[BidForItem]]() { didSet { tableView.reloadData() } }
     
     // create a user array/dict? to store ANY user info
@@ -42,7 +42,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     
     
     let fireBase = FirebaseManager()
-
+    
     
     
     // MARK: View WILL Appear - data calling
@@ -53,7 +53,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         // Get query from firebase
         // 1: list of things I've bidded for
         // 2: list of things I posted
-
+        
         let currentUser = getUserID()
         print("\n [CURRENTUSER var]: \(currentUser)")
         
@@ -63,13 +63,19 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
             // 1a -  this returns a list of my bids (but not posts)
             self.myBids = bidsCreated
-            print("\n__[1.lower]__ [bidsCreated array]: \(self.myBids.count)")
+            print("")
+            print("NOTE~~(in fetchBids completion handler)~~ this should be where the BIDS ARRAY SHOULD BE UPDATED WITH THE bid_responded/accepted stuff")
+            
+            
+            
+            
+            ////print("\n__[1.lower][fetchBidsByUserID]  [myBids bidforItem].#count: \(self.myBids.count)")
             
             // 1b  - this returns a list that is for the PARENT POSTS of my bids
             
             for bid in self.myBids {
                 
-                print(" __[1.upper]__ [fetchBidsByUserID] Sending this bidID to get posts: \(bid.parentPostID)")
+                ////print(" __[1.upper][fetchSinglePost]  Sending this bidID to get posts: \(bid.parentPostID)")
                 
                 // for each bid, look up the parent post so we can display post info in the table
                 
@@ -77,11 +83,11 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                     
                     self.fireBase.fetchSinglePostByPostID(postID: bid.parentPostID, withCompletionHandler: { (post) in
                         
-                        print(" __[1.upper]__  -> post returned from handler: \(post.title)")
+                        print(" __[1.upper][fetchSinglePost]  -> 1 post returned from handler: \(post.title)")
                         self.postsBuying.append(post)
                         
-                        print(" __[1.upper]__-> [fetchBidsByUserID] returned count of posts, set to [postsBuying]: \(self.postsBuying.count)")
-
+                        print(" __[1.upper][fetchSinglePost]  -> appended now [post].#count: \(self.postsBuying.count)")
+                        
                         
                         /// 1c Fetch user info out of each POST Set - requires another QUERY
                         // Then add returned info to local dictionary
@@ -126,7 +132,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
                     self.fireBase.fetchBidsByParentPost(postID: post.id, withCompletionHandler: { (bidsArrayForOnePost) in
-                       
+                        
                         self.otherBidsForMySale.append(bidsArrayForOnePost)
                         
                         
@@ -149,18 +155,18 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                                 
                                 eachBid.parentPostUserInfo = getUser
                                 
-                                // reload after setting optional var in Bid
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    print("reloaded data")
-                                    self.tableView.reloadData()
-                                }
+                                //                                // reload after setting optional var in Bid
+                                //                                dispatch_async(dispatch_get_main_queue()) {
+                                //                                    print("reloaded data")
+                                //                                    self.tableView.reloadData()
+                                //                                }
                                 
                             })
-
+                            
                         }
-
+                        
                         print(" ___[2.upper]_ >> [fetchPostsByUserID] returned count, set to [2.lower][otherBidsForMySale]: \(self.otherBidsForMySale.count)")
-
+                        
                     })
                 }
             }
@@ -182,12 +188,12 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         setupSegmentedControl()
         
         self.tableView.rowHeight = 90.0
-    
+        
         
     }
-
     
-
+    
+    
     
     
     // MARK: Table view functions
@@ -199,7 +205,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
         case Segment.postsBuying.rawValue:
             tableSourceArray = postsBuying
-
+            
         case Segment.postsSelling.rawValue:
             tableSourceArray = postsSelling
             
@@ -209,7 +215,7 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         print(" ** number of SECTIONS for tablesourceArray: \(tableSourceArray.count)")
         
         return tableSourceArray.count
-
+        
     }
     
     
@@ -229,51 +235,51 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         // Use autolayout resizing
         
         headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
-
+        
         
         
         switch segmentedControl.selectedSegmentIndex {
-                
-            case Segment.postsBuying.rawValue:
             
-                let postIBidOn = postsBuying[section]
-                
-                headerView.titleLabel.text = postIBidOn.title
-                headerView.priceLabel.text = postIBidOn.formattedPrice
-                
-                
-            case Segment.postsSelling.rawValue:
-                
-                let myPost = postsSelling[section]
-                
-                // Only check if the 1st post is a placeholder, if it is, then the section info should be hidden
-                guard let myFirstPost = postsSelling.first else {
-                    print("ERROR GETTING first post created")
-                    return headerView
-                }
-                
-                if myFirstPost.id == "placeholder" {
-                    
-                    headerView.titleLabel.text = "You have no posts!"
-                    
-                    // TODO. need to set up quick functions for adjusting UI color and hiding and everything
-                    
-                    headerView.priceLabel.hidden = true
-                    
-                
-                    // If the 1st post is not placeholder
-                } else {
-                    
-                    headerView.titleLabel.text = myPost.title
-                    headerView.priceLabel.text = myPost.formattedPrice
-                    
-                    headerView.priceLabel.hidden = false
-                }
-
-                
-            default: break }
+        case Segment.postsBuying.rawValue:
             
-
+            let postIBidOn = postsBuying[section]
+            
+            headerView.titleLabel.text = postIBidOn.title
+            headerView.priceLabel.text = postIBidOn.formattedPrice
+            
+            
+        case Segment.postsSelling.rawValue:
+            
+            let myPost = postsSelling[section]
+            
+            // Only check if the 1st post is a placeholder, if it is, then the section info should be hidden
+            guard let myFirstPost = postsSelling.first else {
+                print("ERROR GETTING first post created")
+                return headerView
+            }
+            
+            if myFirstPost.id == "placeholder" {
+                
+                headerView.titleLabel.text = "You have no posts!"
+                
+                // TODO. need to set up quick functions for adjusting UI color and hiding and everything
+                
+                headerView.priceLabel.hidden = true
+                
+                
+                // If the 1st post is not placeholder
+            } else {
+                
+                headerView.titleLabel.text = myPost.title
+                headerView.priceLabel.text = myPost.formattedPrice
+                
+                headerView.priceLabel.hidden = false
+            }
+            
+            
+        default: break }
+        
+        
         return headerView
         
     }
@@ -284,38 +290,41 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var numberOfRows: Int = 0
-  
-            switch segmentedControl.selectedSegmentIndex {
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+        case Segment.postsBuying.rawValue:
+            
+            print("[1.lower]postsBidOn section#: \(section). ")
+            
+            
+            // when is this not 1? I can only bid once for another person's post.
+            
+            numberOfRows = 1
+            
+            
+        case Segment.postsSelling.rawValue:
+            
+            print("[2.lower] bidsForCreatedPost section##: \(section). BIGarrayCOunt: \(otherBidsForMySale.count). InnerArrayCount: \(otherBidsForMySale[section].count) ")
+            
+            if self.postsBuying.count != 0 && self.otherBidsForMySale.count != 0 {
                 
-            case Segment.postsBuying.rawValue:
-                
-                print("[1.lower]postsBidOn section#: \(section). ")
-
-                
-                // when is this not 1? I can only bid once for another person's post.
-                
-                numberOfRows = 1
-                
-                
-            case Segment.postsSelling.rawValue:
-                
-                print("[2.lower] bidsForCreatedPost section##: \(section). BIGarrayCOunt: \(otherBidsForMySale.count). InnerArrayCount: \(otherBidsForMySale[section].count) ")
-                
-                if self.postsBuying.count != 0 && self.otherBidsForMySale.count != 0 {
-                    
                 numberOfRows = self.otherBidsForMySale[section].count
                 
-                }
-                
-            default: break }
-
-            return numberOfRows
-
+            }
+            
+        default: break }
+        
+        return numberOfRows
+        
     }
+    
+    
+    // MARK: UITableViewCell
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("bodyCell", forIndexPath: indexPath) as! BodyCell
         
         
@@ -323,197 +332,243 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         self.setupUIForCell(cell)
         
         
-        // SWITCH CASE
-            switch segmentedControl.selectedSegmentIndex {
+        
+        switch segmentedControl.selectedSegmentIndex {
+            
+            
+        case Segment.postsBuying.rawValue:
+            
+            
+            // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
+            // MARK: Buying section: must exist. show my 1 bid under parent post
+            
+            let postIBidOn = myBids[indexPath.section]
+            
+            cell.buyingSectionPriceAmount.text = ""
+            //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
+            
+            
+            // Set seller profile iamage
+            
+            // print("~~~ BUYSECTION getting userID from async local var: #\(indexPath.row):: \(postsBuying[indexPath.row].author) print\(postIBidOn.parentPostUserInfo?.imageURL)\n ")
+            
+            if let userCompleteFromBid: User = postIBidOn.parentPostUserInfo {
                 
-            case Segment.postsBuying.rawValue:
+                cell.buyingSectionUserName.text = userCompleteFromBid.name
                 
                 
-                // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
+                // Start URL request for profile image in background thread
                 
-                let postIBidOn = myBids[indexPath.section]
+                let profileURL = userCompleteFromBid.imageURL
                 
-                cell.buyingSectionPriceAmount.text = ""
-                //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
-                
-                
-                // Set seller profile iamage
-                
-                print("~~~ BUYSECTION getting userID from async local var: #\(indexPath.row):: \(postsBuying[indexPath.row].author) print\(postIBidOn.parentPostUserInfo?.imageURL)\n ")
-                
-                if let userCompleteFromBid: User = postIBidOn.parentPostUserInfo {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
-                    cell.buyingSectionUserName.text = userCompleteFromBid.name
-                    
-
-                    // Start URL request for profile image in background thread
-                    
-                    let profileURL = userCompleteFromBid.imageURL
-                    
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-    
-                        if let url = NSURL(string: profileURL) {
-                            
-                            // Download an NSData representation of the image at the URL
-                            let urlRequest = NSURLRequest(URL: url)
-                            
-                            let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
-                                if error == nil {
-                                    
-                                    guard let unwrappedData = data else {
-                                        print("Error converting image")
-                                        return
-                                    }
-                                    
-                                    guard let image = UIImage(data: unwrappedData) else {
-                                        print("Error converting image")
-                                        return
-                                    }
-                                    
-                                    // Display image (using main thread
-                                    
-                                    dispatch_async(dispatch_get_main_queue(), {
-                                        
-
-                                        cell.buyingSectionUserImage.image = image
-                                        cell.buyingSectionUserImage.contentMode = .ScaleAspectFill
-                                        
-                                        self.roundUIView(cell.buyingSectionUserImage, cornerRadiusParams: cell.buyingSectionUserImage.frame.size.width / 2)
-                                        
-                                    })
-                                    
-                                } else {
-                                    
-                                    print(error?.localizedDescription)
+                    if let url = NSURL(string: profileURL) {
+                        
+                        // Download an NSData representation of the image at the URL
+                        let urlRequest = NSURLRequest(URL: url)
+                        
+                        let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                            if error == nil {
+                                
+                                guard let unwrappedData = data else {
+                                    print("Error converting image")
+                                    return
                                 }
-                            })
+                                
+                                guard let image = UIImage(data: unwrappedData) else {
+                                    print("Error converting image")
+                                    return
+                                }
+                                
+                                // Display image (using main thread
+                                
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    
+                                    
+                                    cell.buyingSectionUserImage.image = image
+                                    cell.buyingSectionUserImage.contentMode = .ScaleAspectFill
+                                    
+                                    self.roundUIView(cell.buyingSectionUserImage, cornerRadiusParams: cell.buyingSectionUserImage.frame.size.width / 2)
+                                    
+                                })
+                                
+                            } else {
+                                
+                                print(error?.localizedDescription)
+                            }
+                        })
+                        
+                        task.resume()
+                    }
+                }
+            }
+            
+        case Segment.postsSelling.rawValue:
+            
+            
+            
+            
+            guard let myFirstPost = postsSelling.first else {
+                print("ERROR GETTING first post created")
+                return cell
+            }
+            
+            // MARK: Selling section: case1. I have no posts to show.
+            
+            // Because if there is an empty query for post then it will return "placeholder" id
+            
+            if myFirstPost.id == "placeholder" {
+                
+                cell.sellingSectionUserName.text = "" //message can go here but I put it in the header
+                
+                
+                
+                // If the 1st post is not placeholder then continue showing data on UI
+                
+            } else {
+                
+                
+                let bidsForOnePost = otherBidsForMySale[indexPath.section][indexPath.row]
+                
+                // MARK: Selling section: case2. I have posts but no bids for my post.
+                
+                // If the bids is a placeholder, then return message
+                
+                if bidsForOnePost.bidID == "placeholder" {
+                    cell.sellingSectionUserName.text = "You have no bids for this item"
+                    
+                    // UI settings NOTE: HAS plus special additional ones because NO RESPONSE SO HIDE A LOT OF STUFF
+                    
+                    cell.acceptButton.hidden = true
+                    cell.sellingSectionPriceAmount.text = ""
+                    cell.sellingSectionStatusImage.hidden = true
+                    cell.sellingSectionUserImage.hidden = true
+                    
+                }
+                    
+                    // MARK: Selling section: case3. I have posts and there are bids for my post.
+                    // Else if bids exist for a particular section then return the BID INFO
+                    
+                else {
+                    
+                    
+                    // set up UI
+                    
+                    cell.sellingSectionPriceAmount.text = bidsForOnePost.formattedAmount
+                    
+                    cell.sellingSectionStatusImage.contentMode = .ScaleAspectFill
+                    
+                    if bidsForOnePost.isPaidOnline {
+                        cell.sellingSectionStatusImage.image = UIImage(named: "crediticon")
+                    } else  {
+                        cell.sellingSectionStatusImage.image = UIImage(named: "cashicon")
+                    }
+                    
+                    
+                    // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC..
+                    
+                    if let userCompleteFromBid: User = bidsForOnePost.parentPostUserInfo {
+                        
+                        cell.sellingSectionUserName.text = userCompleteFromBid.name
+                        
+                        
+                        // Start URL request for profile image in background thread
+                        
+                        let profileURL = userCompleteFromBid.imageURL
+                        
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                             
-                            task.resume()
-                        }
-                    }
-                }
-
-            case Segment.postsSelling.rawValue:
-                
-                // If there is an empty query then it will return "placeholder" id for the post
-                
-                // Only check if the 1st post is a placeholder
-                guard let myFirstPost = postsSelling.first else {
-                    print("ERROR GETTING first post created")
-                    return cell
-                }
-                
-                if myFirstPost.id == "placeholder" {
+                            if let url = NSURL(string: profileURL) {
+                                
+                                // Download an NSData representation of the image at the URL
+                                let urlRequest = NSURLRequest(URL: url)
+                                
+                                let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                                    if error == nil {
+                                        
+                                        guard let unwrappedData = data else {
+                                            print("Error converting image")
+                                            return
+                                        }
+                                        
+                                        guard let image = UIImage(data: unwrappedData) else {
+                                            print("Error converting image")
+                                            return
+                                        }
+                                        
+                                        // Display image (using main thread
+                                        
+                                        dispatch_async(dispatch_get_main_queue(), {
+                                            
+                                            cell.sellingSectionUserImage.image = image
+                                            cell.sellingSectionUserImage.contentMode = .ScaleAspectFill
+                                            
+                                            self.roundUIView(cell.sellingSectionUserImage, cornerRadiusParams: cell.sellingSectionUserImage.frame.size.width / 2)
+                                            
+                                        })
+                                        
+                                    } else {
+                                        
+                                        print(error?.localizedDescription)
+                                    }
+                                })
+                                
+                                task.resume()
+                            }
+                        }//end of dispatch_async
+                    } // end of using local var to fill UserData
                     
-                    cell.sellingSectionUserName.text = "" //message can go here but I put it in the header
                     
-
-                    // If the 1st post is not placeholder
-                } else {
                     
-                    let bidsForOnePost = otherBidsForMySale[indexPath.section][indexPath.row]
+                    // Add conditional for when bid is responded to and/or accepted
                     
-                    // If the bids is a placeholder, then return message
+                    /// if the bid is open
                     
-                    if bidsForOnePost.bidID == "placeholder" {
-                        cell.sellingSectionUserName.text = "You have no bids for this item"
-
-                        // UI settings NOTE: HAS plus special additional ones because NO RESPONSE SO HIDE A LOT OF STUFF
+                    
+                    if bidsForOnePost.isRespondedBySeller == false {
                         
-                        cell.acceptButton.hidden = true
-                        cell.sellingSectionPriceAmount.text = ""
-                        cell.sellingSectionStatusImage.hidden = true
-                        cell.sellingSectionUserImage.hidden = true
-                        
-                    }
-                        
-                        
-                        // Else if bids exist for a particular section then return the BID INFO
-                        
-                    else {
-                        
-                        // set up button functions acceptBid
+                        // attach function for button acceptBid
                         
                         cell.acceptButton.addTarget(self, action: #selector(acceptBid(_:)), forControlEvents: .TouchUpInside)
                         
-                        
-                        // set up other stuff
-                        
-                        cell.sellingSectionPriceAmount.text = bidsForOnePost.formattedAmount
-                        
-                        cell.sellingSectionStatusImage.contentMode = .ScaleAspectFill
-                        
-                        if bidsForOnePost.isPaidOnline {
-                            cell.sellingSectionStatusImage.image = UIImage(named: "crediticon")
-                        } else  {
-                            cell.sellingSectionStatusImage.image = UIImage(named: "cashicon")
-                        }
+                        cell.acceptButton.enabled = true
                         
                         
-                        // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC..
-                        
-                        if let userCompleteFromBid: User = bidsForOnePost.parentPostUserInfo {
-                        
-                            cell.sellingSectionUserName.text = userCompleteFromBid.name
-                            
-                            
-                            
-                            
-                            
-                            // Start URL request for profile image in background thread
-                            
-                            let profileURL = userCompleteFromBid.imageURL
-                        
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-      
-                                if let url = NSURL(string: profileURL) {
-                                    
-                                    // Download an NSData representation of the image at the URL
-                                    let urlRequest = NSURLRequest(URL: url)
-                                    
-                                    let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
-                                        if error == nil {
-                                            
-                                            guard let unwrappedData = data else {
-                                                print("Error converting image")
-                                                return
-                                            }
-                                            
-                                            guard let image = UIImage(data: unwrappedData) else {
-                                                print("Error converting image")
-                                                return
-                                            }
-                                            
-                                            // Display image (using main thread
-                                            
-                                            dispatch_async(dispatch_get_main_queue(), {
-
-                                                cell.sellingSectionUserImage.image = image
-                                                cell.sellingSectionUserImage.contentMode = .ScaleAspectFill
-                                                
-                                                self.roundUIView(cell.sellingSectionUserImage, cornerRadiusParams: cell.sellingSectionUserImage.frame.size.width / 2)
-                                                
-                                            })
-                                            
-                                        } else {
-                                            
-                                            print(error?.localizedDescription)
-                                        }
-                                    })
-                                    
-                                    task.resume()
-                                }
-                            }
-                        }
                     }
-    
+
+                        /// if the bid is closed/responded. everything should still show, except for the button status
+
+                    else {
+
+                        
+                        cell.acceptButton.enabled = false
+                        
+                        cell.acceptButton.backgroundColor = UIColor.whiteColor()
+                        
+                        if bidsForOnePost.isAcceptedBySeller {
+                            
+                            cell.acceptButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
+                            cell.acceptButton.titleLabel?.text = "ACCEPTED!"
+                            
+                        } else {
+                            
+                            cell.acceptButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+                            
+                            cell.acceptButton.titleLabel?.text = "Rejected"
+                        }
+                        
+                        
+                    }
                 }
-            default: break }
+                
+            }
+        default: break }
         
         return cell
-        }
-        
- 
+    }
+    
+    
     // MARK: Other functions
     
     // Get user ID function
@@ -528,21 +583,18 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
         return userID
     }
     
-
     
-    
-    // for image rounding
+    // for image rounding for the button in tableView for accepting bid
     
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true
         view.layer.cornerRadius = cornerRadiusParams
     }
-
-    
-    // for the button in tableView for accepting bid
     
     
-    // OTHER FUNCS
+    
+    
+    // MARK: Function to Accept Bid & confirm
     
     func acceptBid(sender: UIButton) {
         
@@ -553,49 +605,73 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
                 fatalError()
         }
         
-       
+        
         let acceptedBid = self.otherBidsForMySale[cellIndexPath.section][cellIndexPath.row]
-
+        
         // print("cellindexpath : \(cellIndexPath.row).\n   accepted bid?? \(acceptedBid.amount) \n    person bidding?? \(acceptedBid.parentPostUserInfo?.name)")
         
-        popupNotifyPosted()
-
-        fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID) { (isUpdated) in
-            if isUpdated == true {
-                
-                print("TransctionViewControler: firebase completetionhalder ---> UPDATED DB")
-                
-                self.tableView.reloadData()
-                
-                // TODO need to write the conditionals
-            }
-        }
-        
-        
+        popupConfirmToAcceptBid(bid: acceptedBid)
         
     }
     
-
+    
+    func popupConfirmToAcceptBid(bid acceptedBid: BidForItem) {
+        
+        let alertController = UIAlertController(title: "Accept this bid?", message:
+            "You can only accept 1 bid for your post", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        
+        let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print(" > clicked cancel save")
+            
+        })
+        
+        let confirmSaveOption = UIAlertAction(title: "Accept Bid", style: UIAlertActionStyle.Destructive, handler: {
+            (alert: UIAlertAction!) -> Void in
+            
+            
+            print(" > clicked CONFIRM SAVE BID")
+            
+            // do save
+            self.fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID) { (isUpdated) in
+                if isUpdated == true {
+                    
+                    print("TransctionViewControler: firebase completetionhalder ---> UPDATED DB")
+                    
+                    self.tableView.reloadData()
+                    
+                    // TODO need to write the conditionals for changing cell UI
+                }
+            }
+            
+            
+            // notify it's saved w/ popup
+            
+            self.popupNotifyPosted()
+            
+        })
+        
+        alertController.addAction(confirmSaveOption)
+        alertController.addAction(cancelOption)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
     func popupNotifyPosted(){
         
-        let alertController = UIAlertController(title: "Accept Complete", message:
-            "Your buyer is notified - contact them to set up delivery!", preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "Bid Accepted", message:
+            "Your buyer is notified - contact them to set up your delivery!", preferredStyle: UIAlertControllerStyle.ActionSheet)
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         
         self.presentViewController(alertController, animated: true, completion: nil)
         
         
     }
-//    
-//    func confirmUpdateBid(){
-//        
-//        // after the popup, it should save the accepted as TRUE and set all the others ones as false
-//                    // 1) look up postID. get all the bids. set all the bids as CLOSED. with the only 1 bid as accept = true
-//        
-//        
-//    }
-//    
+    
+    
     
     // MARK: Functions for Segmented Control
     
@@ -655,6 +731,8 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             cell.buyingSectionStatus.hidden = false
             cell.buyingSectionStatusImage.hidden = false
             
+            
+            
         case Segment.postsSelling.rawValue:
             
             cell.sellingSectionUserName.hidden = false
@@ -674,6 +752,6 @@ class TransactionsViewController: UIViewController, UITableViewDelegate, UITable
             
         }
     }
-
+    
     
 }

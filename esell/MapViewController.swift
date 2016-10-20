@@ -29,7 +29,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         // Set up title
         
-        self.navigationItem.title = "Local Map"
+        self.navigationItem.title = "Map"
         
         
         // Location manager

@@ -123,10 +123,10 @@ class FirebaseManager {
                     self.ref.child("bids/\(acceptedBidID)/bid_accepted").setValue(true)
                     
                 }
-//                else {
-//                    // uh this hsould already be false so maybe just delete this? TODO
-//                    self.ref.child("bids/\(eachBid.bidID)/bid_accepted").setValue(false)
-//                }
+                else {
+                    // uh this hsould already be false so maybe just delete this? TODO
+                    self.ref.child("bids/\(eachBid.bidID)/bid_accepted").setValue(false)
+                }
             }
             withCompletionHandler(isUpdated: true)
         }
@@ -503,6 +503,7 @@ class FirebaseManager {
         guard let bidderID = dictionary["bidder_id"] as? String,
             let parentPostID = dictionary["parent_post_id"] as? String,
             let amount = dictionary["amount"] as? Double,
+            let isRespondedBySeller = dictionary["bid_responded"] as? Bool,
             let isAcceptedBySeller = dictionary["bid_accepted"] as? Bool,
             let isPaidOnline = dictionary["has_paid_online"] as? Bool else {
                 fatalError("Error parsing")
@@ -521,8 +522,10 @@ class FirebaseManager {
         let bid = BidForItem(bidID: bidID, parentPostID: parentPostID, bidderID: bidderID, amount: amount, date: postDate)
 
         bid.isAcceptedBySeller = isAcceptedBySeller
+        bid.isRespondedBySeller = isRespondedBySeller
         bid.isPaidOnline = isPaidOnline
         
+        print(">> insidePARSEBID FUNCTIOn ~~ isPaidOnline, isAcceptedBySeller==> \(isPaidOnline), \(isAcceptedBySeller)")
         
         //print("> test print. post PARSED result: price: \(post.price) || lat: \(post.pickupLatitude) & lon:\(post.pickupLongitude)")
         
