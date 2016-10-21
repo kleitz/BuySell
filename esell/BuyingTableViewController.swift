@@ -47,7 +47,7 @@ class BuyingTableViewController: UITableViewController {
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
-                    self.fireBase.fetchSinglePostByPostID(postID: bid.parentPostID, withCompletionHandler: { (post) in
+                    self.fireBase.lookupSinglePost(postID: bid.parentPostID, withCompletionHandler: { (post) in
                         
                         print(" __[1.upper][fetchSinglePost]  -> 1 post returned from handler: \(post.title)")
                         
@@ -57,7 +57,7 @@ class BuyingTableViewController: UITableViewController {
                         /// 1c Fetch user info out of each POST Set - requires another QUERY
                         // Then add returned info to local dictionary
                         
-                        self.fireBase.fetchUserInfoFromFirebase(sellerUID: post.author, withCompletionHandler: { (getUser) in
+                        self.fireBase.lookupSingleUser(userID: post.author, withCompletionHandler: { (getUser) in
                             
                             // store this locally as the bidType's optional var
                             
@@ -150,6 +150,9 @@ class BuyingTableViewController: UITableViewController {
         
         // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
         // MARK: Buying section: must exist. show my 1 bid under parent post
+        
+        ///NEED ERROR HANDLING HERE IN CASE ARRAY IS EMPTY UPON LOAD
+        
         
         let myOfferForPost = cellBidsArray[indexPath.section]
         

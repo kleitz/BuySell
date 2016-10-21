@@ -61,18 +61,18 @@ class SellingTableViewController: UITableViewController {
                             
                             //TODO add conditional to prevent fetching for USERID="placeholder" (well.. it fails anyway so maybe it doesn't matter)
                             
-                            self.fireBase.fetchUserInfoFromFirebase(sellerUID: eachBid.bidderID, withCompletionHandler: { (getUser) in
+                            self.fireBase.lookupSingleUser(userID: eachBid.bidderID, withCompletionHandler: { (getUser) in
                                 
                                 
                                 // store this locally as the bidType's optional var
                                 
                                 eachBid.parentPostUserInfo = getUser
                                 
-                                 //reload after setting optional var in Bid
-                                                                dispatch_async(dispatch_get_main_queue()) {
-                                                                    print("reloaded data")
-                                                                    self.tableView.reloadData()
-                                                                }
+                                //reload after setting optional var in Bid
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    print("reloaded data")
+                                    self.tableView.reloadData()
+                                }
                                 
                             })
                             
@@ -135,7 +135,7 @@ class SellingTableViewController: UITableViewController {
         
         headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
-        
+       
         
         // Get Posts info to load in header
         
@@ -164,9 +164,10 @@ class SellingTableViewController: UITableViewController {
         } else {
             
             headerView.titleLabel.text = myPost.title
+            headerView.priceLabel.hidden = true
             headerView.priceLabel.text = myPost.formattedPrice
-            
-            headerView.priceLabel.hidden = false
+//            
+//            headerView.priceLabel.hidden = false
         }
         
         
@@ -232,6 +233,7 @@ class SellingTableViewController: UITableViewController {
                 cell.userName.text = "You have no bids for this item"
                 
                 // UI settings NOTE: HAS plus special additional ones because NO RESPONSE SO HIDE A LOT OF STUFF
+                // Show/hide UI stuff
                 
                 cell.acceptOfferButton.hidden = true
                 cell.userImage.hidden = true
@@ -243,6 +245,13 @@ class SellingTableViewController: UITableViewController {
                 // Else if bids exist for a particular section then return the BID INFO
                 
             else {
+                
+                // Show/hide UI stuff
+                
+                cell.acceptOfferButton.hidden = false
+                cell.userImage.hidden = false
+                cell.offerAmount.hidden = false
+                cell.offerPaymentImage.hidden = false
                 
                 
                 // set up UI
@@ -345,8 +354,8 @@ class SellingTableViewController: UITableViewController {
                         
                         // set up the text for this case
                         
-                        cell.acceptOfferButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-                        cell.acceptOfferButton.setTitle("accepted", forState: .Normal)
+                        cell.acceptOfferButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+                        cell.acceptOfferButton.setTitle("accepted!", forState: .Normal)
                         
                     } else {
                         

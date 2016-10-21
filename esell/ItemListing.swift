@@ -53,6 +53,8 @@ class ItemListing: NSObject {
         return String.localizedStringWithFormat("%@%.0f", currencyLabel, price)
     }
     
+    var statusIsOpen: Bool
+    
     
     
 //    // TODO Failable initializer ? or not failable?
@@ -70,6 +72,8 @@ class ItemListing: NSObject {
         
         self.canAcceptCreditCard = false
         self.canShip = false
+        
+        self.statusIsOpen = true
     }
     
     //TODO I added optional for double & the newer fields but this should be removed later
@@ -89,6 +93,7 @@ class ItemListing: NSObject {
         self.canAcceptCreditCard = false
         self.canShip = false
         
+        self.statusIsOpen = true
     }
     
 //    init(snapshot: FIRDataSnapshot) {

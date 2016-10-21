@@ -47,7 +47,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         self.navigationItem.title = "Create Post"
         
         let cancelButton =  UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(closeModal))
-        let postButton = UIBarButtonItem(title: "Preview", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
+        let postButton = UIBarButtonItem(title: "Post", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
         
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = postButton

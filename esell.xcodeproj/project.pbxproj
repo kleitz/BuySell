@@ -117,7 +117,6 @@
 				84F445241DA7713800429AE7 /* MapViewController.swift */,
 				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,
 				848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */,
-				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
 			);
 			name = "Listings View";
 			sourceTree = "<group>";
@@ -135,6 +134,7 @@
 		84321A831DB8C5DA00332DF4 /* Checkout View */ = {
 			isa = PBXGroup;
 			children = (
+				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
 				848F68231DAE9B6100AED515 /* CheckoutViewController.swift */,
 				848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */,
 			);
@@ -182,9 +182,9 @@
 				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
 				848F681B1DABA8B900AED515 /* PostTabBarController.swift */,
 				84321A811DB8C58900332DF4 /* Listings View */,
-				84321A821DB8C5AA00332DF4 /* Profile View */,
-				84321A8F1DB9379700332DF4 /* Transactions View */,
 				84321A831DB8C5DA00332DF4 /* Checkout View */,
+				84321A8F1DB9379700332DF4 /* Transactions View */,
+				84321A821DB8C5AA00332DF4 /* Profile View */,
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,

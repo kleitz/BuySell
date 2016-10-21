@@ -46,7 +46,7 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
         firebaseInstance.delegate = self
         
-        firebaseInstance.fetchPosts()
+        firebaseInstance.fetchPostsForBrowse()
         
         
     }

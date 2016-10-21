@@ -18,6 +18,7 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     
     @IBOutlet var creditCardTableView: UITableView!
    
+    @IBOutlet weak var itemInfoLabel: UILabel!
   
     @IBOutlet weak var nameTextField: UITextField!
 
@@ -51,7 +52,7 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         
         print("post received??? in CreditCardController \(self.post.id) & price: \(self.post.price)")
         
-        
+        itemInfoLabel.text = "\(self.post.formattedPrice) \(self.post.title)"
         // Add function to button
         
         checkoutButton.addTarget(self, action: #selector(prepareSaveBid), forControlEvents: .TouchUpInside)

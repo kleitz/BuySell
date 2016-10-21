@@ -136,6 +136,57 @@ class FirebaseManager {
     
     // MARK: Functions for fetching Data
     
+    func fetchPostsForBrowse() {
+        
+        ref.child("posts").queryOrderedByChild("created_at").observeEventType(.Value, withBlock: { (snapshot
+            ) in
+            
+            
+            
+            for item in [snapshot.value] {
+                print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
+                //print("TEST ITEM PRINT bid: \(item)")
+                
+                // Create a dictinoary for each item in the array
+                guard let itemDictionary = item as? NSDictionary else {
+                    fatalError()
+                }
+                
+                // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                    fatalError()
+                }
+                
+                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                    fatalError()
+                }
+                
+                
+                for (index,item) in firebaseItemValue.enumerate() {
+                    
+                    let postID = firebaseItemKey[index]
+                    
+                    // Parse all firebase data
+                    
+                    let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
+                    
+                    // Return each post gotten to the delegate in view controller
+                    
+                    self.delegate?.returnData(self, data: post)
+                }
+            }
+            
+            // Return error if error to delegate in view controller
+            
+            }, withCancelBlock: { (error) in
+                print("fetchPosts error: \(error.localizedDescription)")
+                self.delegate?.returnError(self, error: error)
+        })
+
+        
+    }
+    
     func fetchPosts() {
         
         print(" > running fetchPosts()...")
@@ -184,7 +235,7 @@ class FirebaseManager {
     
     // Grab the original 1 post from the parent_post_id (PostID) in Bid Info. Lookup return value in "posts".
     
-    func fetchSinglePostByPostID(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
+    func lookupSinglePost(postID postID: String, withCompletionHandler: (returnedPost: ItemListing)-> Void) {
         
         var post = ItemListing(id: postID)
         
@@ -207,6 +258,49 @@ class FirebaseManager {
         
     }
     
+    // Fetch all user info by UID (like to get seller info from a bid's post owner)
+    
+    func lookupSingleUser(userID uid: String, withCompletionHandler: (getUser: User)-> Void ) {
+        
+        ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
+            
+            print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
+            guard let dictionary = snapshot.value as? [String:AnyObject] else {
+                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
+                return
+            }
+            
+            // print("test print full dictionary w/ toplevel ID: \(dictionary)")
+            
+            
+            guard let sellerData = dictionary[uid] as? [String: AnyObject] else {
+                print("[fetchUserInfoFromFirebase] Error: failed getting seller key's values")
+                return
+            }
+            
+            
+            // Get the name & email
+            
+            guard let name = sellerData["name"] as? String,
+                let email = sellerData["email"] as? String,
+                let imageURL = sellerData["fb_pic_url"] as? String else {
+                    print("error")
+                    return
+            }
+            
+            
+            // Prep the User object to return
+            
+            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
+            
+            
+            print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")
+            
+            withCompletionHandler(getUser: sellerInfo)
+        })
+        
+    }
+
     
     // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
     
@@ -344,48 +438,6 @@ class FirebaseManager {
         })
     }
     
-    // Fetch all user info by UID (like to get seller info from a bid's post owner)
-    
-    func fetchUserInfoFromFirebase(sellerUID uid: String, withCompletionHandler: (getUser: User)-> Void ) {
-        
-        ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
-            
-            print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
-            guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
-                return
-            }
-            
-            // print("test print full dictionary w/ toplevel ID: \(dictionary)")
-            
-            
-            guard let sellerData = dictionary[uid] as? [String: AnyObject] else {
-                print("[fetchUserInfoFromFirebase] Error: failed getting seller key's values")
-                return
-            }
-            
-            
-            // Get the name & email
-            
-            guard let name = sellerData["name"] as? String,
-                let email = sellerData["email"] as? String,
-                let imageURL = sellerData["fb_pic_url"] as? String else {
-                    print("error")
-                    return
-            }
-            
-            
-            // Prep the User object to return
-            
-            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
-            
-            
-            print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")
-            
-            withCompletionHandler(getUser: sellerInfo)
-        })
-        
-    }
     
 
     

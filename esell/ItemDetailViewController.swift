@@ -44,6 +44,8 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
 
         // Setup the UI elements with ItemListing attributes passed in
 
+        sellerInfoButton.hidden = true
+        
         itemTitle.text = post.title
         
         itemPrice.text = post.formattedPrice
@@ -65,7 +67,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
         let fireBase = FirebaseManager()
         
-        fireBase.fetchUserInfoFromFirebase(sellerUID: post.author) { (getUser) -> (Void) in
+        fireBase.lookupSingleUser(userID: post.author) { (getUser) -> (Void) in
             
             self.sellerAsUser = getUser
             
