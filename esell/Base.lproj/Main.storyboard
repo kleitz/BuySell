@@ -173,6 +173,7 @@
                             <outlet property="delegate" destination="MjH-4V-Tyb" id="i0k-lN-RuQ"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="PaQ-Kf-eZz"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j8g-hc-B3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -314,13 +315,13 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="957-Dy-bTy">
                                 <rect key="frame" x="0.0" y="64" width="600" height="29"/>
                                 <segments>
-                                    <segment title="Buying"/>
-                                    <segment title="Selling"/>
+                                    <segment title="Buy"/>
+                                    <segment title="Sell"/>
                                 </segments>
                                 <color key="tintColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wRO-Di-efT">
-                                <rect key="frame" x="0.0" y="92" width="600" height="459"/>
+                                <rect key="frame" x="0.0" y="93" width="600" height="458"/>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -330,7 +331,7 @@
                             <constraint firstItem="wRO-Di-efT" firstAttribute="trailing" secondItem="957-Dy-bTy" secondAttribute="trailing" id="Spu-mM-aAv"/>
                             <constraint firstItem="wRO-Di-efT" firstAttribute="bottom" secondItem="XZ4-2K-JvQ" secondAttribute="top" id="V4B-53-akL"/>
                             <constraint firstItem="957-Dy-bTy" firstAttribute="leading" secondItem="FZM-yd-G43" secondAttribute="leading" id="bVg-mD-ikt"/>
-                            <constraint firstItem="wRO-Di-efT" firstAttribute="top" secondItem="957-Dy-bTy" secondAttribute="bottom" id="y0F-bj-Rp7"/>
+                            <constraint firstItem="wRO-Di-efT" firstAttribute="top" secondItem="957-Dy-bTy" secondAttribute="bottom" constant="1" id="y0F-bj-Rp7"/>
                             <constraint firstItem="wRO-Di-efT" firstAttribute="leading" secondItem="957-Dy-bTy" secondAttribute="leading" id="zzN-eb-aJV"/>
                         </constraints>
                     </view>
@@ -374,7 +375,7 @@
                                                 <constraint firstAttribute="width" constant="122" id="1a4-fQ-zEr"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -389,7 +390,7 @@
                                                 <constraint firstAttribute="width" constant="42" id="zO6-57-KdP"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -478,13 +479,13 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$102" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuP-q0-2s9">
                                             <rect key="frame" x="70" y="38" width="39" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Johnny Appleseed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4te-OG-1PH">
                                             <rect key="frame" x="70" y="15" width="135" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -558,7 +559,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="John Smithsonian" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e0U-qQ-JoZ">
                                                     <rect key="frame" x="112" y="17" width="137" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1096,7 +1097,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ejq-3n-oCb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2528" y="748"/>
+            <point key="canvasLocation" x="2766" y="616"/>
         </scene>
         <!--Seller Info View Controller-->
         <scene sceneID="5fV-Dr-Iz6">
@@ -1625,6 +1626,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jmD-6A-rX0"/>
-        <segue reference="43f-so-zT2"/>
+        <segue reference="dhz-Qj-gpd"/>
     </inferredMetricsTieBreakers>
 </document>

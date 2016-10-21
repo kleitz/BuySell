@@ -53,8 +53,6 @@ class FirebaseManager {
         
         let bidsRef = ref.child("bids")
         
-        //let refUnderCurrentPost = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com").child("posts")
-        
         let newBidItem = bidsRef.childByAutoId()
         
         
@@ -72,12 +70,8 @@ class FirebaseManager {
                        "created_at": FIRServerValue.timestamp(),
                        "bid_responded": false,
                        "bid_accepted": false,
-                       //                       "cc_name_on_card": creditCardInfo.nameOnCard,
-            //                       "cc_number": creditCardInfo.cardNumber,
-            //                       "cc_exp_month": creditCardInfo.expiryMonth,
-            //                       "cc_exp_year": creditCardInfo.expiryYear,
-            "has_paid_online": hasPaidOnline,
-            "bidder_id": userID ]
+                       "has_paid_online": hasPaidOnline,
+                       "bidder_id": userID ]
         
         newBidItem.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
             if err != nil {
@@ -86,23 +80,20 @@ class FirebaseManager {
                 return
             }
             
-            //TODO anoterh delegate to let kCController know it's done saving??
+            // Use delegate to let kCController know it's done saving??
             self.delegateForBid?.bidComplete(self, didComplete: true)
             
             print("saved BID info successfly in firebase DB")
         })
     }
     
-
-    // MARK: Functions for UPDATING Data (overwrite) 
+    
+    // MARK: Functions for UPDATING Data (overwrite)
     
     func updateAllBidsOfOnePost(parentPostID parentPostID: String, acceptedBidID: String, withCompletionHandler: (isUpdated: Bool ) -> Void) {
         
-        // before this, both bid_accepted and bid_responded should be 'false'
-        
-        
-        
-        // set all other ones as rejected???
+        // before this, both bid_accepted and bid_responded should be 'false' by default
+       
         // loop for query of all bids under parent_post_id
         
         self.fetchBidsByParentPost(postID: parentPostID) { (bidsArrayForOnePost) in
@@ -138,13 +129,14 @@ class FirebaseManager {
     
     func fetchPostsForBrowse() {
         
-        ref.child("posts").queryOrderedByChild("created_at").observeEventType(.Value, withBlock: { (snapshot
+        ref.child("posts").queryOrderedByChild("is_open").queryEqualToValue(true).observeEventType(.Value, withBlock: { (snapshot
             ) in
             
+            // todo: error handling if query snapshot returns empty
             
             
             for item in [snapshot.value] {
-                print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
+                
                 //print("TEST ITEM PRINT bid: \(item)")
                 
                 // Create a dictinoary for each item in the array
@@ -162,6 +154,7 @@ class FirebaseManager {
                     fatalError()
                 }
                 
+                var postArray = [ItemListing]()
                 
                 for (index,item) in firebaseItemValue.enumerate() {
                     
@@ -173,8 +166,11 @@ class FirebaseManager {
                     
                     // Return each post gotten to the delegate in view controller
                     
-                    self.delegate?.returnData(self, data: post)
+                    postArray.append(post)
+                    
                 }
+                
+                self.delegate?.returnData(self, data: postArray)
             }
             
             // Return error if error to delegate in view controller
@@ -183,7 +179,7 @@ class FirebaseManager {
                 print("fetchPosts error: \(error.localizedDescription)")
                 self.delegate?.returnError(self, error: error)
         })
-
+        
         
     }
     
@@ -212,24 +208,26 @@ class FirebaseManager {
                 fatalError()
             }
             
+            
+            var postArray = [ItemListing]()
+            
             // Parse each snapshot dictionary & return as an Itemlisting class type
             
             let post = self.parsePostSnapshot(postID: snapshotID, data: dataSnapshot)
             
+            postArray.append(post)
             
             // Return each post gotten to the delegate in view controller
             
-            self.delegate?.returnData(self, data: post)
-
-            
+            self.delegate?.returnData(self, data: postArray)
             
             // Return error if error to delegate in view controller
-
+            
             }, withCancelBlock: { (error) in
                 print("fetchPosts error: \(error.localizedDescription)")
                 self.delegate?.returnError(self, error: error)
         })
-
+        
     }
     
     
@@ -300,7 +298,7 @@ class FirebaseManager {
         })
         
     }
-
+    
     
     // This function is used to grab ALL BIDS from the parent_post_id in Bid Info. Lookup return value in "bids".
     
@@ -371,7 +369,7 @@ class FirebaseManager {
                 print("fetchBIDS error: \(error.localizedDescription)")
                 
         })
-
+        
     }
     
     
@@ -439,7 +437,7 @@ class FirebaseManager {
     }
     
     
-
+    
     
     // Grab ALL bids by a UID
     
@@ -454,49 +452,49 @@ class FirebaseManager {
         ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
             ) in
             if snapshot.exists() != false {
-            
-            // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
-            
-            for item in [snapshot.value] {
                 
-                // Create a dictinoary for each item in the array
-                guard let itemDictionary = item as? NSDictionary else {
-                    fatalError()
+                // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+                
+                for item in [snapshot.value] {
+                    
+                    // Create a dictinoary for each item in the array
+                    guard let itemDictionary = item as? NSDictionary else {
+                        fatalError()
+                    }
+                    
+                    // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                    guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                        fatalError()
+                    }
+                    
+                    // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                    guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                        fatalError()
+                    }
+                    
+                    
+                    var bidArray = [BidForItem]()
+                    
+                    for (index,item) in firebaseItemValue.enumerate() {
+                        
+                        let bidID = firebaseItemKey[index]
+                        
+                        // Parse all firebase data
+                        
+                        let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                        
+                        // Append to the array of posts to be returned from function
+                        print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
+                        
+                        bidArray.append(bid)
+                        
+                        
+                    }
+                    // Return data
+                    
+                    withCompletionHandler(bidsCreated: bidArray)
+                    
                 }
-                
-                // get all the keys as 1 array (which would be the uid, as the 1st layer )
-                guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
-                    fatalError()
-                }
-                
-                // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
-                guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
-                    fatalError()
-                }
-                
-                
-                var bidArray = [BidForItem]()
-                
-                for (index,item) in firebaseItemValue.enumerate() {
-                    
-                    let bidID = firebaseItemKey[index]
-                    
-                    // Parse all firebase data
-                    
-                    let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
-                    
-                    // Append to the array of posts to be returned from function
-                    print("Bid to append: (example info: \(bid.date), \(bid.amount) \(bid.bidderID)")
-                    
-                    bidArray.append(bid)
-                    
-                    
-                }
-                // Return data
- 
-                withCompletionHandler(bidsCreated: bidArray)
-                
-            }
             }
             }, withCancelBlock: { (error) in
                 print("fetchBIDS error: \(error.localizedDescription)")
@@ -506,7 +504,7 @@ class FirebaseManager {
         })
         
     }
-
+    
     
     
     // MARK: Functions for parsing snapshots
@@ -531,28 +529,28 @@ class FirebaseManager {
             fatalError("Error getting time out")
         }
         let postDate = self.convertNSTimeIntervaltoNSDate(date: postRawDate)
-
+        
         
         // Create new post to store all this.
         
         let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude)
         
         post.imageURL = postImageURL
-
+        
         
         // Handle the temporary optional fields (TODO Fix later since firebase has inconsistent data these are optional)
         
         if
             let canAcceptCreditCard = dictionary["can_accept_credit"] as? Bool,
             let canShip = dictionary["can_ship"] as? Bool  {
-                
             
-                post.pickupLatitude = pickupLatitude
-                post.pickupLongitude = pickupLongitude
-                post.canAcceptCreditCard = canAcceptCreditCard
-                post.canShip = canShip
+            
+            post.pickupLatitude = pickupLatitude
+            post.pickupLongitude = pickupLongitude
+            post.canAcceptCreditCard = canAcceptCreditCard
+            post.canShip = canShip
         }
-
+        
         //print("> test print parsePOSTsnapshot. postDate: \(post.createdDate)")
         
         //print("> test print. post PARSED result: price: \(post.price) || lat: \(post.pickupLatitude) & lon:\(post.pickupLongitude)")
@@ -585,7 +583,7 @@ class FirebaseManager {
         // Create new bid to store all this.
         
         let bid = BidForItem(bidID: bidID, parentPostID: parentPostID, bidderID: bidderID, amount: amount, date: postDate)
-
+        
         bid.isAcceptedBySeller = isAcceptedBySeller
         bid.isRespondedBySeller = isRespondedBySeller
         bid.isPaidOnline = isPaidOnline
@@ -606,7 +604,7 @@ class FirebaseManager {
     // MARK: Funciton other: convert time
     
     private func convertNSTimeIntervaltoNSDate(date date: NSTimeInterval) -> NSDate {
-    
+        
         return NSDate(timeIntervalSince1970: date/1000)
         
     }

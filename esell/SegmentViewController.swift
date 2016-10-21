@@ -15,7 +15,7 @@ enum Segment: Int {
 }
 
 protocol FirebaseManagerDelegate: class {
-    func returnData(manager: FirebaseManager, data: ItemListing?)
+    func returnData(manager: FirebaseManager, data: [ItemListing]?)
     func returnError(manager: FirebaseManager, error: NSError?)
 }
 
@@ -54,19 +54,19 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     
     // Delegate methods
     
-    func returnData(manager: FirebaseManager, data: ItemListing?) {
+    func returnData(manager: FirebaseManager, data: [ItemListing]?) {
         
         print("\n [>> delegate method.] 1 PostData returned.")
         
-        guard let post = data else {
+        guard let postDataSet = data else {
             fatalError("fail to unwrap post from data call")
         }
         
         // Store the posts in TabBarController (data will be sourced from there)
         
         let postTabBarController = self.tabBarController as! PostTabBarController
-        postTabBarController.posts.append(post)
-        self.tableViewController.posts.append(post)
+        
+        postTabBarController.posts = postDataSet
         
         
         print("INSERTED in array in TBController. posts.count: \(postTabBarController.posts.count)")

@@ -13,8 +13,6 @@ import UIKit
 class ListingsTableViewController: UITableViewController {
     
     var sourceViewController = PostTabBarController()
-    var posts = [ItemListing]()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +32,7 @@ class ListingsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return posts.count
+        return sourceViewController.posts.count
         
     }
     
@@ -44,7 +42,7 @@ class ListingsTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("PostCell", forIndexPath: indexPath) as! PostCell
         
-        let post = posts[indexPath.row]
+        let post = sourceViewController.posts[indexPath.row]
         
         cell.priceText.text = post.formattedPrice
         cell.titleText.text = post.title
@@ -182,12 +180,12 @@ class ListingsTableViewController: UITableViewController {
                         fatalError("seg failed")
                     }
                     
-                    itemDetailController.post = posts[rowIndex]
+                    itemDetailController.post = sourceViewController.posts[rowIndex]
                     
                     print("PRINT DATA before sgue: \(itemDetailController.post.title): \(itemDetailController.post.formattedPrice)")
                     
                     // for passing image
-                    if let image: UIImage = sourceViewController.imageCache[posts[rowIndex].imageURL!] {
+                    if let image: UIImage = sourceViewController.imageCache[sourceViewController.posts[rowIndex].imageURL!] {
                         itemDetailController.image = image
                     }
                 }
