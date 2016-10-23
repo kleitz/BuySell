@@ -30,6 +30,7 @@ class BuyingTableViewController: UITableViewController {
         
         super.viewWillAppear(animated)
         
+        sectionPostsArray = [ItemListing]()
         
         let currentUser = getUserID()
         
@@ -136,6 +137,7 @@ class BuyingTableViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         return sectionPostsArray.count
+        
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -153,6 +155,8 @@ class BuyingTableViewController: UITableViewController {
         
         ///NEED ERROR HANDLING HERE IN CASE ARRAY IS EMPTY UPON LOAD
         
+        print("WHY DOES INDEXpath fail: \(indexPath.section)")
+        print("count of array: \(sectionPostsArray.count)")
         
         let myOfferForPost = cellBidsArray[indexPath.section]
         
