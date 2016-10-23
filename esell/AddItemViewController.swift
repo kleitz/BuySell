@@ -285,7 +285,11 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             // Actual save happens here, after the checking
             // use separate function to save all info into firebase database (including the url string of the image)
             
-            self.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.acceptShippingOptionSwitch.on)
+            // Pass to Firebase
+            
+            let fireBase = FirebaseManager()
+            
+            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.acceptShippingOptionSwitch.on)
             
         }
         
@@ -302,58 +306,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     }
     
     
-    // Function for saving to Firebase with all POST INFO
-    
-    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool){
-        // do saving into firebase here
-        // TODO fix this so that it doesn't save the image first into database before checking all fields?
-        
-        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
-        
-        let postsRef = ref.child("posts")
-        
-        let newPostRefID = postsRef.childByAutoId()
-        
-        
-        // Get the userID from userdefaults to save as "author" key
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        guard let userID = defaults.stringForKey("uid") else {
-            print("failed getting nsuserdefaults uid")
-            return
-        }
-        
-        /// TODO Fix this coordinate recording later.
-        let placeholderLat = 25.0217026
-        
-        let placeholderLon = 121.2086617
-        
-        // Set the dictionary of values to be saved in database for "POSTS"
-        
-        let values = [
-            "title": itemTitle,
-            "price": itemPrice,
-            "description": itemDescription,
-            "author": userID,
-            "created_at": FIRServerValue.timestamp(),
-            "image_url": imageURL,
-            "can_accept_credit": onlinePaymentOption,
-            "can_ship": shippingOption,
-            "pickup_latitude": placeholderLat,
-            "pickup_longitude": placeholderLon
-        ]
-        
-        newPostRefID.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
-            if err != nil {
-                print(err?.localizedDescription)
-                return
-            }
-            
-            print("saved POSTinfo successfly in firebase DB")
-            
-        })
-    }
     
     
     // Popup alert if missing fields

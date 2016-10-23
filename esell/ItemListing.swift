@@ -53,7 +53,7 @@ class ItemListing: NSObject {
         return String.localizedStringWithFormat("%@%.0f", currencyLabel, price)
     }
     
-    var statusIsOpen: Bool
+    var isOpen: Bool
     
     
     
@@ -73,13 +73,13 @@ class ItemListing: NSObject {
         self.canAcceptCreditCard = false
         self.canShip = false
         
-        self.statusIsOpen = true
+        self.isOpen = true
     }
     
     //TODO I added optional for double & the newer fields but this should be removed later
     // removed parameters , pickupLatitude: Double?, pickupLongitude: Double?, canAcceptCreditCard: Bool?, canShip: Bool?
     
-    init(id: String, author: String, title: String, price: Double, itemDescription: String, createdDate: NSDate, pickupLatitude: Double, pickupLongitude: Double) {
+    init(id: String, author: String, title: String, price: Double, itemDescription: String, createdDate: NSDate, pickupLatitude: Double, pickupLongitude: Double, isOpen: Bool) {
         
         self.id = id
         self.author = author
@@ -93,7 +93,7 @@ class ItemListing: NSObject {
         self.canAcceptCreditCard = false
         self.canShip = false
         
-        self.statusIsOpen = true
+        self.isOpen = isOpen
     }
     
 //    init(snapshot: FIRDataSnapshot) {

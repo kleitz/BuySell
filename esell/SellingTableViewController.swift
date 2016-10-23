@@ -25,6 +25,7 @@ class SellingTableViewController: UITableViewController {
     
     // MARK: - Lifecycle ViewWillAPPEAR
     override func viewWillAppear(animated: Bool) {
+        print("VIEW WILL APPEAR. doe sthis aactually do a call again?")
         
         super.viewWillAppear(animated)
         
@@ -34,7 +35,7 @@ class SellingTableViewController: UITableViewController {
         // 2 - Fetch my posts
         
         fireBase.fetchPostsByUserID(userID: currentUser) { (postsCreated) in
-            
+            print("[fetchPosts] fetching running func ")
             // 2a -  this returns a list of my created posts
             
             self.sectionPostsArray = postsCreated
@@ -332,10 +333,13 @@ class SellingTableViewController: UITableViewController {
                     
                     // set up all UI colors & text for this case
                     
+                    cell.acceptOfferButton.enabled = true
+                    
                     cell.acceptOfferButton.backgroundColor = UIColor(red: 143.0/255, green: 190.0/255, blue: 0/255, alpha: 1.0)
+                    
                     cell.acceptOfferButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
                     cell.acceptOfferButton.setTitle("Accept Offer", forState: .Normal)
-                    cell.acceptOfferButton.enabled = true
+                    
                     
                     
                 }
@@ -466,16 +470,21 @@ class SellingTableViewController: UITableViewController {
             print(" > clicked CONFIRM SAVE BID")
             
             // do save
-            self.fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID) { (isUpdated) in
+            self.fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID, withCompletionHandler:  { (isUpdated) in
                 if isUpdated == true {
                     
                     print("TransctionViewControler: firebase completetionhalder ---> UPDATED DB")
+                    
+                    acceptedBid.parentPostInfo?.isOpen = false
+                    
+                    print("----- \(acceptedBid.parentPostInfo?.isOpen)")
+//                    self.fireBase.fetchPostsForBrowse()
                     
                     self.tableView.reloadData()
                     
                     // TODO need to write the conditionals for changing cell UI
                 }
-            }
+            })
             
             
             // notify it's saved w/ popup

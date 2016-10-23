@@ -46,6 +46,60 @@ class FirebaseManager {
         
     }
     
+    // Function for saving to Firebase with all POST INFO
+    
+    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool){
+        // do saving into firebase here
+        // TODO fix this so that it doesn't save the image first into database before checking all fields?
+        
+        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+        
+        let postsRef = ref.child("posts")
+        
+        let newPostRefID = postsRef.childByAutoId()
+        
+        
+        // Get the userID from userdefaults to save as "author" key
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        guard let userID = defaults.stringForKey("uid") else {
+            print("failed getting nsuserdefaults uid")
+            return
+        }
+        
+        /// TODO Fix this coordinate recording later.
+        let placeholderLat = 25.0217026
+        
+        let placeholderLon = 121.2086617
+        
+        // Set the dictionary of values to be saved in database for "POSTS"
+        
+        let values = [
+            "title": itemTitle,
+            "price": itemPrice,
+            "description": itemDescription,
+            "author": userID,
+            "created_at": FIRServerValue.timestamp(),
+            "image_url": imageURL,
+            "can_accept_credit": onlinePaymentOption,
+            "can_ship": shippingOption,
+            "pickup_latitude": placeholderLat,
+            "pickup_longitude": placeholderLon,
+            "is_open": true
+        ]
+        
+        newPostRefID.updateChildValues(values as [NSObject : AnyObject], withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err?.localizedDescription)
+                return
+            }
+            
+            print("saved POSTinfo successfly in firebase DB")
+            
+        })
+    }
+
     
     // save bid in database
     
@@ -92,11 +146,20 @@ class FirebaseManager {
     
     func updateAllBidsOfOnePost(parentPostID parentPostID: String, acceptedBidID: String, withCompletionHandler: (isUpdated: Bool ) -> Void) {
         
-        // before this, both bid_accepted and bid_responded should be 'false' by default
-       
-        // loop for query of all bids under parent_post_id
+        // 1. Update parent post status as CLOSED on Firebase
         
-        self.fetchBidsByParentPost(postID: parentPostID) { (bidsArrayForOnePost) in
+        self.ref.child("posts/\(parentPostID)/is_open").setValue(false)
+        
+        // 1a. Get this new value passed into local var (wrote this in the other viewcontroller's completion)
+        
+        
+        // 2. Update all bids under the parent post as RESPONDED and if accepted = true/false
+        
+        // before this, both bid_accepted and bid_responded should be 'false' by default. loop for query of all bids under parent_post_id
+        
+        self.fetchBidsByParentPost(postID: parentPostID, withCompletionHandler: { (bidsArrayForOnePost) in
+            
+            
             
             print("[updateAllBids...] total bids in array: \(bidsArrayForOnePost.count)")
             for eachBid in bidsArrayForOnePost {
@@ -120,7 +183,7 @@ class FirebaseManager {
                 }
             }
             withCompletionHandler(isUpdated: true)
-        }
+        })
     }
     
     
@@ -128,6 +191,10 @@ class FirebaseManager {
     // MARK: Functions for fetching Data
     
     func fetchPostsForBrowse() {
+        // you can use queryLimitedToFirst(3) to limit to max number of results returned
+        
+        // TODO how to order by reverse created_at ? it doesn't work.... tried queryOrderedByChild("created_at")
+        // TODO could use .insert(post, atIndex: 0) if you wanted reverse order locally but it's not perfect, still better to find a way to query it from Firebase in reverse order of date
         
         ref.child("posts").queryOrderedByChild("is_open").queryEqualToValue(true).observeEventType(.Value, withBlock: { (snapshot
             ) in
@@ -180,53 +247,6 @@ class FirebaseManager {
                 self.delegate?.returnError(self, error: error)
         })
         
-        
-    }
-    
-    func fetchPosts() {
-        
-        print(" > running fetchPosts()...")
-        
-        
-        // you can use queryLimitedToFirst(3) to limit to max number of results returned
-        
-        // TODO how to order by reverse created_at ? it doesn't work.... tried queryOrderedByChild("created_at")
-        // TODO could use .insert(post, atIndex: 0) if you wanted reverse order locally but it's not perfect, still better to find a way to query it from Firebase in reverse order of date
-        
-        ref.child("posts").queryOrderedByChild("created_at").observeEventType(.ChildAdded, withBlock: { (snapshot
-            ) in
-            
-            //TESTPRINT
-            //print(snapshot)
-            
-            // This is the key or UID for each "post"
-            let snapshotID = snapshot.key
-            
-            // This is the childvalues for each "post"
-            guard let dataSnapshot = snapshot.value as? [String:AnyObject] else {
-                print("error unwrapping post")
-                fatalError()
-            }
-            
-            
-            var postArray = [ItemListing]()
-            
-            // Parse each snapshot dictionary & return as an Itemlisting class type
-            
-            let post = self.parsePostSnapshot(postID: snapshotID, data: dataSnapshot)
-            
-            postArray.append(post)
-            
-            // Return each post gotten to the delegate in view controller
-            
-            self.delegate?.returnData(self, data: postArray)
-            
-            // Return error if error to delegate in view controller
-            
-            }, withCancelBlock: { (error) in
-                print("fetchPosts error: \(error.localizedDescription)")
-                self.delegate?.returnError(self, error: error)
-        })
         
     }
     
@@ -519,7 +539,8 @@ class FirebaseManager {
             let postAuthor = dictionary["author"] as? String,
             let postPrice = dictionary["price"] as? Double,
             let pickupLatitude = dictionary["pickup_latitude"] as? Double,
-            let pickupLongitude = dictionary["pickup_longitude"] as? Double else {
+            let pickupLongitude = dictionary["pickup_longitude"] as? Double,
+            let isOpen = dictionary["is_open"] as? Bool else {
                 fatalError("Error parsing")
         }
         
@@ -533,7 +554,7 @@ class FirebaseManager {
         
         // Create new post to store all this.
         
-        let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude)
+        let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, isOpen: isOpen)
         
         post.imageURL = postImageURL
         
