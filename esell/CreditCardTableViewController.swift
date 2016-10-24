@@ -58,6 +58,9 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         checkoutButton.addTarget(self, action: #selector(prepareSaveBid), forControlEvents: .TouchUpInside)
         
         
+        // Remove table view seperator lines
+        tableView.separatorStyle = .None
+        
         // Looks for single or multiple taps. FOr dismissing keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)

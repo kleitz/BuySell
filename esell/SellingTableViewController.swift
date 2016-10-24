@@ -100,6 +100,9 @@ class SellingTableViewController: UITableViewController {
         
         self.tableView.rowHeight = 70.0
         
+        // Remove table view seperator lines
+        tableView.separatorStyle = .None
+        
     }
     
     // MARK: Lifecycle ViewWillDISAPPEAR

@@ -1,46 +1,50 @@
 //
-//  AddItemViewController.swift
+//  AddItemTableViewController.swift
 //  esell
 //
-//  Created by Angela Lin on 9/27/16.
+//  Created by Angela Lin on 10/24/16.
 //  Copyright © 2016 Angela Lin. All rights reserved.
 //
 
 import UIKit
 import Firebase
 
-
-class AddItemViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class AddItemTableViewController: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     
-    @IBOutlet var imageView: UIImageView!
-    
+    // MARK: IBOutlet Variables
     
     @IBOutlet weak var photoIcon: UIImageView!
     
-    @IBOutlet weak var titleText: UITextField!
-   
-    @IBOutlet weak var priceText: UITextField!
+    @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var titleText: UITextField!
+    
+    @IBOutlet weak var priceText: UITextField!
+
     @IBOutlet weak var descriptionText: UITextView!
     
-    @IBOutlet weak var pickupText: UITextField!
- 
     @IBOutlet weak var acceptOnlinePaymentSwitch: UISwitch!
     
-    @IBOutlet weak var acceptShippingOptionSwitch: UISwitch!
+    @IBOutlet weak var willingToShipSwitch: UISwitch!
     
-    @IBOutlet weak var pickupSwitch: UISegmentedControl!
+    @IBOutlet weak var selectPickupText: UILabel!
     
+    @IBOutlet weak var pickupStaticCell: UITableViewCell!
+    
+    @IBOutlet weak var selectPickupButton: UIButton!
+    
+    
+    // MARK: Data Variables
     
     var imagePicker = UIImagePickerController()
     
-    var pickupLocationPicker = UIPickerView()
     
-    var pickupLocationValues: [String] = ["MRT Taipei Main", "MRT Shuanglian", "MRT Zhongshan", "MRT Minquan E Rd", "MRT Dongmen"]
-
+    // MARK:- ViewDidLOAD
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         // Set up navigation items such as title
         
@@ -53,23 +57,17 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         navigationItem.rightBarButtonItem = postButton
         
         
-        // Setup segment control for pickup option
-        setupPickupSegmentControl()
+        // Set image picker delegate
         
-        // Hide the picker's uipickerview
-        
-        pickupLocationPicker.dataSource = self
-        pickupLocationPicker.delegate = self
-        
-        pickupText.inputView = pickupLocationPicker
- 
         imagePicker.delegate = self
-
         
         
         // Looks for single or multiple taps. FOr dismissing keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        
+        
         
         // Create tap gesture recognizer
         
@@ -89,48 +87,38 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         photoIcon.hidden = false
         
         
-        // Code to handle pickup location text field tap gesture
+    }
+
+
+    
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30.0
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
-        let tapOnPickup = UITapGestureRecognizer(target: self, action: #selector(selectPickupLocation))
+        // Gets the header view as a UITableViewHeaderFooterView and changes the text color
         
-        pickupText.addGestureRecognizer(tapOnPickup)
-        
+        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+        headerView.textLabel?.textColor = UIColor.whiteColor()
+        headerView.contentView.backgroundColor = UIColor.darkGrayColor()
         
     }
     
-   
-    
-    // Function attached to pickupTextField
-    func selectPickupLocation(gesture: UIGestureRecognizer) {
-        
-        pickupLocationPicker.hidden = false
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 2.0
     }
     
-    // Function to setup pickup Segment Control option
-    func setupPickupSegmentControl() {
+    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 2))
+        footerView.backgroundColor = UIColor.darkGrayColor()
         
-        pickupSwitch.addTarget(self, action: #selector(clickPickupSwitch), forControlEvents: UIControlEvents.ValueChanged)
-        
-         // Set default segment that is Selected upon load
-        pickupSwitch.selectedSegmentIndex = 0
+        return footerView
     }
+
     
-    func clickPickupSwitch() {
-        switch pickupSwitch.selectedSegmentIndex {
-        case 0:
-            print("select MRT")
-            // bring up choose mrt list
-            pickupText.becomeFirstResponder()
-            
-        case 1:
-            print("select choose from Map")
-            pickupText.text = nil
-            // bring up map view
-            
-           
-        default: break;
-        }
-    }
+    // MARK:- Functions
     
     // Function attached to UIImageview for selecting photo from photolibrary
     func selectImage(gesture: UIGestureRecognizer) {
@@ -152,7 +140,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
                 self.imagePicker.modalPresentationStyle = .Popover
                 self.presentViewController(self.imagePicker, animated: true, completion: nil)
             }
-
+            
         })
         
         let cameraOption = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction!) -> Void in
@@ -170,7 +158,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         let cancelOption = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Cancel")
-
+            
         })
         
         //Adding the actions to the action sheet. Here, camera will only show up as an option if the camera is available in the first place.
@@ -184,7 +172,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         //Now that the action sheet is set up, we present it.
         self.presentViewController(optionMenu, animated: true, completion: nil)
         
-
+        
     }
     
     // ImagePicker Delegate Methods
@@ -200,7 +188,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         print(" > finished picking image w/ edit")
     }
-
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
@@ -224,9 +212,9 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         // Create STORAGE ref for images only (not database reference)
         
         let imageName = NSUUID().UUIDString
-    
+        
         let storageRef = FIRStorage.storage().reference().child("post_images").child("\(imageName).png")
-
+        
         
         // Do error checking for all fields to make sure before saving
         
@@ -289,7 +277,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
             
             let fireBase = FirebaseManager()
             
-            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.acceptShippingOptionSwitch.on)
+            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on)
             
         }
         
@@ -311,7 +299,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     // Popup alert if missing fields
     
     func popupNotifyIncomplete(){
-
+        
         let alertController = UIAlertController(title: "Wait!", message:
             "You need to fill out all fields", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -327,7 +315,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     // Popup alert if Post Successful
     //completion completion: ()?
     func popupNotifyPosted(){
-
+        
         let alertController = UIAlertController(title: "Post Completed", message:
             "Your item has been posted!", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -336,34 +324,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    
-    // UIPickerView functions for selecting location from a picker
-    func numberOfComponentsInPickerView(pickerView: UIPickerView)->Int {
-        
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView,numberOfRowsInComponent component:Int) -> Int{
-        
-        return pickupLocationValues.count
-        
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int)->String?{
-        
-        return pickupLocationValues[row]
-        
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
-        
-        print("SELECTED FROM PICKER --> \(pickupText.text)")
-
-        pickupText.text = pickupLocationValues[row]
-        
-        self.view.endEditing(true)
-    
-    }
     
     // Dismiss Keyboard functions
     func dismissKeyboard() {
@@ -377,7 +337,7 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         return true
     }
     
-    // Reset all fields function 
+    // Reset all fields function
     
     func resetAllFields() {
         
@@ -387,10 +347,8 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
         descriptionText.text = ""
         priceText.text = ""
         
-        pickupText.text = nil
-        pickupSwitch.selectedSegmentIndex = 0
         acceptOnlinePaymentSwitch.on = false
-        acceptShippingOptionSwitch.on = false
+        willingToShipSwitch.on = false
     }
     
     
@@ -410,6 +368,6 @@ class AddItemViewController: UIViewController, UINavigationControllerDelegate, U
     deinit {
         print("(deinit) -> [AddItemViewController]")
     }
+
+
 }
-
-

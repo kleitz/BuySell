@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8403BA611DBC84A100193E10 /* PickMapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */; };
 		840D3C571DB49D6A0052D8B7 /* BodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D3C561DB49D6A0052D8B7 /* BodyCell.swift */; };
 		842D36201DB5AFD300AE5F5F /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D361F1DB5AFD300AE5F5F /* SectionHeaderView.swift */; };
 		842D36221DB5B01600AE5F5F /* SectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842D36211DB5B01600AE5F5F /* SectionHeaderView.xib */; };
@@ -15,6 +16,7 @@
 		84321A881DB8FDE300332DF4 /* SellingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84321A871DB8FDE300332DF4 /* SellingTableViewController.swift */; };
 		84321A8C1DB9373100332DF4 /* BuyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84321A8B1DB9373100332DF4 /* BuyTableViewCell.swift */; };
 		84321A8E1DB9374000332DF4 /* SellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */; };
+		8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */; };
 		848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */; };
 		848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F681B1DABA8B900AED515 /* PostTabBarController.swift */; };
 		848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68211DACF5D000AED515 /* FirebaseManager.swift */; };
@@ -24,7 +26,6 @@
 		848F682C1DB0C25600AED515 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F682B1DB0C25600AED515 /* TransactionsViewController.swift */; };
 		849993881D9904BA006C050C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849993871D9904BA006C050C /* GoogleService-Info.plist */; };
 		8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849993891D992451006C050C /* ListingsTableViewController.swift */; };
-		8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938B1D9ABD92006C050C /* AddItemViewController.swift */; };
 		8499938E1D9B5701006C050C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938D1D9B5701006C050C /* User.swift */; };
 		849993901D9B5715006C050C /* ItemListing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938F1D9B5715006C050C /* ItemListing.swift */; };
 		84BE85181DB24C0B0001FEF8 /* BidForItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BE85171DB24C0B0001FEF8 /* BidForItem.swift */; };
@@ -48,6 +49,7 @@
 		15F194C66E73071165440AD3 /* Pods-esell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-esell.release.xcconfig"; path = "Pods/Target Support Files/Pods-esell/Pods-esell.release.xcconfig"; sourceTree = "<group>"; };
 		21CCE51F04529112EBFDE571 /* Pods-esell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-esell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-esell/Pods-esell.debug.xcconfig"; sourceTree = "<group>"; };
 		26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_esell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickMapLocationViewController.swift; sourceTree = "<group>"; };
 		840D3C561DB49D6A0052D8B7 /* BodyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyCell.swift; sourceTree = "<group>"; };
 		842D361F1DB5AFD300AE5F5F /* SectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		842D36211DB5B01600AE5F5F /* SectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeaderView.xib; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		84321A871DB8FDE300332DF4 /* SellingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellingTableViewController.swift; sourceTree = "<group>"; };
 		84321A8B1DB9373100332DF4 /* BuyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyTableViewCell.swift; sourceTree = "<group>"; };
 		84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellTableViewCell.swift; sourceTree = "<group>"; };
+		8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemTableViewController.swift; sourceTree = "<group>"; };
 		848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemBackgroundViewController.swift; sourceTree = "<group>"; };
 		848F681B1DABA8B900AED515 /* PostTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTabBarController.swift; sourceTree = "<group>"; };
 		848F68211DACF5D000AED515 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
@@ -65,7 +68,6 @@
 		848F682B1DB0C25600AED515 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		849993871D9904BA006C050C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		849993891D992451006C050C /* ListingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsTableViewController.swift; sourceTree = "<group>"; };
-		8499938B1D9ABD92006C050C /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
 		8499938D1D9B5701006C050C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8499938F1D9B5715006C050C /* ItemListing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListing.swift; sourceTree = "<group>"; };
 		84BE85171DB24C0B0001FEF8 /* BidForItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BidForItem.swift; sourceTree = "<group>"; };
@@ -113,10 +115,11 @@
 				849993891D992451006C050C /* ListingsTableViewController.swift */,
 				84F5547D1DA243EB00D7BDA5 /* ListingsCollectionViewController.swift */,
 				84F5547F1DA24F0F00D7BDA5 /* CollectionViewCell.swift */,
-				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
 				84F445241DA7713800429AE7 /* MapViewController.swift */,
-				8499938B1D9ABD92006C050C /* AddItemViewController.swift */,
+				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
 				848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */,
+				8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */,
+				8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */,
 			);
 			name = "Listings View";
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 		84DFB0E91D98F15D00111668 /* esell */ = {
 			isa = PBXGroup;
 			children = (
+				8499938D1D9B5701006C050C /* User.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
 				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
@@ -197,7 +201,6 @@
 		84E1BCB41D9BEAD800315DB3 /* ModelObjects */ = {
 			isa = PBXGroup;
 			children = (
-				8499938D1D9B5701006C050C /* User.swift */,
 				848F68271DAF59FF00AED515 /* CreditCard.swift */,
 				8499938F1D9B5715006C050C /* ItemListing.swift */,
 				84BE85171DB24C0B0001FEF8 /* BidForItem.swift */,
@@ -355,6 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */,
+				8403BA611DBC84A100193E10 /* PickMapLocationViewController.swift in Sources */,
 				84321A801DB8C56500332DF4 /* ProfileTableViewController.swift in Sources */,
 				84321A881DB8FDE300332DF4 /* SellingTableViewController.swift in Sources */,
 				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
@@ -366,7 +370,6 @@
 				842D36201DB5AFD300AE5F5F /* SectionHeaderView.swift in Sources */,
 				84321A861DB8FDD300332DF4 /* BuyingTableViewController.swift in Sources */,
 				849993901D9B5715006C050C /* ItemListing.swift in Sources */,
-				8499938C1D9ABD92006C050C /* AddItemViewController.swift in Sources */,
 				84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */,
 				84F554781DA2003300D7BDA5 /* ProfileViewController.swift in Sources */,
 				848F68261DAE9C5800AED515 /* CreditCardTableViewController.swift in Sources */,
@@ -381,6 +384,7 @@
 				848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 				84F445251DA7713800429AE7 /* MapViewController.swift in Sources */,
+				8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */,
 				848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */,
 				84BE85181DB24C0B0001FEF8 /* BidForItem.swift in Sources */,
 			);

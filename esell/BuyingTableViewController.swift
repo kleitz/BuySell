@@ -89,6 +89,9 @@ class BuyingTableViewController: UITableViewController {
         
         self.tableView.rowHeight = 70.0
         
+        // Remove table view seperator lines
+        tableView.separatorStyle = .None
+        
     }
     
     // MARK: Lifecycle ViewWillDISAPPEAR
@@ -154,9 +157,6 @@ class BuyingTableViewController: UITableViewController {
         // MARK: Buying section: must exist. show my 1 bid under parent post
         
         ///NEED ERROR HANDLING HERE IN CASE ARRAY IS EMPTY UPON LOAD
-        
-        print("WHY DOES INDEXpath fail: \(indexPath.section)")
-        print("count of array: \(sectionPostsArray.count)")
         
         let myOfferForPost = cellBidsArray[indexPath.section]
         
