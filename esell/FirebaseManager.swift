@@ -48,7 +48,7 @@ class FirebaseManager {
     
     // Function for saving to Firebase with all POST INFO
     
-    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool){
+    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool, pickupLatitude: Double, pickupLongitude: Double) {
         // do saving into firebase here
         // TODO fix this so that it doesn't save the image first into database before checking all fields?
         
@@ -68,10 +68,6 @@ class FirebaseManager {
             return
         }
         
-        /// TODO Fix this coordinate recording later.
-        let placeholderLat = 25.0217026
-        
-        let placeholderLon = 121.2086617
         
         // Set the dictionary of values to be saved in database for "POSTS"
         
@@ -84,8 +80,8 @@ class FirebaseManager {
             "image_url": imageURL,
             "can_accept_credit": onlinePaymentOption,
             "can_ship": shippingOption,
-            "pickup_latitude": placeholderLat,
-            "pickup_longitude": placeholderLon,
+            "pickup_latitude": pickupLatitude,
+            "pickup_longitude": pickupLongitude,
             "is_open": true
         ]
         

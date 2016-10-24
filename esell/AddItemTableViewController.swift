@@ -30,14 +30,19 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
     
     @IBOutlet weak var selectPickupText: UILabel!
     
-    @IBOutlet weak var pickupStaticCell: UITableViewCell!
     
     @IBOutlet weak var selectPickupButton: UIButton!
+    
+    
     
     
     // MARK: Data Variables
     
     var imagePicker = UIImagePickerController()
+    
+    var pickupLat: Double?
+    var pickupLong: Double?
+    
     
     
     // MARK:- ViewDidLOAD
@@ -48,7 +53,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         // Set up navigation items such as title
         
-        self.navigationItem.title = "Create Post"
+        self.navigationItem.title = "New Post"
         
         let cancelButton =  UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(closeModal))
         let postButton = UIBarButtonItem(title: "Post", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
@@ -240,6 +245,14 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         }
         
         
+        guard let pickupLatitude = pickupLat,
+            let pickupLongitude = pickupLong else {
+                print("failed saving latitude longitude because optional or nil")
+                popupNotifyMissingPickupLocation()
+                return
+        }
+        
+        
         /// TODO need to add a better check for this NUMBER input
         
         guard let itemPriceString = priceText.text where itemPriceString != "" else {
@@ -277,7 +290,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             
             let fireBase = FirebaseManager()
             
-            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on)
+            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude)
             
         }
         
@@ -310,6 +323,17 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    func popupNotifyMissingPickupLocation(){
+        
+        let alertController = UIAlertController(title: "Wait!", message:
+            "You haven't chosen a pickup location", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            print("test: pressed Dismiss")
+        }))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     
     
     // Popup alert if Post Successful

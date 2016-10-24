@@ -59,9 +59,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             
             
         }
-        
-        // TO DO Fetch posts from other tab or new fetch call. 
-        // then read the coord of each post (optional) and if it exists then show on the map
+
         
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
     
@@ -186,17 +184,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
 
     }
-    
-    
-    // func to get coordinates out of Firebase
-    
-    func fetchPostsWithCoordinates() {
-        
-        //let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
-        
-        // ref.child
-    }
-    
     
     
     
