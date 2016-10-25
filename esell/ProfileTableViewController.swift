@@ -20,6 +20,9 @@ class ProfileTableViewController: UITableViewController {
         
         super.viewDidLoad()
 
+        // Remove table view seperator lines
+        tableView.separatorStyle = .None
+        
         
         // get userInfo from NSUserDefaults
         

@@ -20,8 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        Fabric.with([Crashlytics.self])
-        
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Use/configure Firebase
@@ -83,6 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            print("---> [appdel] the root is set as : LOGIN page")
 //            
 //        }
+        
+        Fabric.with([Crashlytics.self])
         
         return true
     }
