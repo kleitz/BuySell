@@ -112,7 +112,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		84321A811DB8C58900332DF4 /* Listings View */ = {
+		84321A811DB8C58900332DF4 /* Browse Posts */ = {
 			isa = PBXGroup;
 			children = (
 				84F5547B1DA223A900D7BDA5 /* SegmentViewController.swift */,
@@ -121,11 +121,8 @@
 				84F445241DA7713800429AE7 /* MapViewController.swift */,
 				84E1BCB91D9C052C00315DB3 /* PostCell.swift */,
 				84F5547F1DA24F0F00D7BDA5 /* CollectionViewCell.swift */,
-				848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */,
-				8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */,
-				8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */,
 			);
-			name = "Listings View";
+			name = "Browse Posts";
 			sourceTree = "<group>";
 		};
 		84321A821DB8C5AA00332DF4 /* Profile View */ = {
@@ -138,7 +135,7 @@
 			name = "Profile View";
 			sourceTree = "<group>";
 		};
-		84321A831DB8C5DA00332DF4 /* Checkout View */ = {
+		84321A831DB8C5DA00332DF4 /* View Detail to Checkout */ = {
 			isa = PBXGroup;
 			children = (
 				84EA54261D9E474700DE34EF /* ItemDetailViewController.swift */,
@@ -146,10 +143,10 @@
 				848F68231DAE9B6100AED515 /* CheckoutViewController.swift */,
 				848F68251DAE9C5800AED515 /* CreditCardTableViewController.swift */,
 			);
-			name = "Checkout View";
+			name = "View Detail to Checkout";
 			sourceTree = "<group>";
 		};
-		84321A8F1DB9379700332DF4 /* Transactions View */ = {
+		84321A8F1DB9379700332DF4 /* View Transactions */ = {
 			isa = PBXGroup;
 			children = (
 				848F682B1DB0C25600AED515 /* TransactionsViewController.swift */,
@@ -161,7 +158,7 @@
 				84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */,
 				840D3C561DB49D6A0052D8B7 /* BodyCell.swift */,
 			);
-			name = "Transactions View";
+			name = "View Transactions";
 			sourceTree = "<group>";
 		};
 		84DFB0DE1D98F15C00111668 = {
@@ -190,9 +187,10 @@
 				848F681B1DABA8B900AED515 /* PostTabBarController.swift */,
 				8437E4591DC04DF700DD469D /* NavigationController.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
-				84321A811DB8C58900332DF4 /* Listings View */,
-				84321A831DB8C5DA00332DF4 /* Checkout View */,
-				84321A8F1DB9379700332DF4 /* Transactions View */,
+				84321A811DB8C58900332DF4 /* Browse Posts */,
+				84E5E3001DC0A7F800423C41 /* Add Post */,
+				84321A831DB8C5DA00332DF4 /* View Detail to Checkout */,
+				84321A8F1DB9379700332DF4 /* View Transactions */,
 				84321A821DB8C5AA00332DF4 /* Profile View */,
 				84DFB0EA1D98F15E00111668 /* AppDelegate.swift */,
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
@@ -213,6 +211,16 @@
 				848F68211DACF5D000AED515 /* FirebaseManager.swift */,
 			);
 			name = ModelObjects;
+			sourceTree = "<group>";
+		};
+		84E5E3001DC0A7F800423C41 /* Add Post */ = {
+			isa = PBXGroup;
+			children = (
+				848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */,
+				8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */,
+				8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */,
+			);
+			name = "Add Post";
 			sourceTree = "<group>";
 		};
 		9921E4AF41DAA5E48982D334 /* Pods */ = {

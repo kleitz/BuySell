@@ -54,8 +54,7 @@ class ItemListing: NSObject {
     }
     
     var isOpen: Bool
-    
-    
+
     
 //    // TODO Failable initializer ? or not failable?
     init(id: String) {

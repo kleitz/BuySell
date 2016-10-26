@@ -40,7 +40,7 @@ class FirebaseManager {
                 return
             }
             
-            print("[LoginControl] user info -> in firebase DB")
+            // print("[LoginControl] user info -> in firebase DB")
             
         })
         
@@ -278,7 +278,7 @@ class FirebaseManager {
         
         ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
             
-            print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
+            // print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
             guard let dictionary = snapshot.value as? [String:AnyObject] else {
                 print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
                 return
@@ -320,9 +320,9 @@ class FirebaseManager {
     
     func fetchBidsByParentPost(postID postID: String, withCompletionHandler: (bidsArrayForOnePost: [BidForItem]) -> Void) {
         
-        // note: limit to 25
+        // TODO note: limit to 25
         
-        print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
+        // print("   [fetchBidsbyPost]  ->> look up this post id: \(postID)")
         
         // TODO can use regular event here? or use SINGLE is better? I don't see it refresh when someone bids for the item even when I use eregular eventType, not single eventType
         
