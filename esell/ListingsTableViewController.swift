@@ -14,6 +14,8 @@ class ListingsTableViewController: UITableViewController {
     
     var sourceViewController = PostTabBarController()
     
+ 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -195,13 +197,6 @@ class ListingsTableViewController: UITableViewController {
         
     }
     
-    
-    // MARK: for logging view controller lifecycle
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        print(">> view appearin -> Listings")
-    }
     
     deinit {
         print("(deinit) -> Listings")

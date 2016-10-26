@@ -51,7 +51,6 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
     }
     
-    
     // Delegate methods
     
     func returnData(manager: FirebaseManager, data: [ItemListing]?) {
@@ -199,6 +198,7 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         // Notify Child View Controller
         viewController.removeFromParentViewController()
     }
+    
     
     deinit{
         print(" (deinit) -> SegmentViewController")

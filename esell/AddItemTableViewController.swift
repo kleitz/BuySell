@@ -54,6 +54,11 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         // Set up navigation items such as title
         
         self.navigationItem.title = "New Post"
+
+        
+        
+        
+        // Set up navigation bar buttons
         
         let cancelButton =  UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(closeModal))
         let postButton = UIBarButtonItem(title: "Post", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))

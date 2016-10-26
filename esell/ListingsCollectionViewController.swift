@@ -23,8 +23,8 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     
     
     @IBOutlet var collectionView: UICollectionView!
-   
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,6 +33,24 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
     }
+    
+//    override func viewWillAppear(animated: Bool) {
+//        
+//        super.viewWillAppear(true)
+//        
+//        // SET TAB BAR USING THIS FUNCTION w/Animation so that there is no white space when segue
+//        setTabBarVisible(!tabBarIsVisible(), animated: false)
+//        
+//    }
+//
+//    override func viewWillDisappear(animated: Bool) {
+//        
+//        super.viewWillDisappear(true)
+//        
+//        // SET TAB BAR USING THIS FUNCTION w/Animation so that there is no white space when segue
+//        setTabBarVisible(false, animated: true)
+//        
+//    }
     
 
     
@@ -193,7 +211,10 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                     if let image: UIImage = sourceViewController.imageCache[sourceViewController.posts[rowIndex].imageURL!] {
                         itemDetailController.image = image
                     }
+
+                    itemDetailController.tabBarController?.tabBar.hidden = true
                     
+
                 }
             default: break
             }
@@ -201,36 +222,6 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         
     }
 
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-    
-    }
-    */
 
 }
 

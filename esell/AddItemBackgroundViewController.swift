@@ -30,10 +30,6 @@ class AddItemBackgroundViewController: UIViewController {
         
         let newItemModal = storyboard.instantiateViewControllerWithIdentifier("AddItemView") as! UINavigationController
         
-        // set navigationBar color
-        
-        newItemModal.navigationBar.barTintColor = UIColor.whiteColor()
-        
         
         self.presentViewController(newItemModal, animated: true, completion: nil)
         

@@ -118,6 +118,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         let tapPoint: CGPoint = gestureRecognizer.locationInView(mapView)
         let touchMapCoordinate: CLLocationCoordinate2D = mapView.convertPoint(tapPoint, toCoordinateFromView: mapView)
         
+        setUsersClosestCity(touchMapCoordinate)
+
         print("cooridnates: \(touchMapCoordinate)")
         
         
@@ -135,7 +137,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             
             mapView.addAnnotation(annotation)
             
-            // any time annotation is added, also write to the previous view controller as an update
+            /// SAVE map annotation
             
             saveAnnotationToPreviousViewController()
 
@@ -154,6 +156,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             return
         }
         
+        setUsersClosestCity(currentLocation.coordinate)
         
         // stop updating because should have gotten location at least once
         
@@ -248,8 +251,9 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             self.mapView.centerCoordinate = self.pointAnnotation.coordinate
             self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
             
-            // any time annotation is added, also write to the previous view controller as an update
             
+            
+            /// SAVE map annotation
             self.saveAnnotationToPreviousViewController()
             
             
@@ -279,6 +283,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     }
     
     
+    // SAVE- any time annotation is added, also write to the previous view controller as an update
+    
     func saveAnnotationToPreviousViewController() {
         let count = self.navigationController!.viewControllers.count
         print("count of \(self.navigationController!.viewControllers.count)")
@@ -290,6 +296,54 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         }
         print(mapView.annotations.first?.coordinate)
         
+    }
+    
+    func setUsersClosestCity(myCoordinate: CLLocationCoordinate2D) {
+        let geoCoder = CLGeocoder()
+        let location = CLLocation(latitude: myCoordinate.latitude, longitude: myCoordinate.longitude)
+        geoCoder.reverseGeocodeLocation(location)
+        {
+            (placemarks, error) -> Void in
+            
+            let placeArray = placemarks as [CLPlacemark]!
+            
+            // Place details
+            var placeMark: CLPlacemark!
+            placeMark = placeArray?[0]
+            
+            // Address dictionary
+            print(placeMark.addressDictionary)
+            
+            // Location name
+            if let locationName = placeMark.addressDictionary?["Name"] as? NSString
+            {
+                print(locationName)
+            }
+            
+            // Street address
+            if let street = placeMark.addressDictionary?["Thoroughfare"] as? NSString
+            {
+                print(street)
+            }
+            
+            // City
+            if let city = placeMark.addressDictionary?["City"] as? NSString
+            {
+                print(city)
+            }
+            
+            // Zip code
+            if let zip = placeMark.addressDictionary?["ZIP"] as? NSString
+            {
+                print(zip)
+            }
+            
+            // Country
+            if let country = placeMark.addressDictionary?["Country"] as? NSString
+            {
+                print(country)
+            }
+        }
     }
     
     
