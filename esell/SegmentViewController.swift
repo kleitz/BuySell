@@ -26,6 +26,14 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     @IBOutlet weak var mainView: UIView!
     
     
+    override func viewWillAppear(animated: Bool) {
+        
+        super.viewWillAppear(true)
+        
+        self.tabBarController?.setTabBarVisible(true, animated: true)
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

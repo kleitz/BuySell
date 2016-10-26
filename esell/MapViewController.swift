@@ -113,9 +113,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         // set region zoom
         let center = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
-        
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
-        
         self.mapView.setRegion(region, animated: true)
         
     }

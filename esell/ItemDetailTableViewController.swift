@@ -24,15 +24,23 @@ class ItemDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var postOtherInfoLabel: UILabel!
     
+
+    
+    // vars for post info
     var post = ItemListing(id: "temp")
-    var image = UIImage()
+    
+    var postImage = UIImage()
+    
+    
+    // vars for Seller
     
     var sellerAsUser = User(id: "temp")
+    var daysAgo = "less than 1 day"
     
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         // Remove table view seperator lines
         tableView.separatorStyle = .None
@@ -44,34 +52,39 @@ class ItemDetailTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         
         
-        let parentViewController = self.parentViewController as! ItemDetailViewController
-        
-        
-        self.navigationItem.rightBarButtonItem = editButtonItem()
-        
-
-        
-        
         // Setup the UI elements with ItemListing attributes passed in
         
-        itemDescription.text = parentViewController.post.itemDescription
+        itemDescription.text = post.itemDescription
         
-        itemTitle.text = parentViewController.post.title
+        itemTitle.text = post.title
         
         postOtherInfoLabel.text = "This is filler text 123 This is filler text 123  This is filler text 123  This is filler text 123  This is filler text 123 "
         
-        print(" \n  -->: Title: \(post.title), Price: \(post.formattedPrice), Desc: \(post.itemDescription)")
-        
-        
-        itemImage.image = parentViewController.image
+        itemImage.image = postImage
         itemImage.contentMode = .ScaleAspectFill
+        
+        
+        // Handle date
+        
+        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let now: NSDate = NSDate()
+        
+        
+        switch now.daysFrom(post.createdDate) {
+            
+        case 0: daysAgo = "today"
+        case 1: daysAgo = "1 day ago"
+            
+        default: daysAgo = String("\(now.daysFrom(post.createdDate)) days ago")
+            
+        }
         
         
         // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
         let fireBase = FirebaseManager()
         
-        fireBase.lookupSingleUser(userID: parentViewController.post.author) { (getUser) -> (Void) in
+        fireBase.lookupSingleUser(userID: post.author) { (getUser) -> (Void) in
             
             self.sellerAsUser = getUser
             
@@ -85,8 +98,6 @@ class ItemDetailTableViewController: UITableViewController {
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        let itemDescReqHeight = itemDescription.requiredHeight()
-        
         switch indexPath.section {
         case 0:
             switch(indexPath.row) {
@@ -95,7 +106,7 @@ class ItemDetailTableViewController: UITableViewController {
             case 2: return 10
             case 3: return 70
             case 4: return UITableViewAutomaticDimension
-            default: fatalError("unknown row in section")
+            default: return 0
             }
         default: fatalError("unknown section")
         }
@@ -161,28 +172,10 @@ class ItemDetailTableViewController: UITableViewController {
         print("(TESTPRINT) Seller Info. name: \(self.sellerAsUser.name) email: \(self.sellerAsUser.email)")
         
         
-        // Handle date
         
-        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let now: NSDate = NSDate()
-        
-        var daysAgo = "less than 1 day"
-        
-        switch now.daysFrom(self.post.createdDate) {
-            
-        case 0: daysAgo = "today"
-        case 1: daysAgo = "1 day ago"
-            
-        default: daysAgo = String("\(now.daysFrom(self.post.createdDate)) days ago")
-            
-        }
-        
-        
-        
-        print("the current date (NSDate()) is : \(now)")
         // Display seller name as text
         
-        self.itemSeller.text = ("Posted \(daysAgo) by \(self.sellerAsUser.name ?? "")")
+        self.itemSeller.text = ("Posted \(self.daysAgo) by \(self.sellerAsUser.name ?? "")")
         
         
     }
@@ -194,6 +187,13 @@ class ItemDetailTableViewController: UITableViewController {
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true
         view.layer.cornerRadius = cornerRadiusParams
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+        
     }
     
     

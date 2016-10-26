@@ -212,9 +212,6 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
                         itemDetailController.image = image
                     }
 
-                    itemDetailController.tabBarController?.tabBar.hidden = true
-                    
-
                 }
             default: break
             }

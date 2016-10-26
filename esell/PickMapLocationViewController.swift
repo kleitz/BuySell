@@ -41,7 +41,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         // Set up title
         
-        self.navigationItem.title = "Pickup Area"
+        self.navigationItem.title = "Pickup"
         
         let searchButton = UIBarButtonItem(title: "Search", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(showSearchBar))
         
@@ -128,6 +128,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         if .Began == gestureRecognizer.state {
             
             // Delete any existing annotations.
+            
             if mapView.annotations.count != 0 {
                 mapView.removeAnnotations(mapView.annotations)
             }
@@ -166,9 +167,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         // set region zoom
         let center = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
-        
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
-        
         self.mapView.setRegion(region, animated: true)
         
     }
@@ -236,7 +235,15 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
                 return
             }
             
-            // if has results, then draw on map with pin annotaiotn view
+            // if has results,
+            
+            // Delete any existing annotations.
+            
+            if self.mapView.annotations.count != 0 {
+                self.mapView.removeAnnotations(self.mapView.annotations)
+            }
+            
+            // then draw on map with pin annotation view
             
             self.pointAnnotation = MKPointAnnotation()
             self.pointAnnotation.title = searchBar.text
