@@ -191,7 +191,6 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         viewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         // Notify the child view controller
-        //(this means the var viewcontroller is the child view controller..., it passes 'self' which is the container view controller, as the argument)
         viewController.didMoveToParentViewController(self)
         
     }

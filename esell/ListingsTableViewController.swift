@@ -18,9 +18,7 @@ class ListingsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("_tableView view loaded")
-        
+
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
     }
@@ -50,9 +48,6 @@ class ListingsTableViewController: UITableViewController {
         cell.titleText.text = post.title
         cell.descriptionText.text = post.itemDescription
    
-        
-        // do image stuff here TODO make load separately
-        // does adding dispatch help load when get FIRdatabase data?
         
         // temp set image
         cell.photo.image = UIImage(named:"shopbag")
@@ -127,10 +122,7 @@ class ListingsTableViewController: UITableViewController {
             
             
         }
-        
-        // each cell returns
-        
-        print("Cell returned... [cellForRowAtIndexPath]")
+
         return cell
         
     }
@@ -139,28 +131,7 @@ class ListingsTableViewController: UITableViewController {
         print(" >> selected row@ \(indexPath.row)")
         
     }
-    
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-     if editingStyle == .Delete {
-     // Delete the row from the data source
-     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-     } else if editingStyle == .Insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
+
     
     // MARK: - Navigation
     

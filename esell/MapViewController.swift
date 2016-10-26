@@ -22,7 +22,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     var posts = [ItemListing]()
     
-//    var pinAnnotationView: MKPinAnnotationView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         self.navigationItem.title = "Map"
         
         
-        // Location manager
         // Use CLLocation Manager to get current location
         
         if (CLLocationManager.locationServicesEnabled())
@@ -124,8 +123,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     
-    // CLLocationManagerDelegate method
-    // Called by CLLocationManager when access to authorisation changes.
+    // CLLocationManagerDelegate method. Called by CLLocationManager when access to authorisation changes.
 
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         
@@ -151,9 +149,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
 
 
     
-    // MARK: - Custom Annotation (MKMapViewDelegate method)
-
-    // Called when the map view needs to display the annotation.
+    // MARK: - Custom Annotation (MKMapViewDelegate method). Called when the map view needs to display the annotation.
     // E.g. If you drag the map so that the annotation goes offscreen, the annotation view will be recycled. When you drag the annotation back on screen this method will be called again to recreate the view for the annotation.
 
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -184,7 +180,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     
-    
     // MARK: - Navigation
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -194,9 +189,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
         
         print(" >> started segue")
         

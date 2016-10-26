@@ -27,31 +27,10 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("_collectionView view loaded")
 
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
     }
-    
-//    override func viewWillAppear(animated: Bool) {
-//        
-//        super.viewWillAppear(true)
-//        
-//        // SET TAB BAR USING THIS FUNCTION w/Animation so that there is no white space when segue
-//        setTabBarVisible(!tabBarIsVisible(), animated: false)
-//        
-//    }
-//
-//    override func viewWillDisappear(animated: Bool) {
-//        
-//        super.viewWillDisappear(true)
-//        
-//        // SET TAB BAR USING THIS FUNCTION w/Animation so that there is no white space when segue
-//        setTabBarVisible(false, animated: true)
-//        
-//    }
-    
 
     
     // MARK: UICollectionView Delegate
@@ -99,7 +78,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         cell.labelText.text = post.formattedPrice
         
         cell.imageView.backgroundColor = UIColor.whiteColor()
-        //cell.imageView.image = post.imageAsUIImage
+
         cell.imageView.contentMode = .ScaleAspectFill
         
         // Image handling
