@@ -18,8 +18,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     @IBOutlet weak var mapView: MKMapView!
     
     
-    @IBOutlet weak var displayLocationLabel: UILabel!
     
+    @IBOutlet weak var locationLabel: UILabel!
     
     var locationManager: CLLocationManager!
     
@@ -46,7 +46,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         self.navigationItem.title = "" // TODO I think should replace with image instead of text here
         
-
+        
         // Use CLLocation Manager to get current location
         
         if (CLLocationManager.locationServicesEnabled())
@@ -84,12 +84,6 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         // Set up Label to show when user pins a location
         
-        displayLocationLabel.text = ""
-        
-        
-        
-        
-        
         
         
         
@@ -101,7 +95,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         longPressOnMap.minimumPressDuration = 0.5
         
         mapView.addGestureRecognizer(longPressOnMap)
-  
+        
     }
     
     
@@ -113,7 +107,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         // Get the spot that was tapped.
         let tapPoint: CGPoint = gestureRecognizer.locationInView(mapView)
         let touchMapCoordinate: CLLocationCoordinate2D = mapView.convertPoint(tapPoint, toCoordinateFromView: mapView)
-
+        
         print("cooridnates: \(touchMapCoordinate)")
         
         
@@ -133,13 +127,13 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             mapView.addAnnotation(annotation)
             
             /// SAVE map annotation
-//            
-//            let test = getClosestCityFromCoordinate(annotation.coordinate)
-//            
-//            print("test: \(test)")
+            //
+            //            let test = getClosestCityFromCoordinate(annotation.coordinate)
+            //
+            //            print("test: \(test)")
             
             saveAnnotationToPreviousViewController(annotation.coordinate)
-
+            
         }
         
     }
@@ -255,12 +249,12 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
             
             
-//            if let myAnnotation = self.mapView.annotations.first {
-//                
-//                let myCoordinate = myAnnotation.coordinate
-//                /// SAVE map annotation - this is where data is passed
-//                self.saveAnnotationToPreviousViewController(self.pointAnnotation.coordinate)
-//            }
+            //            if let myAnnotation = self.mapView.annotations.first {
+            //
+            //                let myCoordinate = myAnnotation.coordinate
+            //                /// SAVE map annotation - this is where data is passed
+            //                self.saveAnnotationToPreviousViewController(self.pointAnnotation.coordinate)
+            //            }
             
             self.saveAnnotationToPreviousViewController(self.pointAnnotation.coordinate)
             
@@ -271,7 +265,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             
             
         })
-   
+        
     }
     
     
@@ -305,10 +299,10 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             return
         }
         
-      
+        // Set data for the previous VC
         previousVC.pickupLat = pickUpLocationCoordinate.latitude
         previousVC.pickupLong = pickUpLocationCoordinate.longitude
-     
+        
         
         // also save the nearest city/location name
         self.getClosestCityFromCoordinate(pickUpLocationCoordinate)
@@ -317,7 +311,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     }
     
     
-    func getClosestCityFromCoordinate(myCoordinate: CLLocationCoordinate2D) -> [String:AnyObject]  {
+    func getClosestCityFromCoordinate(myCoordinate: CLLocationCoordinate2D)  {
         
         let geoCoder = CLGeocoder()
         let location = CLLocation(latitude: myCoordinate.latitude, longitude: myCoordinate.longitude)
@@ -334,65 +328,58 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
             
-            // CLPlacemark has an Address dictionary
+            // CLPlacemark has an Address dictionary property
             print(placeMark.addressDictionary)
-            
-            /* Optional([Street: Navy HQ Road, SubAdministrativeArea: Taipei City, State: Taipei, CountryCode: TW, ZIP: 104, Thoroughfare: Navy HQ Road, Name: Navy HQ Road, Country: Taiwan, FormattedAddressLines: <__NSArrayM 0x170849d50>(
-            Navy HQ Road,
-            Taipei, Taipei City 104,
-            Taiwan
-            )
-             , City: Taipei])
-             
-             Optional([SubAdministrativeArea: Essex, CountryCode: US, SubLocality: Newark Airport and Port Newark, State: NJ, Street: 104-112 Lister Ave, ZIP: 07105, Name: 104-112 Lister Ave, Thoroughfare: Lister Ave, FormattedAddressLines: <__NSArrayM 0x176044230>(
-             104-112 Lister Ave,
-             Newark, NJ  07105,
-             United States
-             )
-             
-             Optional([SubLocality: Kamiyanagi, Street: Kamiyanagi, State: Saitama, CountryCode: JP, Thoroughfare: Kamiyanagi, Name: Kamiyanagi, Country: Japan, FormattedAddressLines: <__NSArrayM 0x172845580>(
-             Kamiyanagi,
-             Kasukabe, Saitama,
-             Japan
-             )
-             , City: Kasukabe])
-             */
             
             
             guard let dictionary = placeMark.addressDictionary as? [String:AnyObject] else {
                 fatalError("convert location dict didn't work")
             }
             
-            
-            if let city = placeMark.addressDictionary?["City"] as? NSString
-            {
-                print(city)
-            }
-            
-            if let district = placeMark.addressDictionary?["SubLocality"] as? NSString
-            {
-                print(district)
-                self.displayLocationLabel.text = "\(district)"
-            }
-            
-            
-            if let adminArea = placeMark.addressDictionary?["SubAdministrativeArea"] as? NSString
-            {
-                print(adminArea)
-
-            }
-
-            
             locationDictInfo = dictionary
             
-            print("test print the dict \(locationDictInfo["City"])")
+            self.updateLabelShowCurrentChosenLocation(locationDictInfo)
+            
         }
-        
-        return locationDictInfo
-        
-        
+
     }
     
+    func updateLabelShowCurrentChosenLocation(dataDictionary: [String:AnyObject]) {
 
-    
+        
+        guard let adminArea = dataDictionary["SubAdministrativeArea"] as? NSString,
+            let city = dataDictionary["City"] as? NSString else
+        {
+            print("error getting district, city out of placed mark location")
+            return
+        }
+        
+        print("Print.. sub adminarea-> \(adminArea), city-> \(city)")
+        
+        
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            self.locationLabel.text = " \(adminArea), \(city)"
+            
+            self.locationLabel.setNeedsDisplay()
+
+        })
+        
+        
+        
+        // send data to previous VC
+        
+        let count = self.navigationController!.viewControllers.count
+        
+        guard let previousVC = self.navigationController!.viewControllers[count - 2] as? AddItemTableViewController else {
+            print("[saveAnnotToPrevVC] ERROR getting reference to previous vc")
+            // TODO do a popup? or already handled in the previous vc..
+            return
+        }
+
+        
+        previousVC.pickupLocationText = city as String
+    }
+
 }

@@ -43,6 +43,14 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
     var pickupLat: Double?
     var pickupLong: Double?
     
+    var pickupLocationText: String = "" {
+        didSet { dispatch_async(dispatch_get_main_queue(), {
+            self.selectPickupText.text = self.pickupLocationText
+            self.selectPickupText.setNeedsDisplay()
+            })
+}
+    }
+    
     
     
     // MARK:- ViewDidLOAD

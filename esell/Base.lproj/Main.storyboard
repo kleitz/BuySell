@@ -943,14 +943,8 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="GE2-9p-lCl">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                             </mapView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Drop a pin or use search to specify pickup" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qab-Zw-GZp">
-                                <rect key="frame" x="200" y="161" width="239" height="15"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Latitude: 1239123,  Longitude: 120312032" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tn1-ka-TZu">
-                                <rect key="frame" x="95" y="232" width="600" height="15"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Drop a pin or use search to specify pickup" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qab-Zw-GZp">
+                                <rect key="frame" x="20" y="72" width="239" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -960,34 +954,36 @@
                         <constraints>
                             <constraint firstItem="GE2-9p-lCl" firstAttribute="leading" secondItem="MSB-ee-bgc" secondAttribute="leading" id="2iE-BT-Qrm"/>
                             <constraint firstAttribute="trailing" secondItem="GE2-9p-lCl" secondAttribute="trailing" id="4cc-Hc-cgg"/>
-                            <constraint firstAttribute="trailing" secondItem="tn1-ka-TZu" secondAttribute="trailing" constant="10" id="KCJ-WA-cu0"/>
+                            <constraint firstItem="GE2-9p-lCl" firstAttribute="top" secondItem="qab-Zw-GZp" secondAttribute="bottom" constant="-87" id="BuF-L4-t3e"/>
+                            <constraint firstItem="qab-Zw-GZp" firstAttribute="top" secondItem="4MD-ll-ZZa" secondAttribute="bottom" constant="8" id="G1M-Iy-jwL"/>
+                            <constraint firstItem="GE2-9p-lCl" firstAttribute="leading" secondItem="qab-Zw-GZp" secondAttribute="trailing" constant="-259" id="KDy-Sm-te3"/>
+                            <constraint firstItem="GE2-9p-lCl" firstAttribute="leading" secondItem="qab-Zw-GZp" secondAttribute="trailing" constant="-259" id="SCB-eq-JnV"/>
                             <constraint firstItem="GE2-9p-lCl" firstAttribute="bottom" secondItem="RNb-QK-0x9" secondAttribute="top" id="Sfl-Nb-9U8"/>
                             <constraint firstItem="GE2-9p-lCl" firstAttribute="top" secondItem="qab-Zw-GZp" secondAttribute="bottom" constant="-120" id="TDC-EX-Pez"/>
-                            <constraint firstAttribute="leading" secondItem="tn1-ka-TZu" secondAttribute="leading" constant="10" id="W1y-Bt-ffB"/>
                             <constraint firstItem="qab-Zw-GZp" firstAttribute="leading" secondItem="MSB-ee-bgc" secondAttribute="leading" constant="10" id="fVx-Qb-pVv"/>
                             <constraint firstItem="GE2-9p-lCl" firstAttribute="leading" secondItem="qab-Zw-GZp" secondAttribute="trailing" constant="-333" id="nab-Vz-SQg"/>
                             <constraint firstItem="GE2-9p-lCl" firstAttribute="top" secondItem="MSB-ee-bgc" secondAttribute="top" id="p8G-DM-XbK"/>
-                            <constraint firstItem="tn1-ka-TZu" firstAttribute="top" secondItem="qab-Zw-GZp" secondAttribute="bottom" constant="5" id="pe1-Ju-d6A"/>
                             <constraint firstItem="qab-Zw-GZp" firstAttribute="top" secondItem="4MD-ll-ZZa" secondAttribute="bottom" constant="10" id="rfo-Wg-wV5"/>
-                            <constraint firstItem="GE2-9p-lCl" firstAttribute="leading" secondItem="tn1-ka-TZu" secondAttribute="trailing" constant="-52" id="slJ-4t-adt"/>
+                            <constraint firstItem="GE2-9p-lCl" firstAttribute="top" secondItem="qab-Zw-GZp" secondAttribute="bottom" constant="-87" id="u8q-iK-snX"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="qab-Zw-GZp" secondAttribute="leading" id="xby-uH-AOF"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="BuF-L4-t3e"/>
+                                <exclude reference="KDy-Sm-te3"/>
+                                <exclude reference="SCB-eq-JnV"/>
                                 <exclude reference="TDC-EX-Pez"/>
                                 <exclude reference="nab-Vz-SQg"/>
-                                <exclude reference="slJ-4t-adt"/>
+                                <exclude reference="u8q-iK-snX"/>
                                 <exclude reference="fVx-Qb-pVv"/>
                                 <exclude reference="rfo-Wg-wV5"/>
-                                <exclude reference="KCJ-WA-cu0"/>
-                                <exclude reference="W1y-Bt-ffB"/>
-                                <exclude reference="pe1-Ju-d6A"/>
                             </mask>
                         </variation>
                     </view>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="displayLocationLabel" destination="tn1-ka-TZu" id="uZk-u4-QeC"/>
+                        <outlet property="locationLabel" destination="qab-Zw-GZp" id="BHv-zj-qjF"/>
                         <outlet property="mapView" destination="GE2-9p-lCl" id="AXS-cR-ia2"/>
                     </connections>
                 </viewController>
