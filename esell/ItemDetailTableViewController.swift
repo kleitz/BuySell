@@ -22,7 +22,7 @@ class ItemDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var sellerProfileImage: UIImageView!
     
-    @IBOutlet weak var postOtherInfoLabel: UILabel!
+    @IBOutlet weak var pickupDescription: UILabel!
     
     @IBOutlet weak var pickupIconImage: UIImageView!
 
@@ -55,39 +55,27 @@ class ItemDetailTableViewController: UITableViewController {
         
         // Setup the UI elements with ItemListing attributes passed in
         
-        pickupIconImage.hidden = false
         
-        itemDescription.text = post.itemDescription
+        
         
         itemTitle.text = post.title
         
         itemPrice.text = post.formattedPrice
         
-//        
-//        postOtherInfoLabel.text = "This is filler text 123 This is filler text 123  This is filler text 123  This is filler text 123  This is filler text 123 "
+        itemDescription.text = post.itemDescription
+        
+        pickupIconImage.hidden = false
+        pickupDescription.text = post.pickupDescription
+        
         
         itemImage.image = postImage
         itemImage.contentMode = .ScaleAspectFill
     
+
         
-        let mapManager = MapManager()
-        mapManager.getCityFromCoordinate(post.coordinate) { (city) in
-            
-            print("~~INCOMPLETION handler")
-            self.postOtherInfoLabel.text = city
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self.postOtherInfoLabel.setNeedsDisplay()
-                
-            })
-        }
-        
-        
-        // Handle date
-        
-        //let calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        // Handle date for posted how many days ago
+
         let now: NSDate = NSDate()
-        
         
         switch now.daysFrom(post.createdDate) {
             
@@ -97,9 +85,8 @@ class ItemDetailTableViewController: UITableViewController {
         default: daysAgo = String("\(now.daysFrom(post.createdDate)) days ago")
             
         }
+    
         
-        
-        // Remember post.author == UID which should not be shown on the UI, so need to look up user from the UID
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
         let fireBase = FirebaseManager()
         
@@ -122,8 +109,8 @@ class ItemDetailTableViewController: UITableViewController {
             switch(indexPath.row) {
             case 0: return 400
             case 1: return UITableViewAutomaticDimension
-            case 2: return 10
-            case 3: return 70
+            case 2: return 2
+            case 3: return UITableViewAutomaticDimension
             case 4: return UITableViewAutomaticDimension
             default: return 0
             }

@@ -22,6 +22,8 @@ class ItemListing: NSObject {
     var itemDescription: String
     var author: String
     
+    var pickupDescription: String
+    
     var createdDate: NSDate
 //    {
 //        return NSDate(timeIntervalSince1970: createdDateTimeInterval)
@@ -68,6 +70,7 @@ class ItemListing: NSObject {
         self.price = 0.0
         self.pickupLatitude = 0.0
         self.pickupLongitude = 0.0
+        self.pickupDescription = ""
         
         self.canAcceptCreditCard = false
         self.canShip = false
@@ -76,7 +79,7 @@ class ItemListing: NSObject {
     }
     
 
-    init(id: String, author: String, title: String, price: Double, itemDescription: String, createdDate: NSDate, pickupLatitude: Double, pickupLongitude: Double, isOpen: Bool) {
+    init(id: String, author: String, title: String, price: Double, itemDescription: String, createdDate: NSDate, pickupLatitude: Double, pickupLongitude: Double, pickupDescription: String, isOpen: Bool) {
         
         self.id = id
         self.author = author
@@ -87,6 +90,8 @@ class ItemListing: NSObject {
         
         self.pickupLatitude = pickupLatitude
         self.pickupLongitude = pickupLongitude
+        self.pickupDescription = pickupDescription
+        
         self.canAcceptCreditCard = false
         self.canShip = false
         

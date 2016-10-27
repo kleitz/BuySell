@@ -48,7 +48,7 @@ class FirebaseManager {
     
     // Function for saving to Firebase with all POST INFO
     
-    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool, pickupLatitude: Double, pickupLongitude: Double) {
+    func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool, pickupLatitude: Double, pickupLongitude: Double, pickupDescription: String) {
         // do saving into firebase here
         // TODO fix this so that it doesn't save the image first into database before checking all fields?
         
@@ -82,6 +82,7 @@ class FirebaseManager {
             "can_ship": shippingOption,
             "pickup_latitude": pickupLatitude,
             "pickup_longitude": pickupLongitude,
+            "pickup_description": pickupDescription,
             "is_open": true
         ]
         
@@ -197,6 +198,8 @@ class FirebaseManager {
             
             // todo: error handling if query snapshot returns empty
             
+            if snapshot.exists() != false {
+                
             
             for item in [snapshot.value] {
                 
@@ -235,6 +238,7 @@ class FirebaseManager {
                 
                 self.delegate?.returnData(self, data: postArray)
             }
+            }
             
             // Return error if error to delegate in view controller
             
@@ -243,9 +247,7 @@ class FirebaseManager {
                 self.delegate?.returnError(self, error: error)
         })
         
-        
     }
-    
     
     // Grab the original 1 post from the parent_post_id (PostID) in Bid Info. Lookup return value in "posts".
     
@@ -536,6 +538,7 @@ class FirebaseManager {
             let postPrice = dictionary["price"] as? Double,
             let pickupLatitude = dictionary["pickup_latitude"] as? Double,
             let pickupLongitude = dictionary["pickup_longitude"] as? Double,
+            let pickupDescription = dictionary["pickup_description"] as? String,
             let isOpen = dictionary["is_open"] as? Bool else {
                 fatalError("Error parsing")
         }
@@ -550,7 +553,7 @@ class FirebaseManager {
         
         // Create new post to store all this.
         
-        let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, isOpen: isOpen)
+        let post = ItemListing(id: postID, author: postAuthor, title: postTitle, price: postPrice, itemDescription: postDescription, createdDate: postDate, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, pickupDescription: pickupDescription, isOpen: isOpen)
         
         post.imageURL = postImageURL
         

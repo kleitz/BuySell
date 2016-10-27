@@ -305,7 +305,6 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         
         // also get and save the nearest city/location name
-        
         let mapManager = MapManager()
         
         mapManager.getCityFromCoordinate(pickUpLocationCoordinate) { (city) in

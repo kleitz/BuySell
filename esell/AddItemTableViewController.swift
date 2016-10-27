@@ -265,6 +265,12 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
                 return
         }
         
+        guard let pickupDesc = self.selectPickupText.text else {
+                print("failed saving pickup description text")
+                popupNotifyMissingPickupLocation()
+                return
+        }
+        
         
         /// TODO need to add a better check for this NUMBER input
         
@@ -303,7 +309,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             
             let fireBase = FirebaseManager()
             
-            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude)
+            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, pickupDescription: pickupDesc)
             
         }
         
