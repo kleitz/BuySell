@@ -46,9 +46,15 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         self.navigationItem.title = "" // TODO I think should replace with image instead of text here
         
+        // Init the zoom level
+        let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 34.03, longitude: 118.14)
+        let span = MKCoordinateSpanMake(100, 80)
+        let region = MKCoordinateRegionMake(coordinate, span)
+        self.mapView.setRegion(region, animated: true)
+        
         
         // Use CLLocation Manager to get current location
-        
+
         if (CLLocationManager.locationServicesEnabled())
         {
             locationManager = CLLocationManager()

@@ -391,11 +391,90 @@ class FirebaseManager {
     }
     
     
+    func fetchBidsByPostArray(postsCreated postsCreated: [ItemListing], withCompletionHandler: (bidsArrayForOnePost: [BidForItem]) -> Void) {
+        
+        // TODO note that current: limit to 25
+        
+        for eachPost in postsCreated {
+            
+            
+            ref.child("bids").queryOrderedByChild("parent_post_id").queryEqualToValue(eachPost.id).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
+                ) in
+                
+                var bidSmallArray = [BidForItem]()
+                
+                
+                // This will loop through each query (snapshot)
+                
+                print("   [fetchBidsbyPost] snapshot exists?= \(snapshot.exists())")
+                
+                if snapshot.exists() != false {
+                    
+                    // This means: for each item in the array (snapshot.value is an array with a list of values), go through each arrayItem
+                    
+                    for item in [snapshot.value] {
+                        print("   [fetchBidsbyPost] >> IN HASGOT VALUE >>")
+                        //print("TEST ITEM PRINT bid: \(item)")
+                        
+                        // Create a dictinoary for each item in the array
+                        guard let itemDictionary = item as? NSDictionary else {
+                            fatalError()
+                        }
+                        
+                        // get all the keys as 1 array (which would be the uid, as the 1st layer )
+                        guard let firebaseItemKey = itemDictionary.allKeys as? [String] else {
+                            fatalError()
+                        }
+                        
+                        // get all the values in the array (which are in a key/value dictinoary format (the 2nd layer))
+                        guard let firebaseItemValue = itemDictionary.allValues as? [NSDictionary] else {
+                            fatalError()
+                        }
+                        
+                        for (index,item) in firebaseItemValue.enumerate() {
+                            
+                            let bidID = firebaseItemKey[index]
+                            
+                            // Parse all firebase data
+                            
+                            let bid = self.parseBidSnapshot(bidID: bidID, data: item as! [String : AnyObject])
+                            
+                            // Append to the array of posts to be returned from function
+                            bidSmallArray.append(bid)
+                        }
+                        
+                    }
+                    
+                    // else: if the snapshot does not exist:
+                } else {
+                    
+                    print("   [fetchBidsbyPost] >> IN ELSE CUZ snapshot not exist>")
+                    
+                    bidSmallArray.append(BidForItem(bidID: "placeholder"))
+                    
+                }
+                
+                withCompletionHandler(bidsArrayForOnePost: bidSmallArray)
+                
+                
+                }, withCancelBlock: { (error) in
+                    print("fetchBIDS error: \(error.localizedDescription)")
+
+            })
+            
+        }
+        
+    }
+
+    
+    
+    
+    
     // Grab ALL POSTS from a UserID. Lookup return value in "posts".
     
     func fetchPostsByUserID(userID uid: String, withCompletionHandler: (postsCreated: [ItemListing])-> Void) {
         
-        print(">>> RUnning query for POSTS created by user.")
+        print(" * [fetchPostsByUserID] started >>")
         
         // note: limit to 25
         
@@ -403,7 +482,7 @@ class FirebaseManager {
             ) in
             
             
-            print("   [fetchPostsByUserID] snapshot exists?= \(snapshot.exists())")
+            print("   [fetchPostsByUserID] snapshot exists? = \(snapshot.exists())")
             
             if snapshot.exists() != false {
                 
@@ -438,7 +517,7 @@ class FirebaseManager {
                         let post = self.parsePostSnapshot(postID: postID, data: item as! [String : AnyObject])
                         
                         // Append to the array of posts to be returned from function
-                        print("POST to append: \(post.title)")
+                        print("   [fetchPostsByUserID] to append in arr: \(post.title)")
                         postArray.append(post)
                     }
                     withCompletionHandler(postsCreated: postArray)
