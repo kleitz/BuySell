@@ -24,6 +24,44 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        print("VIEW WILL APPEAR")
+        
+        self.tabBarController?.setTabBarVisible(true, animated: true)
+        
+        posts = []
+        
+        sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
+        
+        for post in sourceViewController.posts {
+            
+            posts.append(post)
+            
+        }
+        
+        print("print posts \(posts)")
+        print(" print # of posts \(posts.count)")
+        
+        
+        for post in posts {
+            let location = post.coordinate
+            
+            let coordinates = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+            
+            let point: MKPointAnnotation = MKPointAnnotation()
+            point.coordinate = coordinates
+            point.title = post.title
+            point.subtitle = post.itemDescription
+            // pinAnnotationView = MKPinAnnotationView(annotation: point, reuseIdentifier: "pickupLocation")
+            mapView.addAnnotation(point)
+            
+        }
+
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -60,31 +98,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
 
         
-        sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
-    
-        for post in sourceViewController.posts {
-
-            posts.append(post)
-            
-        }
-        
-        print("print posts \(posts)")
-        print(" print # of posts \(posts.count)")
-        
-
-        for post in posts {
-            let location = post.coordinate
-            
-            let coordinates = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-            
-            let point: MKPointAnnotation = MKPointAnnotation()
-            point.coordinate = coordinates
-            point.title = post.title
-            point.subtitle = post.itemDescription
-            // pinAnnotationView = MKPinAnnotationView(annotation: point, reuseIdentifier: "pickupLocation")
-            mapView.addAnnotation(point)
-            
-        }
     }
     
     
@@ -165,7 +178,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             
-            annotationView!.leftCalloutAccessoryView = UIButton(type: .DetailDisclosure)
+            annotationView!.rightCalloutAccessoryView = UIButton(type: .InfoLight)
 
             annotationView!.canShowCallout = true
             annotationView!.image = UIImage(named: "shopbag")

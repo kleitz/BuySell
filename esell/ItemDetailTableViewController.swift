@@ -24,6 +24,7 @@ class ItemDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var postOtherInfoLabel: UILabel!
     
+    @IBOutlet weak var pickupIconImage: UIImageView!
 
     
     // vars for post info
@@ -54,14 +55,32 @@ class ItemDetailTableViewController: UITableViewController {
         
         // Setup the UI elements with ItemListing attributes passed in
         
+        pickupIconImage.hidden = false
+        
         itemDescription.text = post.itemDescription
         
         itemTitle.text = post.title
         
-        postOtherInfoLabel.text = "This is filler text 123 This is filler text 123  This is filler text 123  This is filler text 123  This is filler text 123 "
+        itemPrice.text = post.formattedPrice
+        
+//        
+//        postOtherInfoLabel.text = "This is filler text 123 This is filler text 123  This is filler text 123  This is filler text 123  This is filler text 123 "
         
         itemImage.image = postImage
         itemImage.contentMode = .ScaleAspectFill
+    
+        
+        let mapManager = MapManager()
+        mapManager.getCityFromCoordinate(post.coordinate) { (city) in
+            
+            print("~~INCOMPLETION handler")
+            self.postOtherInfoLabel.text = city
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.postOtherInfoLabel.setNeedsDisplay()
+                
+            })
+        }
         
         
         // Handle date
@@ -113,10 +132,7 @@ class ItemDetailTableViewController: UITableViewController {
         
     }
     
-//    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        return 70
-//    }
-    
+
     func loadSellerInfo(sellerData: User) {
         
         // Background for get profile image
@@ -167,15 +183,9 @@ class ItemDetailTableViewController: UITableViewController {
         }
         
         
-        print("(TESTPRINT) Seller byline text.  \(self.itemSeller.text)")
-        
-        print("(TESTPRINT) Seller Info. name: \(self.sellerAsUser.name) email: \(self.sellerAsUser.email)")
-        
-        
-        
         // Display seller name as text
         
-        self.itemSeller.text = ("Posted \(self.daysAgo) by \(self.sellerAsUser.name ?? "")")
+        self.itemSeller.text = ("Posted \(self.daysAgo) \n\(self.sellerAsUser.name ?? "")")
         
         
     }
@@ -190,13 +200,13 @@ class ItemDetailTableViewController: UITableViewController {
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        
-        
-    }
-    
-    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        
+//        
+//        
+//    }
+//    
+//    
     
 }
 

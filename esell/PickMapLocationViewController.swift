@@ -304,82 +304,45 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         previousVC.pickupLong = pickUpLocationCoordinate.longitude
         
         
-        // also save the nearest city/location name
-        self.getClosestCityFromCoordinate(pickUpLocationCoordinate)
+        // also get and save the nearest city/location name
         
+        let mapManager = MapManager()
         
-    }
-    
-    
-    func getClosestCityFromCoordinate(myCoordinate: CLLocationCoordinate2D)  {
-        
-        let geoCoder = CLGeocoder()
-        let location = CLLocation(latitude: myCoordinate.latitude, longitude: myCoordinate.longitude)
-        
-        var locationDictInfo = [String:AnyObject]()
-        
-        
-        geoCoder.reverseGeocodeLocation(location) {
-            (placemarks, error) -> Void in
+        mapManager.getCityFromCoordinate(pickUpLocationCoordinate) { (city) in
             
-            let placeArray = placemarks as [CLPlacemark]!
+            // send data to previous VC
             
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
+            let count = self.navigationController!.viewControllers.count
             
-            // CLPlacemark has an Address dictionary property
-            print(placeMark.addressDictionary)
-            
-            
-            guard let dictionary = placeMark.addressDictionary as? [String:AnyObject] else {
-                fatalError("convert location dict didn't work")
+            guard let previousVC = self.navigationController!.viewControllers[count - 2] as? AddItemTableViewController else {
+                print("[saveAnnotToPrevVC] ERROR getting reference to previous vc")
+                // TODO do a popup? or already handled in the previous vc..
+                return
             }
             
-            locationDictInfo = dictionary
+            previousVC.pickupLocationText = city as String
             
-            self.updateLabelShowCurrentChosenLocation(locationDictInfo)
+            
+            // update current view's label
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                self.locationLabel.text = " \(city)"
+                
+                self.locationLabel.setNeedsDisplay()
+                
+            })
             
         }
-
+   
     }
     
-    func updateLabelShowCurrentChosenLocation(dataDictionary: [String:AnyObject]) {
-
+    
+   
+    
+    
+    deinit{
         
-        guard let adminArea = dataDictionary["SubAdministrativeArea"] as? NSString,
-            let city = dataDictionary["City"] as? NSString else
-        {
-            print("error getting district, city out of placed mark location")
-            return
-        }
-        
-        print("Print.. sub adminarea-> \(adminArea), city-> \(city)")
-        
-        
-        
-        dispatch_async(dispatch_get_main_queue(), {
-            
-            self.locationLabel.text = " \(adminArea), \(city)"
-            
-            self.locationLabel.setNeedsDisplay()
-
-        })
-        
-        
-        
-        // send data to previous VC
-        
-        let count = self.navigationController!.viewControllers.count
-        
-        guard let previousVC = self.navigationController!.viewControllers[count - 2] as? AddItemTableViewController else {
-            print("[saveAnnotToPrevVC] ERROR getting reference to previous vc")
-            // TODO do a popup? or already handled in the previous vc..
-            return
-        }
-
-        
-        previousVC.pickupLocationText = city as String
+        print("[deinit] killed PickMap")
     }
 
 }

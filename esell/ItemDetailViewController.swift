@@ -42,26 +42,6 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         self.navigationItem.title = "Item Detail"
         
         
-//        // Add the other tableviewcontroller as subview into the containerView
-//        
-//        let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
-//        
-//        let itemDetailView = storyboard.instantiateViewControllerWithIdentifier("ItemDetailTableViewController") as! ItemDetailTableViewController
-//        
-//        // Add child view controller
-//        self.addChildViewController(itemDetailView)
-//        
-//        // Add child view as subview [of parent]
-//        self.containerView.addSubview(itemDetailView.view)
-//        
-//        // Configure child view
-//        itemDetailView.view.frame = self.containerView.bounds
-//        itemDetailView.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-//        
-//        // Notify the child view controller
-//        itemDetailView.didMoveToParentViewController(self)
-        
-        
     }
     
     
@@ -71,36 +51,36 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
         
         
         if let identifer = segue.identifier {
-        
-        switch identifer {
-        case "segueToCheckout":
-            print(" >> prepare SEGUE to CheckoutView")
             
-            guard let nextController = segue.destinationViewController as? CheckoutViewController else {
+            switch identifer {
+            case "segueToCheckout":
+                print(" >> prepare SEGUE to CheckoutView")
                 
-                print("segue failed")
-                return
+                guard let nextController = segue.destinationViewController as? CheckoutViewController else {
+                    
+                    print("segue failed")
+                    return
+                }
+                
+                nextController.post = self.post
+                print("  >> POST ID being sent: \(self.post.id ?? "") andt hte price is \(self.post.price). the date is \(self.post.createdDate)")
+                
+            case "itemDetailEmbedSegue":
+                
+                guard let embeddedController = segue.destinationViewController as? ItemDetailTableViewController else {
+                    
+                    print("segue failed")
+                    return
+                }
+                embeddedController.postImage = self.image
+                embeddedController.post = self.post
+                
+                
+            default: break
             }
             
-            nextController.post = self.post
-            print("  >> POST ID being sent: \(self.post.id ?? "") andt hte price is \(self.post.price). the date is \(self.post.createdDate)")
-            
-        case "itemDetailEmbedSegue":
-            
-            guard let embeddedController = segue.destinationViewController as? ItemDetailTableViewController else {
-                
-                print("segue failed")
-                return
-            }
-            embeddedController.postImage = self.image
-            embeddedController.post = self.post
             
             
-        default: break
-        }
-        
-        
-        
         }
     }
     

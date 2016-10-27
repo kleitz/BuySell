@@ -54,7 +54,7 @@ class ItemListing: NSObject {
     }
     
     var isOpen: Bool
-
+    
     
 //    // TODO Failable initializer ? or not failable?
     init(id: String) {
@@ -75,9 +75,7 @@ class ItemListing: NSObject {
         self.isOpen = true
     }
     
-    //TODO I added optional for double & the newer fields but this should be removed later
-    // removed parameters , pickupLatitude: Double?, pickupLongitude: Double?, canAcceptCreditCard: Bool?, canShip: Bool?
-    
+
     init(id: String, author: String, title: String, price: Double, itemDescription: String, createdDate: NSDate, pickupLatitude: Double, pickupLongitude: Double, isOpen: Bool) {
         
         self.id = id
