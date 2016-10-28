@@ -9,12 +9,12 @@
 import UIKit
 
 protocol BuyingStillLoadingDelegate {
-   // func startLoading(manager: BuyingTableViewController, isStartLoading: Bool)
+
     func stopLoading(manager: BuyingTableViewController, isFinishedLoading: Bool)
 }
 
 protocol SellingStillLoadingDelegate {
-   // func startLoading(manager: SellingTableViewController, startedLoading: Bool)
+
     func stopLoading(manager: SellingTableViewController, finishedLoading: Bool)
 }
 
@@ -43,14 +43,14 @@ class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, 
     // MARK:  VIEW DID LOAD
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        activityIndicator.startAnimating()
         
         self.currentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BuyingTableViewController") as! BuyingTableViewController
         self.currentViewController!.view.translatesAutoresizingMaskIntoConstraints = false
         self.addChildViewController(self.currentViewController!)
         self.addSubview(self.currentViewController!.view, toView: self.containerView)
-    
-        
-        super.viewDidLoad()
         
         
         self.navigationItem.title = "My Offers"

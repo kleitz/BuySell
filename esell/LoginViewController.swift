@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginViewController.swift
 //  esell
 //
 //  Created by Angela Lin on 9/26/16.
@@ -12,15 +12,46 @@ import FirebaseAuth
 import FBSDKLoginKit
 
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
-    
-    
+
 
     let loginButton: FBSDKLoginButton = {
         let button = FBSDKLoginButton()
-        button.readPermissions = ["email"]
+        button.readPermissions = ["email", "public_profile"]
         return button
     }()
    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("---> [login] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) // \(FIRAuth.auth()?.currentUser?.uid) ")
+        
+        // Go to main view if alreayd has auth
+        
+        if ((FIRAuth.auth()?.currentUser) != nil) {
+            
+            print("---> [login] logged in already, so present main View")
+            
+            // Get a reference to the storyboard
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
+                
+                print("---> [login] ERROR setting up main controller to go to")
+                
+                fatalError()
+            }
+            
+            // Present/set the view controller
+            
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            appDelegate.window?.rootViewController = mainPage
+            
+            
+            print("---> [login] the root is set as : MAIN navig\n")
+        }
+
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +145,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         try! FIRAuth.auth()!.signOut()
         
         print("[LoginControl] User Logged Out")
+        
     }
     
     func returnUserDatafromFBGraphRequest(withAuthUID uid: String){

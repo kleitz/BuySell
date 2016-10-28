@@ -610,6 +610,12 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mHT-iH-dop" id="cG7-ir-PHM">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDY-bU-A0e">
+                                                    <rect key="frame" x="16" y="7" width="48" height="30"/>
+                                                    <state key="normal" title="Logout"/>
+                                                </button>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -621,6 +627,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="logoutButton" destination="tDY-bU-A0e" id="20R-9Z-jkf"/>
                         <outlet property="profileImage" destination="PyD-LK-H7i" id="Vgc-cO-LTi"/>
                         <outlet property="profileName" destination="e0U-qQ-JoZ" id="HYy-SU-Z2Z"/>
                     </connections>
@@ -1775,7 +1782,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -1816,7 +1823,7 @@
         <!--Login NavigationController-->
         <scene sceneID="m4l-tV-blg">
             <objects>
-                <navigationController storyboardIdentifier="LoginViewController" title="Login NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="opR-2w-4aV" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController title="Login NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="opR-2w-4aV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xow-aB-XRn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1829,7 +1836,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YIz-kF-KRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="371" y="-23"/>
+            <point key="canvasLocation" x="383" y="-264"/>
         </scene>
         <!--Post Tab Bar Controller-->
         <scene sceneID="N7a-hf-pBK">
@@ -1961,7 +1968,7 @@
         <image name="shopbag" width="29" height="29"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jmD-6A-rX0"/>
+        <segue reference="0mr-9A-yhx"/>
         <segue reference="43f-so-zT2"/>
     </inferredMetricsTieBreakers>
 </document>

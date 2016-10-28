@@ -26,61 +26,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FIRApp.configure()
         
-        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) // \(FIRAuth.auth()?.currentUser?.uid) ")
-        
-        // Go to main view if alreayd has auth
-        
-        if ((FIRAuth.auth()?.currentUser) != nil) {
-            
-            print("---> [appdel] logged in already, so present main View")
-            
-            // Get a reference to the storyboard
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
-                
-                print("---> [appdel] ERROR setting up main controller to go to")
-                
-                fatalError()
-            }
-            
-            // Present/set the view controller
-            
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            appDelegate.window?.rootViewController = mainPage
-            
-            
-            print("---> [appdel] the root is set as : MAIN navig\n")
-        }
-            
-       //// Go to login view if no auth  // OK THIS HAPPENS BY DEFAULT SO COMMENTING OUT THE LOGIN INSTANTIATOR (kinda udplicates the idea of going to login )
-//    
-//        else {
+//        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) // \(FIRAuth.auth()?.currentUser?.uid) ")
+//        
+//        // Go to main view if alreayd has auth
+//        
+//        if ((FIRAuth.auth()?.currentUser) != nil) {
 //            
-//            print("---> [appdel] is not logged in so present LoginView")
+//            print("---> [appdel] logged in already, so present main View")
 //            
 //            // Get a reference to the storyboard
 //            
 //            let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //            
-//            // Instantiate the login view controller
-//            
-//            guard let loginPage = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+//            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
 //                
-//                print("---> [appdel] ERROR setting up login controller to go to")
+//                print("---> [appdel] ERROR setting up main controller to go to")
 //                
 //                fatalError()
 //            }
 //            
-//            // Present the view controller
+//            // Present/set the view controller
+//            
 //            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//            appDelegate.window?.rootViewController = mainPage
 //            
-//            appDelegate.window?.rootViewController = loginPage
 //            
-//            print("---> [appdel] the root is set as : LOGIN page")
-//            
+//            print("---> [appdel] the root is set as : MAIN navig\n")
 //        }
+        
         
         Fabric.with([Crashlytics.self])
         
