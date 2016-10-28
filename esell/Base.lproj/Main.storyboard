@@ -338,15 +338,21 @@
                                 </segments>
                                 <color key="tintColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FAr-Kk-c8C">
+                                <rect key="frame" x="282" y="303" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wRO-Di-efT">
                                 <rect key="frame" x="0.0" y="93" width="600" height="458"/>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="FAr-Kk-c8C" firstAttribute="centerX" secondItem="957-Dy-bTy" secondAttribute="centerX" id="4Ez-lj-nXB"/>
                             <constraint firstItem="957-Dy-bTy" firstAttribute="top" secondItem="dDM-Fe-FZX" secondAttribute="bottom" id="7Fn-Ky-llA"/>
                             <constraint firstAttribute="trailing" secondItem="957-Dy-bTy" secondAttribute="trailing" id="AEm-g1-XeC"/>
                             <constraint firstItem="wRO-Di-efT" firstAttribute="trailing" secondItem="957-Dy-bTy" secondAttribute="trailing" id="Spu-mM-aAv"/>
+                            <constraint firstItem="FAr-Kk-c8C" firstAttribute="centerY" secondItem="wRO-Di-efT" secondAttribute="centerY" id="TgQ-D0-eEv"/>
                             <constraint firstItem="wRO-Di-efT" firstAttribute="bottom" secondItem="XZ4-2K-JvQ" secondAttribute="top" id="V4B-53-akL"/>
                             <constraint firstItem="957-Dy-bTy" firstAttribute="leading" secondItem="FZM-yd-G43" secondAttribute="leading" id="bVg-mD-ikt"/>
                             <constraint firstItem="wRO-Di-efT" firstAttribute="top" secondItem="957-Dy-bTy" secondAttribute="bottom" constant="1" id="y0F-bj-Rp7"/>
@@ -355,6 +361,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="bUM-fb-Da2"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="FAr-Kk-c8C" id="oKH-aT-yIR"/>
                         <outlet property="containerView" destination="wRO-Di-efT" id="o2U-4Y-jQq"/>
                         <outlet property="segmentedControl" destination="957-Dy-bTy" id="2wh-WF-Cx4"/>
                     </connections>

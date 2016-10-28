@@ -9,6 +9,7 @@
 import UIKit
 
 
+
 class BuyingTableViewController: UITableViewController {
     
     
@@ -23,6 +24,7 @@ class BuyingTableViewController: UITableViewController {
     
     let fireBase = FirebaseManager()
     
+    var delegate: BuyingStillLoadingDelegate?
     
     // MARK:- Lifecycle ViewWillAPPEAR
     
@@ -72,6 +74,8 @@ class BuyingTableViewController: UITableViewController {
                         })
                         
                     })
+                    // is this the correct place to put stop loading?
+                    self.delegate?.stopLoading(self, isFinishedLoading: true)
                 }
             }
             

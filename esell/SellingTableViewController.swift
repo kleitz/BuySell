@@ -21,11 +21,11 @@ class SellingTableViewController: UITableViewController {
     
     let fireBase = FirebaseManager()
     
+    var delegate: SellingStillLoadingDelegate?
     
     
     // MARK: - Lifecycle ViewWillAPPEAR
     override func viewWillAppear(animated: Bool) {
-        print("\n >> View WILL APPEAR.")
         
         super.viewWillAppear(animated)
         
@@ -71,8 +71,9 @@ class SellingTableViewController: UITableViewController {
                         })
                     }
                 })
+                
             }
-            
+        
         }
     }
     
@@ -168,10 +169,7 @@ class SellingTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var numberOfRows: Int = 0
-        
-        print("in section#: \(section)")
-        print("OUterArrayCOunt: \(cellBidsArray.count)")
-        
+
         // in case not all data has returned, numberOfRows = 1
         if cellBidsArray.count != sectionPostsArray.count {
             numberOfRows = 1
@@ -188,8 +186,7 @@ class SellingTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("sellCell", forIndexPath: indexPath) as! SellTableViewCell
         
-        setDefaultCellUI(cell, isHiddenExceptName: true)
-
+        
         print(" **  > in tableview cellforRow: section\(indexPath.section): row\(indexPath.row)")
         
         // MARK: Selling section: case1. you haven't created any posts.
@@ -200,6 +197,8 @@ class SellingTableViewController: UITableViewController {
             fatalError()
         }
         if myFirstPost.id == "placeholder" {
+            setDefaultCellUI(cell, isHiddenExceptName: true)
+
             
             print("    > in tableview cellforRow: ____ no posts exist")
             
@@ -211,24 +210,26 @@ class SellingTableViewController: UITableViewController {
         
         // MARK: Selling section: case2. I have posts but no bids for my post.
         
-        // in case bids (data for cells) hasn't returned yet
+        // IN CASE DATA HASN"T RETUREND YET>  bids (data for cells) hasn't returned yet
         
-        else if cellBidsArray.count != sectionPostsArray.count {
-            
-            print("    > in tableview cellforRow: _____ bids not returned yet")
-            
-            cell.userName.text = "No bids yet for this item!"
-            
-            return cell
-            
-        }
+//        else if cellBidsArray.count != sectionPostsArray.count {
+//            
+//            print("    > in tableview cellforRow: _____ bids not returned yet")
+//            
+//            cell.userName.text = ""
+//            
+//            return cell
+//            
+//        }
         
-        
+        if cellBidsArray.count == sectionPostsArray.count {
         let bidsForOnePost = cellBidsArray[indexPath.section][indexPath.row]
         
         // If the bids is a placeholder, then return message
         
         if bidsForOnePost.bidID == "placeholder" {
+            
+            setDefaultCellUI(cell, isHiddenExceptName: true)
             
             print("    > in tableview cellforRow: _____ no bids for posts")
 
@@ -345,29 +346,25 @@ class SellingTableViewController: UITableViewController {
                     
                 case true:
                     
-                    cell.acceptOfferButton.setTitle("accepted!", forState: .Normal)
+                    cell.acceptOfferButton.setTitle("you accepted", forState: .Normal)
                     cell.acceptOfferButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
                     
                     
                 case false:
                     
-                    cell.acceptOfferButton.setTitle("not accepted", forState: .Normal)
+                    cell.acceptOfferButton.setTitle("declined", forState: .Normal)
                     cell.acceptOfferButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
                     
                 }
                 
             }
         }
+        }
         
         return cell
     }
     
-    // MARK: - Other
-    
-    deinit {
-        print("[DEINIT] SellingTable was killed")
-        
-    }
+
 
     
     // MARK: Function to Accept Bid & confirm. UIAlertController
@@ -375,7 +372,7 @@ class SellingTableViewController: UITableViewController {
     
     func acceptBid(sender: UIButton) {
         
-        print("clicked accept")
+        print("   ---> clicked accept")
         
         guard let senderCell = sender.superview?.superview as? UITableViewCell,
             cellIndexPath = tableView?.indexPathForCell(senderCell) else {
@@ -413,11 +410,11 @@ class SellingTableViewController: UITableViewController {
             self.fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID, withCompletionHandler:  { (isUpdated) in
                 if isUpdated == true {
                     
-                    print("TransctionViewControler: firebase completetionhalder ---> UPDATED DB")
+                    print("----- [updateAllBids] firebase completetionhalder ---> UPDATED DB")
                     
                     acceptedBid.parentPostInfo?.isOpen = false
                     
-                    print("----- \(acceptedBid.parentPostInfo?.isOpen)")
+                    print("----- [updateAllBids] acceptedBid.parentPostInfo?.isOpen, it hsould be set to false: \(acceptedBid.parentPostInfo?.isOpen)")
                     //                    self.fireBase.fetchPostsForBrowse()
                     
                     self.tableView.reloadData()
@@ -479,6 +476,12 @@ class SellingTableViewController: UITableViewController {
             fatalError("failed getting nsuserdefaults uid")
         }
         return userID
+    }
+    
+    
+    deinit {
+        print("[DEINIT] SellingTable was killed")
+        
     }
     
 }

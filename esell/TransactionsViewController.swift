@@ -8,9 +8,17 @@
 
 import UIKit
 
+protocol BuyingStillLoadingDelegate {
+   // func startLoading(manager: BuyingTableViewController, isStartLoading: Bool)
+    func stopLoading(manager: BuyingTableViewController, isFinishedLoading: Bool)
+}
 
+protocol SellingStillLoadingDelegate {
+   // func startLoading(manager: SellingTableViewController, startedLoading: Bool)
+    func stopLoading(manager: SellingTableViewController, finishedLoading: Bool)
+}
 
-class TransactionsViewController: UIViewController {
+class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, SellingStillLoadingDelegate {
     
     
     enum Segment: Int {
@@ -23,6 +31,8 @@ class TransactionsViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var containerView: UIView!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     
     // MARK: Data Variables
@@ -38,8 +48,10 @@ class TransactionsViewController: UIViewController {
         self.currentViewController!.view.translatesAutoresizingMaskIntoConstraints = false
         self.addChildViewController(self.currentViewController!)
         self.addSubview(self.currentViewController!.view, toView: self.containerView)
+    
         
         super.viewDidLoad()
+        
         
         self.navigationItem.title = "My Offers"
         
@@ -64,6 +76,7 @@ class TransactionsViewController: UIViewController {
     
  
     func cycleFromViewController(oldViewController: UITableViewController, toViewController newViewController: UITableViewController) {
+        
         oldViewController.willMoveToParentViewController(nil)
         self.addChildViewController(newViewController)
         self.addSubview(newViewController.view, toView:self.containerView!)
@@ -73,15 +86,14 @@ class TransactionsViewController: UIViewController {
             newViewController.view.alpha = 1
             oldViewController.view.alpha = 0
             },
-                                   completion: { finished in
-                                    oldViewController.view.removeFromSuperview()
-                                    //oldViewController.removeFromParentViewController()
-                                    newViewController.didMoveToParentViewController(self)
+            completion: { finished in
+            oldViewController.view.removeFromSuperview()
+            //oldViewController.removeFromParentViewController()
+            newViewController.didMoveToParentViewController(self)
         })
     }
     
-    
-    
+
     // MARK: Functions for Segmented Control
     
     func setupSegmentedControl(){
@@ -101,11 +113,11 @@ class TransactionsViewController: UIViewController {
         
         switch segmentedControl.selectedSegmentIndex {
             
+            
         case Segment.postsBuying.rawValue:
-            
+            activityIndicator.startAnimating()
             print("  > selected segment: BIDS")
-            
-            
+        
             // set container view content
             
             let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BuyingTableViewController") as! BuyingTableViewController
@@ -113,11 +125,12 @@ class TransactionsViewController: UIViewController {
             self.cycleFromViewController(self.currentViewController!, toViewController: newViewController)
             self.currentViewController = newViewController
             
+            newViewController.delegate = self
             
         case Segment.postsSelling.rawValue:
-            
+            activityIndicator.startAnimating()
             print("  > selected segment: POSTS")
-            
+
             // set container view content
             
             let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SellingTableViewController") as! SellingTableViewController
@@ -125,8 +138,24 @@ class TransactionsViewController: UIViewController {
             self.cycleFromViewController(self.currentViewController!, toViewController: newViewController)
             self.currentViewController = newViewController
             
+            newViewController.delegate = self
+            
         default: break }
     }
 
     
+    func stopLoading(manager: BuyingTableViewController, isFinishedLoading: Bool) {
+        print("[buying] IN THE DELEGEAT FUNC; stop")
+        if isFinishedLoading {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
+    
+    func stopLoading(manager: SellingTableViewController, finishedLoading: Bool) {
+        print("[sell] IN THE DELEGEAT FUNC; stop")
+        if finishedLoading {
+            activityIndicator.stopAnimating()
+        }
+    }
 }
