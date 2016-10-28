@@ -54,31 +54,22 @@ class SellingTableViewController: UITableViewController {
                     self.cellBidsArray.append(bidsArrayForOnePost)
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        print(" 1---- reloaded data")
+                        print(" ---- reloaded data")
                         self.tableView.reloadData()
                     }
                     
                     for bid in bidsArrayForOnePost {
                         // get the parent post info for each bid here
                         
-                        self.fireBase.lookupSinglePost(postID: bid.parentPostID, withCompletionHandler: { (returnedPost) in
+                        self.fireBase.lookupSingleUser(userID: bid.bidderID, withCompletionHandler: { (getUser) in
+                            bid.parentPostUserInfo = getUser
                             
-                            bid.parentPostInfo = returnedPost
-                            
-                            if let userIDOfBid = bid.parentPostInfo?.author {
-                            self.fireBase.lookupSingleUser(userID: userIDOfBid, withCompletionHandler: { (getUser) in
-                                bid.parentPostUserInfo = getUser
-                                
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    print(" 2---- reloaded data")
-                                    self.tableView.reloadData()
-                                }
-                            })
+                            dispatch_async(dispatch_get_main_queue()) {
+                                print(" 2---- reloaded data")
+                                self.tableView.reloadData()
                             }
                         })
                     }
-                    
-                    
                 })
             }
             
