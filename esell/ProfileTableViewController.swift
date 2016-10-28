@@ -29,9 +29,11 @@ class ProfileTableViewController: UITableViewController {
         
         super.viewDidLoad()
 
+        self.navigationItem.title = "Profile"
+        
+        
         // Remove table view seperator lines
         tableView.separatorStyle = .None
-    
         
         // get userInfo from NSUserDefaults
         

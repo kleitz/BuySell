@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
         
         //let userInfo = User(id: "placeholder")
         
-        self.navigationItem.title = "My Account"
+        
         
         
         //   Attach logout button to logout function

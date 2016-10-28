@@ -560,15 +560,15 @@
         <scene sceneID="d7i-MI-cu1">
             <objects>
                 <tableViewController id="Ner-6b-Hhd" customClass="ProfileTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3aY-xk-0Qf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3aY-xk-0Qf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="Mf1-Ad-LxF">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="100" id="Zwp-U5-1wT">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
+                                        <rect key="frame" x="0.0" y="64" width="600" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Zwp-U5-1wT" id="l1J-PH-Kla">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
@@ -597,7 +597,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="P8H-87-VBH">
-                                        <rect key="frame" x="0.0" y="100" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="164" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P8H-87-VBH" id="SGz-j7-1oD">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -605,17 +605,21 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mHT-iH-dop">
-                                        <rect key="frame" x="0.0" y="144" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="208" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mHT-iH-dop" id="cG7-ir-PHM">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDY-bU-A0e">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDY-bU-A0e">
                                                     <rect key="frame" x="16" y="7" width="48" height="30"/>
                                                     <state key="normal" title="Logout"/>
                                                 </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tDY-bU-A0e" firstAttribute="centerY" secondItem="cG7-ir-PHM" secondAttribute="centerY" id="LiR-Za-zoG"/>
+                                                <constraint firstItem="tDY-bU-A0e" firstAttribute="leading" secondItem="cG7-ir-PHM" secondAttribute="leadingMargin" constant="8" id="OgO-gj-7O7"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -626,6 +630,7 @@
                             <outlet property="delegate" destination="Ner-6b-Hhd" id="NSW-AX-1F9"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="ZKX-9t-lj8"/>
                     <connections>
                         <outlet property="logoutButton" destination="tDY-bU-A0e" id="20R-9Z-jkf"/>
                         <outlet property="profileImage" destination="PyD-LK-H7i" id="Vgc-cO-LTi"/>
@@ -634,53 +639,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n4S-bT-GCR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-426" y="-264"/>
-        </scene>
-        <!--Profile View Controller-->
-        <scene sceneID="wY3-m8-1kB">
-            <objects>
-                <viewController id="bzg-qJ-PUm" customClass="ProfileViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8Zh-IM-ZMg"/>
-                        <viewControllerLayoutGuide type="bottom" id="RgZ-SP-soh"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Qai-Am-Lgl">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uS7-cM-dnb">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
-                                <connections>
-                                    <segue destination="Ner-6b-Hhd" kind="embed" id="x5R-ZC-KIX"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="uS7-cM-dnb" secondAttribute="trailing" id="8D5-5f-ZC6"/>
-                            <constraint firstItem="uS7-cM-dnb" firstAttribute="leading" secondItem="Qai-Am-Lgl" secondAttribute="leading" id="Cc8-Ls-fkf"/>
-                            <constraint firstItem="uS7-cM-dnb" firstAttribute="bottom" secondItem="RgZ-SP-soh" secondAttribute="top" id="Yla-Y2-Jbm"/>
-                            <constraint firstItem="uS7-cM-dnb" firstAttribute="top" secondItem="Qai-Am-Lgl" secondAttribute="top" id="pYj-IE-wmM"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="wyf-Su-mHM">
-                        <nil key="title"/>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="tow-b6-ebI">
-                            <rect key="frame" x="20" y="7" width="560" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="go to log out"/>
-                            <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="jmD-6A-rX0"/>
-                            </connections>
-                        </button>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="logoutButton" destination="tow-b6-ebI" id="NsN-IC-spm"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5p6-rM-U9J" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-414" y="638"/>
+            <point key="canvasLocation" x="-428" y="385"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="Zq9-Lu-Eya">
@@ -1871,7 +1830,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="bzg-qJ-PUm" kind="relationship" relationship="rootViewController" id="fDe-Ds-M8J"/>
+                        <segue destination="Ner-6b-Hhd" kind="relationship" relationship="rootViewController" id="ehJ-qI-3dg"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CUu-SN-hlK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1968,7 +1927,6 @@
         <image name="shopbag" width="29" height="29"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0mr-9A-yhx"/>
         <segue reference="43f-so-zT2"/>
     </inferredMetricsTieBreakers>
 </document>
