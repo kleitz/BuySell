@@ -54,10 +54,7 @@ class ItemDetailTableViewController: UITableViewController {
         
         
         // Setup the UI elements with ItemListing attributes passed in
-        
-        
-        
-        
+
         itemTitle.text = post.title
         
         itemPrice.text = post.formattedPrice
@@ -165,7 +162,6 @@ class ItemDetailTableViewController: UITableViewController {
                 })
                 
                 task.resume()
-                
             }
         }
         
@@ -173,11 +169,9 @@ class ItemDetailTableViewController: UITableViewController {
         // Display seller name as text
         
         self.itemSeller.text = ("Posted \(self.daysAgo) \n\(self.sellerAsUser.name ?? "")")
-        
-        
+
     }
-    
-    
+
     
     // for image rounding
     
@@ -228,22 +222,6 @@ extension NSDate {
         if minutesFrom(date) > 0 { return "\(minutesFrom(date))m" }
         if secondsFrom(date) > 0 { return "\(secondsFrom(date))s" }
         return ""
-    }
-}
-
-extension UILabel{
-    
-    func requiredHeight() -> CGFloat{
-        
-        let label:UILabel = UILabel(frame: CGRectMake(0, 0, self.frame.width, CGFloat.max))
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        label.font = self.font
-        label.text = self.text
-        
-        label.sizeToFit()
-        
-        return label.frame.height
     }
 }
 

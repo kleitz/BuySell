@@ -47,7 +47,7 @@ class ListingsTableViewController: UITableViewController {
         cell.priceText.text = post.formattedPrice
         cell.titleText.text = post.title
         cell.descriptionText.text = post.itemDescription
-   
+        cell.locationText.text = post.pickupDescription.componentsSeparatedByString(",")[0] ?? ""
         
         // temp set image
         cell.photo.image = UIImage(named:"shopbag")

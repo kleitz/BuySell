@@ -15,6 +15,8 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
     let reuseIdentifier = "cell"
     
     var sourceViewController = PostTabBarController()
+
+    
     
     var screenSize: CGRect!
     var screenWidth: CGFloat!

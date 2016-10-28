@@ -19,4 +19,7 @@ class PostCell: UITableViewCell {
 
     @IBOutlet weak var descriptionText: UILabel!
 
+    @IBOutlet weak var locationText: UILabel!
+    
+    
 }

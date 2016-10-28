@@ -28,6 +28,7 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
     
     @IBOutlet weak var expiryYearTextField: UITextField!
     
+    @IBOutlet weak var pickupInfo: UILabel!
 
     @IBOutlet weak var CvcTextField: UITextField!
     
@@ -53,6 +54,8 @@ class CreditCardTableViewController: UITableViewController, UITextFieldDelegate,
         print("post received??? in CreditCardController \(self.post.id) & price: \(self.post.price)")
         
         itemInfoLabel.text = "\(self.post.formattedPrice) \(self.post.title)"
+        pickupInfo.text = post.pickupDescription
+        
         // Add function to button
         
         checkoutButton.addTarget(self, action: #selector(prepareSaveBid), forControlEvents: .TouchUpInside)

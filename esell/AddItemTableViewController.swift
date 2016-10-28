@@ -279,6 +279,10 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             return
         }
         
+        if isStringNumerical(itemPriceString) == false {
+            popupNotifyIncomplete("You must enter a number for price")
+        }
+        
         /// TODO FIX this 0 error handling later
         let itemPrice = Double(itemPriceString) ?? 0
         
@@ -342,6 +346,20 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    // Popup alert if missing fields
+    
+    func popupNotifyIncomplete(errorMessage: String){
+        
+        let alertController = UIAlertController(title: "Wait!", message:
+            errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            print("test: pressed Dismiss")
+        }))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
     func popupNotifyMissingPickupLocation(){
         
         let alertController = UIAlertController(title: "Wait!", message:
@@ -365,6 +383,13 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in self.closeModal() } ))
         
         self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    
+    func isStringNumerical(string : String) -> Bool {
+        // Only allow numbers. Look for anything not a number.
+        let range = string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        return (range == nil)
     }
     
     

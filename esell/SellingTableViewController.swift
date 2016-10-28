@@ -54,9 +54,30 @@ class SellingTableViewController: UITableViewController {
                     self.cellBidsArray.append(bidsArrayForOnePost)
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        print(" ---- reloaded data")
+                        print(" 1---- reloaded data")
                         self.tableView.reloadData()
                     }
+                    
+                    for bid in bidsArrayForOnePost {
+                        // get the parent post info for each bid here
+                        
+                        self.fireBase.lookupSinglePost(postID: bid.parentPostID, withCompletionHandler: { (returnedPost) in
+                            
+                            bid.parentPostInfo = returnedPost
+                            
+                            if let userIDOfBid = bid.parentPostInfo?.author {
+                            self.fireBase.lookupSingleUser(userID: userIDOfBid, withCompletionHandler: { (getUser) in
+                                bid.parentPostUserInfo = getUser
+                                
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    print(" 2---- reloaded data")
+                                    self.tableView.reloadData()
+                                }
+                            })
+                            }
+                        })
+                    }
+                    
                     
                 })
             }
@@ -236,6 +257,8 @@ class SellingTableViewController: UITableViewController {
 
             cell.offerAmount.text = bidsForOnePost.formattedAmount
             cell.offerPaymentImage.contentMode = .ScaleAspectFill
+            
+            cell.userName.text = bidsForOnePost.parentPostUserInfo?.name
             
             switch bidsForOnePost.isPaidOnline {
             case true:

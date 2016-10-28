@@ -26,9 +26,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(true)
-        
-        print(self.tabBarController?.tabBar.hidden)
-        
+ 
         self.tabBarController?.setTabBarVisible(false, animated: true)
         
     }
