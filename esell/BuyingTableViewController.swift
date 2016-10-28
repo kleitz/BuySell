@@ -104,7 +104,21 @@ class BuyingTableViewController: UITableViewController {
     
     
     
-    // Table view: SECTION/HEADER - [posts] go under here
+    // MARK: - Table view HEADER/SECTION
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
+        print("sectoin count \(sectionPostsArray.count)")
+        
+        if sectionPostsArray.count == 0 {
+            
+            return 1
+            
+        }
+        
+        return sectionPostsArray.count
+    }
+
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40.0
@@ -122,26 +136,28 @@ class BuyingTableViewController: UITableViewController {
         headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
         
-        // Get Posts info to load in header
+        if sectionPostsArray.count == 0 {
+            
+            headerView.titleLabel.text = "You haven't sent any offers."
+            headerView.priceLabel.hidden = true
+            
+        }
+        else {
         
-        let postIBidOn = sectionPostsArray[section]
+            // Get Posts info to load in header
+            
+            let postIBidOn = sectionPostsArray[section]
+            
+            headerView.titleLabel.text = postIBidOn.title
+            headerView.priceLabel.text = postIBidOn.formattedPrice
         
-        headerView.titleLabel.text = postIBidOn.title
-        headerView.priceLabel.text = postIBidOn.formattedPrice
-        
+        }
         
         return headerView
-        
     }
     
+    //MARK: Table view: NumberOFROWS/CELLS
     
-    // MARK: - Table view data source
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        return sectionPostsArray.count
-        
-    }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -153,156 +169,114 @@ class BuyingTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("buyCell", forIndexPath: indexPath) as! BuyTableViewCell
         
-        // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
-        // MARK: Buying section: must exist. show my 1 bid under parent post
-        
-        ///NEED ERROR HANDLING HERE IN CASE ARRAY IS EMPTY UPON LOAD
-        
-        let myOfferForPost = cellBidsArray[indexPath.section]
-        
-        //cell.buyingSectionPriceAmount.text = ""
-        //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
+        // set UI as hidden for cell, if sectionCountt=0
+        setDefaultCellUI(cell, isHidden: true)
         
         
-        // Add conditional for when bid is responded to and/or accepted
-        
-        /// if the bid is open
-        
-        
-        if cellBidsArray[indexPath.section].isRespondedBySeller {
+        if sectionPostsArray.count > 0 {
             
-            if cellBidsArray[indexPath.section].isAcceptedBySeller {
+            // set UI as SHown for cell, if there are sections.
+            setDefaultCellUI(cell, isHidden: false)
+            
+            // use indexPath.section instead of indexPath.row for the bid because it's 1:1 relationship
+            // MARK: Buying section: must exist. show my 1 bid under parent post
+            
+            let myOfferForPost = cellBidsArray[indexPath.section]
+            
+            //cell.buyingSectionPriceAmount.text = ""
+            //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
+            
+            
+            
+            // if the bid is responded by seller
+            
+            switch cellBidsArray[indexPath.section].isRespondedBySeller {
                 
-                // print("~~ MY BID WAS ACCEPTED")
-                cell.offerStatus.text = "has ACCEPTED YOUR OFFER!"
-                cell.offerStatus.textColor = UIColor.darkTextColor()
+            case true:
                 
-            } else {
+                // if respondeded, then check whether Accepted
                 
-                // print("~~ MY BID WAS REJECTED")
-                cell.offerStatus.text = "has DECLINED your offer"
-                cell.offerStatus.textColor = UIColor.darkGrayColor()
+                switch cellBidsArray[indexPath.section].isAcceptedBySeller {
+                    
+                case true:
+                    // print("~~ MY BID WAS ACCEPTED")
+                    cell.offerStatus.text = "has ACCEPTED YOUR OFFER!"
+                    cell.offerStatus.textColor = UIColor.darkTextColor()
+                case false:
+                    // print("~~ MY BID WAS REJECTED")
+                    cell.offerStatus.text = "has DECLINED your offer"
+                    cell.offerStatus.textColor = UIColor.darkGrayColor()
+                }
+                
+            case false:
+                
+                // if the bid is not responded. everything should still show, except for the button status
+                
+                cell.offerStatus.text = "has not responded yet"
+                cell.offerStatus.textColor = UIColor.lightGrayColor()
                 
             }
             
             
+            // Get seller profile iamage to show
+            // print("~~~ BUYSECTION getting userID from async local var: #\(indexPath.row):: \(postsBuying[indexPath.row].author) print\(postIBidOn.parentPostUserInfo?.imageURL)\n ")
             
-        } else {
-            
-            /// if the bid is closed/responded. everything should still show, except for the button status
-            
-            
-            // cell.textLabel?.text = "no repsonse"
-            cell.offerStatus.text = "has not responded yet"
-            cell.offerStatus.textColor = UIColor.lightGrayColor()
-            
-        }
-        
-        // Set seller profile iamage
-        
-        // print("~~~ BUYSECTION getting userID from async local var: #\(indexPath.row):: \(postsBuying[indexPath.row].author) print\(postIBidOn.parentPostUserInfo?.imageURL)\n ")
-        
-        if let userCompleteFromBid: User = myOfferForPost.parentPostUserInfo {
-            
-            cell.userName.text = userCompleteFromBid.name
-            
-            
-            // Start URL request for profile image in background thread
-            
-            let profileURL = userCompleteFromBid.imageURL
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            if let userCompleteFromBid: User = myOfferForPost.parentPostUserInfo {
                 
-                if let url = NSURL(string: profileURL) {
+                cell.userName.text = userCompleteFromBid.name
+
+                // Start URL request for profile image in background thread
+                
+                let profileURL = userCompleteFromBid.imageURL
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
-                    // Download an NSData representation of the image at the URL
-                    let urlRequest = NSURLRequest(URL: url)
-                    
-                    let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
-                        if error == nil {
-                            
-                            guard let unwrappedData = data else {
-                                print("Error converting image")
-                                return
+                    if let url = NSURL(string: profileURL) {
+                        
+                        // Download an NSData representation of the image at the URL
+                        let urlRequest = NSURLRequest(URL: url)
+                        
+                        let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                            if error == nil {
+                                
+                                guard let unwrappedData = data else {
+                                    print("Error converting image")
+                                    return
+                                }
+                                
+                                guard let image = UIImage(data: unwrappedData) else {
+                                    print("Error converting image")
+                                    return
+                                }
+                                
+                                // Display image (using main thread
+                                
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    
+                                    
+                                    cell.userImage.image = image
+                                    cell.userImage.contentMode = .ScaleAspectFill
+                                    
+                                    self.roundUIView(cell.userImage, cornerRadiusParams: cell.userImage.frame.size.width / 2)
+                                    
+                                })
+                                
+                            } else {
+                                
+                                print(error?.localizedDescription)
                             }
-                            
-                            guard let image = UIImage(data: unwrappedData) else {
-                                print("Error converting image")
-                                return
-                            }
-                            
-                            // Display image (using main thread
-                            
-                            dispatch_async(dispatch_get_main_queue(), {
-                                
-                                
-                                cell.userImage.image = image
-                                cell.userImage.contentMode = .ScaleAspectFill
-                                
-                                self.roundUIView(cell.userImage, cornerRadiusParams: cell.userImage.frame.size.width / 2)
-                                
-                            })
-                            
-                        } else {
-                            
-                            print(error?.localizedDescription)
-                        }
-                    })
-                    
-                    task.resume()
+                        })
+                        
+                        task.resume()
+                    }
                 }
             }
+            
         }
-        
-        
         return cell
     }
     
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-     if editingStyle == .Delete {
-     // Delete the row from the data source
-     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-     } else if editingStyle == .Insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
     
     // MARK: - Other
     
@@ -325,6 +299,14 @@ class BuyingTableViewController: UITableViewController {
         return userID
     }
     
+
+    private func setDefaultCellUI(cell: BuyTableViewCell, isHidden: Bool) {
+        
+        cell.userImage.hidden = isHidden
+        cell.userName.hidden = isHidden
+        cell.offerStatus.hidden = isHidden
+        
+    }
     
     deinit {
         
