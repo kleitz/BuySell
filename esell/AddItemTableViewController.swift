@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class AddItemTableViewController: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class AddItemTableViewController: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate {
     
     
     // MARK: IBOutlet Variables
@@ -50,6 +50,8 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             })
 }
     }
+    let descriptionPlaceholder = "Describe what you're selling. Include details such as color, brand, condition as new/used, etc."
+    
     
     
     
@@ -69,11 +71,21 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         // Set up navigation bar buttons
         
         let cancelButton =  UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(closeModal))
-        let postButton = UIBarButtonItem(title: "Post", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
+        let postButton = UIBarButtonItem(title: "Upload", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(clickSavePost))
         
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = postButton
         
+        
+        // set Description UITextField
+        
+        descriptionText.delegate = self
+        descriptionText.text = descriptionPlaceholder
+        descriptionText.textColor = UIColor.lightGrayColor()
+        descriptionText.layer.cornerRadius = 5.0
+        descriptionText.layer.borderWidth = 0.5
+        descriptionText.layer.borderColor = UIColor(red: 204/255.0, green: 204/255.0, blue: 204/255.0, alpha: 1).CGColor
+    
         
         // Set image picker delegate
         
@@ -252,7 +264,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             return
         }
         
-        guard let itemDescription = descriptionText.text where itemDescription != "" else {
+        guard let itemDescription = descriptionText.text where itemDescription != "" && descriptionText.text != descriptionPlaceholder else {
             popupNotifyIncomplete()
             return
         }
@@ -400,7 +412,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
     }
     
     // I dont think this one works (supposed to dismiss keyboard upeon hitting enter - only for UITextField)
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    private func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
@@ -419,6 +431,20 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         willingToShipSwitch.on = false
     }
     
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.textColor == UIColor.lightGrayColor() {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = self.descriptionPlaceholder
+            textView.textColor = UIColor.lightGrayColor()
+        }
+    }
     
     // Close this view controller
     

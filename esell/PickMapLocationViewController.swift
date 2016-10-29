@@ -18,8 +18,11 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     @IBOutlet weak var mapView: MKMapView!
     
     
+    @IBOutlet weak var checkmarkImage: UIImageView!
     
     @IBOutlet weak var locationLabel: UILabel!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var locationManager: CLLocationManager!
     
@@ -42,6 +45,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         super.viewDidLoad()
         
         
+        
+        
         // Set up title
         
         self.navigationItem.title = "" // TODO I think should replace with image instead of text here
@@ -51,6 +56,11 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         let span = MKCoordinateSpanMake(100, 80)
         let region = MKCoordinateRegionMake(coordinate, span)
         self.mapView.setRegion(region, animated: true)
+        
+        
+        // Setup label/checkmark icon
+        self.locationLabel.text = "Press on map to drop a pin, or use search"
+        self.checkmarkImage.hidden = true
         
         
         // Use CLLocation Manager to get current location
@@ -146,8 +156,6 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        print(" -- location gotten: \(locations)")
-        
         let lastLocation = locations.last
         
         guard let currentLocation = lastLocation else {
@@ -158,8 +166,6 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         // stop updating because should have gotten location at least once
         
         locationManager.stopUpdatingLocation()
-        print(" -- stop updating location")
-        
         
         // set region zoom
         let center = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
@@ -254,13 +260,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             self.mapView.centerCoordinate = self.pointAnnotation.coordinate
             self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
             
-            
-            //            if let myAnnotation = self.mapView.annotations.first {
-            //
-            //                let myCoordinate = myAnnotation.coordinate
-            //                /// SAVE map annotation - this is where data is passed
-            //                self.saveAnnotationToPreviousViewController(self.pointAnnotation.coordinate)
-            //            }
+
             
             self.saveAnnotationToPreviousViewController(self.pointAnnotation.coordinate)
             
@@ -294,6 +294,9 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     // SAVE DATA - any time annotation is added, also write to the previous view controller as an update
     
     func saveAnnotationToPreviousViewController(pickUpLocationCoordinate: CLLocationCoordinate2D) {
+        self.checkmarkImage.hidden = true
+        self.locationLabel.text = ""
+        self.activityIndicator.startAnimating()
         
         // This takes the navigation stack and goes to get a ref to the previous controller
         
@@ -309,39 +312,68 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         previousVC.pickupLat = pickUpLocationCoordinate.latitude
         previousVC.pickupLong = pickUpLocationCoordinate.longitude
         
+        saveNearestCityNameFromCoordinate(pickUpLocationCoordinate)
+    }
+    
+    func saveNearestCityNameFromCoordinate(coordinate: CLLocationCoordinate2D){
         
         // also get and save the nearest city/location name
         let mapManager = MapManager()
         
-        mapManager.getCityFromCoordinate(pickUpLocationCoordinate) { (city) in
+        mapManager.getCityFromCoordinate(coordinate) { (error, city) in
             
-            // send data to previous VC
             
-            let count = self.navigationController!.viewControllers.count
+            // if there is an eror, then popup message
             
-            guard let previousVC = self.navigationController!.viewControllers[count - 2] as? AddItemTableViewController else {
-                print("[saveAnnotToPrevVC] ERROR getting reference to previous vc")
-                // TODO do a popup? or already handled in the previous vc..
-                return
+            if let error = error {
+                
+                print(error)
+                self.popupNotifyIncomplete("Error getting location, try again")
+                
             }
             
-            previousVC.pickupLocationText = city as String
-            
-            
-            // update current view's label
-            dispatch_async(dispatch_get_main_queue(), {
+            // if no error, then use city
+            if let city = city {
+                print("IN COMPLETION HANDLER: \(city)")
+                // send data to previous VC
                 
-                self.locationLabel.text = " \(city)"
+                let count = self.navigationController!.viewControllers.count
                 
-                self.locationLabel.setNeedsDisplay()
+                guard let previousVC = self.navigationController!.viewControllers[count - 2] as? AddItemTableViewController else {
+                    print("[saveAnnotToPrevVC] ERROR getting reference to previous vc")
+                    // TODO do a popup? or already handled in the previous vc..
+                    return
+                }
                 
-            })
-            
+                previousVC.pickupLocationText = city as String
+                
+                
+                // update current view's label
+                dispatch_async(dispatch_get_main_queue(), {
+                    
+                    self.locationLabel.text = "Selected: \(city)"
+                    
+                    self.checkmarkImage.hidden = false
+                    
+                    self.locationLabel.setNeedsDisplay()
+                    
+                    
+                })
+                self.activityIndicator.stopAnimating()
+            }
         }
-   
+        
     }
     
     
+    func popupNotifyIncomplete(errorMessage: String) {
+        
+        let alertController = UIAlertController(title: "Wait!", message: errorMessage, preferredStyle: .Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
    
     
     
