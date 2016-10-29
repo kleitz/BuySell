@@ -229,6 +229,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         imageView.contentMode = .ScaleAspectFit
         imageView.image = chosenImage
+        imageView.backgroundColor = UIColor.whiteColor()
         
         dismissViewControllerAnimated(true, completion: nil)
         

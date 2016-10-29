@@ -347,6 +347,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
                 
                 previousVC.pickupLocationText = city as String
                 
+                previousVC.selectPickupText.textColor = UIColor.blackColor()
                 
                 // update current view's label
                 dispatch_async(dispatch_get_main_queue(), {
