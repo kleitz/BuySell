@@ -24,17 +24,14 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
 
     @IBOutlet weak var descriptionText: UITextView!
     
-    @IBOutlet weak var acceptOnlinePaymentSwitch: UISwitch!
+
     
-    @IBOutlet weak var willingToShipSwitch: UISwitch!
     
     @IBOutlet weak var selectPickupText: UILabel!
     
-    
     @IBOutlet weak var selectPickupButton: UIButton!
     
-    
-    
+
     
     // MARK: Data Variables
     
@@ -47,13 +44,12 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         didSet { dispatch_async(dispatch_get_main_queue(), {
             self.selectPickupText.text = self.pickupLocationText
             self.selectPickupText.setNeedsDisplay()
-            })
-}
+        })
+        }
     }
+    
     let descriptionPlaceholder = "Describe what you're selling. Include details such as color, brand, condition as new/used, etc."
-    
-    
-    
+
     
     // MARK:- ViewDidLOAD
     
@@ -64,9 +60,10 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         // Set up navigation items such as title
         
         self.navigationItem.title = "New Post"
-
         
+        tableView.separatorStyle = .None
         
+        tableView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
         
         // Set up navigation bar buttons
         
@@ -131,21 +128,26 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         // Gets the header view as a UITableViewHeaderFooterView and changes the text color
         
         let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-        headerView.textLabel?.textColor = UIColor.whiteColor()
-        headerView.contentView.backgroundColor = UIColor.darkGrayColor()
         
+        headerView.textLabel?.textColor = UIColor.blackColor()
+        headerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
     }
+    
     
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 2.0
+        return 15.0
     }
     
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 2))
-        footerView.backgroundColor = UIColor.darkGrayColor()
+    override func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         
-        return footerView
+        // Gets the header view as a UITableViewHeaderFooterView and changes the text color
+        
+        let footerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+    
+        footerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
     }
+    
+ 
 
     
     // MARK:- Functions
@@ -326,7 +328,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             
             let fireBase = FirebaseManager()
             
-            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: self.acceptOnlinePaymentSwitch.on, shippingOption: self.willingToShipSwitch.on, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, pickupDescription: pickupDesc)
+            fireBase.saveNewPostInDataBase(imageURL: imageURL, itemTitle: itemTitle, itemDescription: itemDescription, itemPrice: itemPrice, onlinePaymentOption: false, shippingOption: false, pickupLatitude: pickupLatitude, pickupLongitude: pickupLongitude, pickupDescription: pickupDesc)
             
         }
         
@@ -427,9 +429,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         titleText.text = ""
         descriptionText.text = ""
         priceText.text = ""
-        
-        acceptOnlinePaymentSwitch.on = false
-        willingToShipSwitch.on = false
+    
     }
     
     
