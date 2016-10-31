@@ -43,7 +43,7 @@ class ItemDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = UIColor(red: 242.0/255, green: 239.0/255, blue: 230.0/255, alpha: 1.0)
+        tableView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
         
         // Remove table view seperator lines
         tableView.separatorStyle = .None
@@ -182,14 +182,7 @@ class ItemDetailTableViewController: UITableViewController {
         view.layer.cornerRadius = cornerRadiusParams
     }
     
-    
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        
-//        
-//        
-//    }
-//    
-//    
+
     
 }
 

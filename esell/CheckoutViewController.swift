@@ -8,58 +8,137 @@
 
 import UIKit
 
-class CheckoutViewController: UIViewController {
+protocol FirebaseManagerBidDelegate: class {
+    
+    func bidComplete(manager: FirebaseManager, didComplete: Bool)
+    
+}
 
+
+class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
+
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var paymentMethodSegmentControl: UISegmentedControl!
-    
+
     @IBOutlet weak var mainContainerView: UIView!
     
+    @IBOutlet weak var checkoutButton: UIButton!
+    
+    
+    
+    // MARK: - Data Variables
     
     var post = ItemListing(id: "test")
+    var postImage = UIImage()
+    
+    
+    // MARK: - ViewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("post received??? in CheckoutViewController \(post.id) & price: \(post.price)")
         
+        // Add function to button
+        
+        checkoutButton.addTarget(self, action: #selector(prepareSaveOffer), forControlEvents: .TouchUpInside)
         
         
         
-        
-        /*  REMOVE THE CC VC
-        
-        // Add the credit card table into the viewcontroller
+        // Add the TableViewController into the viewcontroller
         
         let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
         
-        let ccViewController = storyboard.instantiateViewControllerWithIdentifier("CreditCardTableViewController") as! CreditCardTableViewController
-            
+        let childViewController = storyboard.instantiateViewControllerWithIdentifier("CheckoutTableViewController") as! CheckoutTableViewController
+        
         // Add child view controller
-        self.addChildViewController(ccViewController)
+        self.addChildViewController(childViewController)
         
         // Add child view as subview [of parent]
-        self.mainContainerView.addSubview(ccViewController.view)
+        self.mainContainerView.addSubview(childViewController.view)
         
         // Configure child view
-        ccViewController.view.frame = self.mainContainerView.bounds
-        ccViewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        childViewController.view.frame = self.mainContainerView.bounds
+        childViewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         // Notify the child view controller
-        ccViewController.didMoveToParentViewController(self)
-        */
+        childViewController.didMoveToParentViewController(self)
         
-
     }
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+
+    
+    // MARK: - FUNCTIONS
+    
+    func prepareSaveOffer() {
+        
+        // guard for non nil values
+        guard let childViewController = self.childViewControllers.first as? CheckoutTableViewController else {
+            fatalError()
+            //TODO change to return later
+        }
+        
+        let postID = childViewController.post.id
+        let price = childViewController.post.price
+        
+        
+        
+        // Pass to Firebase
+        
+        let fireBase = FirebaseManager()
+        
+        fireBase.delegateForBid = self
+        
+        
+        // Save the bid to firebase. Removed credit card info as the parameter because shouldn't actually store it - just store the payment method (cash or credit), not the actual card info
+        
+        fireBase.saveBid(parentPostID: postID, bidAmount: price, hasPaidOnline: false)
+        
     }
-    */
+    
+    func bidComplete(manager: FirebaseManager, didComplete: Bool) {
+        if didComplete == true {
+            popupNotifyPosted(title: "Bid Completed", message: "Your bid has been sent!")
+        } else {
+            popupNotifyPosted(title: "Error sending bid", message: "Please try again, something went wrong")
+        }
+    }
+    
+    
+    
+    // Popup alert if missing fields
+    
+    func popupNotifyIncomplete(errorMessage: String){
+        
+        let alertController = UIAlertController(title: "Wait!", message:
+            errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            print("test: pressed Dismiss")
+        }))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    
+    
+    // Popup alert if Post Successful
+    
+    func popupNotifyPosted(title title: String, message: String){
+        
+        let alertController = UIAlertController(title: title, message:
+            message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { action in
+            
+            // when click OK on alert, unwind back to previous view
+            self.performSegueWithIdentifier("unwindToDetail", sender: self) })
+        )
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+
+
 
 }

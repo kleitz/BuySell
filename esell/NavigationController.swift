@@ -20,6 +20,8 @@ class NavigationController: UINavigationController {
         
         let backgroundColor = UIColor(red: 109.0/255, green: 88.0/255, blue: 67.0/255, alpha: 1.0)
         
+        self.view.backgroundColor = backgroundColor
+        
         self.navigationBar.barTintColor = backgroundColor
         
         self.navigationBar.tintColor = UIColor.whiteColor()

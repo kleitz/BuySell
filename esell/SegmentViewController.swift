@@ -25,6 +25,8 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     
     @IBOutlet weak var mainView: UIView!
     
+    @IBAction func unwindToDetail(segue: UIStoryboardSegue) {}
+    
     
     override func viewWillAppear(animated: Bool) {
         

@@ -15,7 +15,7 @@ import UIKit
 class ItemDetailViewController: UIViewController, UIViewControllerTransitioningDelegate  {
     
     
-    @IBAction func unwindToDetail(segue: UIStoryboardSegue) {}
+
     
     @IBOutlet weak var containerView: UIView!
     
@@ -61,6 +61,8 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
                 }
                 
                 nextController.post = self.post
+                nextController.postImage = self.image
+                
                 print("  >> POST ID being sent: \(self.post.id ?? "") andt hte price is \(self.post.price). the date is \(self.post.createdDate)")
                 
             case "itemDetailEmbedSegue":

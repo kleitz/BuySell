@@ -113,7 +113,6 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         
     }
-
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30.0
@@ -125,16 +124,9 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
         
-        if let headerViewText = headerView.textLabel {
-            
-            headerViewText.textColor = UIColor.blackColor()
-            //headerViewText.font = UIFont(name: "System", size: 20)
-            //headerViewText.text = headerViewText.text!.capitalizedString
-        }
-       
-        //headerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
+        headerView.contentView.backgroundColor = UIColor(red: 242.0/255, green: 239.0/255, blue: 230.0/255, alpha: 1.0)
     }
-    
+
     
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 15.0
@@ -233,7 +225,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         imageView.contentMode = .ScaleAspectFit
         imageView.image = chosenImage
-        imageView.backgroundColor = UIColor.whiteColor()
+        imageView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
         
         dismissViewControllerAnimated(true, completion: nil)
         
