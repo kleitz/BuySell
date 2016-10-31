@@ -42,7 +42,8 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
         setupSegmentControl()
         
-        segmentControl.tintColor = UIColor.whiteColor()
+        segmentControl.tintColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
+    
         
         // Set up title
         

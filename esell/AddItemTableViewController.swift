@@ -24,8 +24,6 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
 
     @IBOutlet weak var descriptionText: UITextView!
     
-
-    
     
     @IBOutlet weak var selectPickupText: UILabel!
     
@@ -116,8 +114,6 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
     }
 
-
-    
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30.0
@@ -129,8 +125,14 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
         
-        headerView.textLabel?.textColor = UIColor.blackColor()
-        headerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
+        if let headerViewText = headerView.textLabel {
+            
+            headerViewText.textColor = UIColor.blackColor()
+            //headerViewText.font = UIFont(name: "System", size: 20)
+            //headerViewText.text = headerViewText.text!.capitalizedString
+        }
+       
+        //headerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
     }
     
     
@@ -300,9 +302,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         /// TODO FIX this 0 error handling later
         let itemPrice = Double(itemPriceString) ?? 0
-        
-        // note: don't need to guard for selectors for credit card and shipping
-        
+
         
         // After checking is ok, store in storage (the image gets its own url)
         
@@ -321,10 +321,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             }
             
             
-            // Actual save happens here, after the checking
-            // use separate function to save all info into firebase database (including the url string of the image)
-            
-            // Pass to Firebase
+            // Actual save happens in a separate function, after the checking
             
             let fireBase = FirebaseManager()
             
@@ -335,19 +332,9 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         // Notify user when post is successfully posted/saved
         
         popupNotifyPosted()
-        
-        
-        // Reset all the fields after save is done
-        // DELETE THIS IF DISMISSING AFTER SAVED?
-        
-        
+
         
     }
-    
-    
-    
-    
-    // Popup alert if missing fields
     
     func popupNotifyIncomplete(){
         
@@ -361,7 +348,6 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    // Popup alert if missing fields
     
     func popupNotifyIncomplete(errorMessage: String){
         
@@ -387,9 +373,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    
-    // Popup alert if Post Successful
-    //completion completion: ()?
+
     func popupNotifyPosted(){
         
         let alertController = UIAlertController(title: "Post Completed", message:

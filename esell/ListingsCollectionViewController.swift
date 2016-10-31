@@ -32,6 +32,10 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
 
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
+        collectionView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
+        
+        
+        
     }
 
     

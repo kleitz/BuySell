@@ -24,6 +24,11 @@ class CheckoutViewController: UIViewController {
         print("post received??? in CheckoutViewController \(post.id) & price: \(post.price)")
         
         
+        
+        
+        
+        /*  REMOVE THE CC VC
+        
         // Add the credit card table into the viewcontroller
         
         let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
@@ -42,16 +47,10 @@ class CheckoutViewController: UIViewController {
         
         // Notify the child view controller
         ccViewController.didMoveToParentViewController(self)
-        
+        */
         
 
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     /*
     // MARK: - Navigation
