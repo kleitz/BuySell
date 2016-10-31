@@ -125,7 +125,7 @@ class BuyingTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return 35.0
     }
     
     
@@ -139,24 +139,17 @@ class BuyingTableViewController: UITableViewController {
         
         headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
+        headerView.titleLabel.text = ""
+        headerView.priceLabel.text = ""
         
-        if sectionPostsArray.count == 0 {
-            
-            headerView.titleLabel.text = "You haven't sent any offers."
-            headerView.priceLabel.hidden = true
-            
+        
+        for index in 0...section {
+            if let postIBidOn = sectionPostsArray[safe: index] {
+                headerView.titleLabel.text = postIBidOn.title
+                headerView.priceLabel.text = postIBidOn.formattedPrice
+            }
         }
-        else {
-        
-            // Get Posts info to load in header
-            
-            let postIBidOn = sectionPostsArray[section]
-            
-            headerView.titleLabel.text = postIBidOn.title
-            headerView.priceLabel.text = postIBidOn.formattedPrice
-        
-        }
-        
+
         return headerView
     }
     
@@ -204,10 +197,12 @@ class BuyingTableViewController: UITableViewController {
                     
                 case true:
                     // print("~~ MY BID WAS ACCEPTED")
+                    cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                     cell.offerStatus.text = "has ACCEPTED YOUR OFFER!"
                     cell.offerStatus.textColor = UIColor.darkTextColor()
                 case false:
                     // print("~~ MY BID WAS REJECTED")
+                    cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                     cell.offerStatus.text = "has DECLINED your offer"
                     cell.offerStatus.textColor = UIColor.darkGrayColor()
                 }
@@ -215,8 +210,8 @@ class BuyingTableViewController: UITableViewController {
             case false:
                 
                 // if the bid is not responded. everything should still show, except for the button status
-                
-                cell.offerStatus.text = "has not responded yet"
+                cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
+                cell.offerStatus.text = "has not yet responded"
                 cell.offerStatus.textColor = UIColor.lightGrayColor()
                 
             }
@@ -306,6 +301,7 @@ class BuyingTableViewController: UITableViewController {
 
     private func setDefaultCellUI(cell: BuyTableViewCell, isHidden: Bool) {
         
+        cell.offerSentAmount.hidden = isHidden  
         cell.userImage.hidden = isHidden
         cell.userName.hidden = isHidden
         cell.offerStatus.hidden = isHidden
@@ -316,5 +312,12 @@ class BuyingTableViewController: UITableViewController {
         
         print("[DEINIT] BuyingTable was killed")
         
+    }
+}
+
+extension CollectionType {
+    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }

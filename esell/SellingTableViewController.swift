@@ -61,14 +61,18 @@ class SellingTableViewController: UITableViewController {
                     for bid in bidsArrayForOnePost {
                         // get the parent post info for each bid here
                         
-                        self.fireBase.lookupSingleUser(userID: bid.bidderID, withCompletionHandler: { (getUser) in
-                            bid.parentPostUserInfo = getUser
+                        // add this line so prevent calling if it's empty
+                        if bid.bidID != "placeholder" {
                             
-                            dispatch_async(dispatch_get_main_queue()) {
-                                print(" 2---- reloaded data")
-                                self.tableView.reloadData()
-                            }
-                        })
+                            self.fireBase.lookupSingleUser(userID: bid.bidderID, withCompletionHandler: { (getUser) in
+                                bid.parentPostUserInfo = getUser
+                                
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    print(" 2---- reloaded data")
+                                    self.tableView.reloadData()
+                                }
+                            })
+                        }
                     }
                 })
                 
@@ -112,7 +116,7 @@ class SellingTableViewController: UITableViewController {
     // Table view: SECTION/HEADER - [posts] go under here
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return 35.0
     }
     
     

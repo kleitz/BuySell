@@ -40,12 +40,16 @@ class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, 
     weak var currentViewController: UITableViewController?
     
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        activityIndicator.startAnimating()
+        
+    }
     // MARK:  VIEW DID LOAD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        activityIndicator.startAnimating()
+
         
         self.currentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("BuyingTableViewController") as! BuyingTableViewController
         self.currentViewController!.view.translatesAutoresizingMaskIntoConstraints = false

@@ -43,6 +43,8 @@ class ItemDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.backgroundColor = UIColor.orangeColor()
+        
         // Remove table view seperator lines
         tableView.separatorStyle = .None
         

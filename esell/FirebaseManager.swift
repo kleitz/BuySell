@@ -268,7 +268,6 @@ class FirebaseManager {
             
             post = self.parsePostSnapshot(postID: postID, data: dataSnapshot)
             
-            
             withCompletionHandler(returnedPost: post)
         })
         
@@ -278,11 +277,12 @@ class FirebaseManager {
     
     func lookupSingleUser(userID uid: String, withCompletionHandler: (getUser: User)-> Void ) {
         
+        print("run lookupSingleUser for uid: \(uid)")
         ref.child("users").queryOrderedByKey().queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock:  { (snapshot) in
             
             // print("[fetchUserInfoFromFirebase]  snapshot: \(snapshot)")
             guard let dictionary = snapshot.value as? [String:AnyObject] else {
-                print("[fetchUserInfoFromFirebase] Error: failed getting user in database")
+                print("[fetchUserInfoFromFirebase] Error: failed getting user in database.")
                 return
             }
             

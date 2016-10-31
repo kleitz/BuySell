@@ -17,6 +17,7 @@ class BuyTableViewCell: UITableViewCell {
     
     @IBOutlet weak var offerStatus: UILabel!
     
+    @IBOutlet weak var offerSentAmount: UILabel!
     // TODO later add status Image
     // TODO later add price if allow differnet bid amounts
     
