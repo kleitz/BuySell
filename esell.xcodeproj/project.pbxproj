@@ -19,8 +19,8 @@
 		84321A8E1DB9374000332DF4 /* SellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */; };
 		8437E4581DBF633F00DD469D /* ItemDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8437E4571DBF633F00DD469D /* ItemDetailTableViewController.swift */; };
 		8437E45A1DC04DF700DD469D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8437E4591DC04DF700DD469D /* NavigationController.swift */; };
+		8440F4F21DC7728600F8672F /* BuyHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8440F4F11DC7728600F8672F /* BuyHeaderView.xib */; };
 		8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */; };
-		8459C73C1DBE16EC008E213F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8459C73B1DBE16EC008E213F /* GoogleService-Info.plist */; };
 		848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */; };
 		848F681C1DABA8B900AED515 /* PostTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F681B1DABA8B900AED515 /* PostTabBarController.swift */; };
 		848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68211DACF5D000AED515 /* FirebaseManager.swift */; };
@@ -32,6 +32,7 @@
 		8499938E1D9B5701006C050C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938D1D9B5701006C050C /* User.swift */; };
 		849993901D9B5715006C050C /* ItemListing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938F1D9B5715006C050C /* ItemListing.swift */; };
 		84BE85181DB24C0B0001FEF8 /* BidForItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BE85171DB24C0B0001FEF8 /* BidForItem.swift */; };
+		84BEF8DC1DC84C4C0072479D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84BEF8DB1DC84C4C0072479D /* GoogleService-Info.plist */; };
 		84DFB0EB1D98F15E00111668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EA1D98F15E00111668 /* AppDelegate.swift */; };
 		84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DFB0EC1D98F15E00111668 /* LoginViewController.swift */; };
 		84DFB0F01D98F15E00111668 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84DFB0EE1D98F15E00111668 /* Main.storyboard */; };
@@ -64,8 +65,8 @@
 		84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellTableViewCell.swift; sourceTree = "<group>"; };
 		8437E4571DBF633F00DD469D /* ItemDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailTableViewController.swift; sourceTree = "<group>"; };
 		8437E4591DC04DF700DD469D /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		8440F4F11DC7728600F8672F /* BuyHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BuyHeaderView.xib; sourceTree = "<group>"; };
 		8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemTableViewController.swift; sourceTree = "<group>"; };
-		8459C73B1DBE16EC008E213F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemBackgroundViewController.swift; sourceTree = "<group>"; };
 		848F681B1DABA8B900AED515 /* PostTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTabBarController.swift; sourceTree = "<group>"; };
 		848F68211DACF5D000AED515 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 		8499938D1D9B5701006C050C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8499938F1D9B5715006C050C /* ItemListing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListing.swift; sourceTree = "<group>"; };
 		84BE85171DB24C0B0001FEF8 /* BidForItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BidForItem.swift; sourceTree = "<group>"; };
+		84BEF8DB1DC84C4C0072479D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84DFB0E71D98F15C00111668 /* esell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = esell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84DFB0EA1D98F15E00111668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84DFB0EC1D98F15E00111668 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			children = (
 				848F682B1DB0C25600AED515 /* TransactionsViewController.swift */,
 				842D36211DB5B01600AE5F5F /* SectionHeaderView.xib */,
+				8440F4F11DC7728600F8672F /* BuyHeaderView.xib */,
 				842D361F1DB5AFD300AE5F5F /* SectionHeaderView.swift */,
 				84321A871DB8FDE300332DF4 /* SellingTableViewController.swift */,
 				84321A851DB8FDD300332DF4 /* BuyingTableViewController.swift */,
@@ -198,7 +201,7 @@
 				84DFB0F11D98F15E00111668 /* Assets.xcassets */,
 				84DFB0F31D98F15E00111668 /* LaunchScreen.storyboard */,
 				84DFB0F61D98F15E00111668 /* Info.plist */,
-				8459C73B1DBE16EC008E213F /* GoogleService-Info.plist */,
+				84BEF8DB1DC84C4C0072479D /* GoogleService-Info.plist */,
 			);
 			path = esell;
 			sourceTree = "<group>";
@@ -298,11 +301,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8440F4F21DC7728600F8672F /* BuyHeaderView.xib in Resources */,
 				84DFB0F51D98F15E00111668 /* LaunchScreen.storyboard in Resources */,
 				84DFB0F21D98F15E00111668 /* Assets.xcassets in Resources */,
-				8459C73C1DBE16EC008E213F /* GoogleService-Info.plist in Resources */,
 				84DFB0F01D98F15E00111668 /* Main.storyboard in Resources */,
 				842D36221DB5B01600AE5F5F /* SectionHeaderView.xib in Resources */,
+				84BEF8DC1DC84C4C0072479D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +532,7 @@
 				INFOPLIST_FILE = esell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.corealstudios.esell;
+				PRODUCT_BUNDLE_IDENTIFIER = com.corealstudios.BuySell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -544,7 +548,7 @@
 				INFOPLIST_FILE = esell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.corealstudios.esell;
+				PRODUCT_BUNDLE_IDENTIFIER = com.corealstudios.BuySell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

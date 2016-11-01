@@ -21,6 +21,11 @@ class BuyTableViewCell: UITableViewCell {
     // TODO later add status Image
     // TODO later add price if allow differnet bid amounts
     
+    @IBOutlet weak var itemImage: UIImageView!
+    
+    @IBOutlet weak var itemTitle: UILabel!
+    @IBOutlet weak var viewListingButton: UIButton!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

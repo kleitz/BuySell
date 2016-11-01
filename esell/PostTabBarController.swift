@@ -60,6 +60,7 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
+        self.view.backgroundColor = UIColor(red: 242.0/255, green: 239.0/255, blue: 230.0/255, alpha: 1.0)
 
         // Set UI
         

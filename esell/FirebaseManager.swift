@@ -21,7 +21,7 @@ class FirebaseManager {
     weak var delegateForBid: FirebaseManagerBidDelegate?
     
     
-    let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
+    let ref = FIRDatabase.database().referenceFromURL("https://buysell-b6e74.firebaseio.com/")
     
     
     // MARK: Functions for write Data to Firebase
@@ -51,8 +51,6 @@ class FirebaseManager {
     func saveNewPostInDataBase(imageURL imageURL: String, itemTitle: String, itemDescription: String, itemPrice: Double, onlinePaymentOption: Bool, shippingOption: Bool, pickupLatitude: Double, pickupLongitude: Double, pickupDescription: String) {
         // do saving into firebase here
         // TODO fix this so that it doesn't save the image first into database before checking all fields?
-        
-        let ref = FIRDatabase.database().referenceFromURL("https://esell-bf562.firebaseio.com/")
         
         let postsRef = ref.child("posts")
         

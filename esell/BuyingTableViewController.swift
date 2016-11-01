@@ -20,20 +20,27 @@ class BuyingTableViewController: UITableViewController {
     
     // for each section/header cell
     var cellBidsArray = [BidForItem]()  // { didSet { tableView.reloadData() } }
+    /// NOTE : I need a dictionary or something for this.
+    /// the key is the sectionPoastArray.each . id 
+    /// the value is a an Array of bidForItem
+    /// OTHERWISE THE VALUES AREN"T MATCHING!!
     
+    
+    var bidDictionaryForPost = [String:ItemListing]()
     
     let fireBase = FirebaseManager()
     
     var delegate: BuyingStillLoadingDelegate?
+
+    
+    
     
     // MARK:- Lifecycle ViewWillAPPEAR
     
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
-        
-        sectionPostsArray = [ItemListing]()
-        
+
         let currentUser = getUserID()
         
         fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
@@ -47,12 +54,16 @@ class BuyingTableViewController: UITableViewController {
             for bid in self.cellBidsArray {
                 
                 // for each bid, look up the parent post so we can display post info in the table
+                // for each bid, need to store a dictinoary of the [ BId ID : POST INFO ]
+                
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
                     self.fireBase.lookupSinglePost(postID: bid.parentPostID, withCompletionHandler: { (post) in
                         
-                        print(" __[1.upper][fetchSinglePost]  -> 1 post returned from handler: \(post.title)")
+                        self.bidDictionaryForPost["\(bid.bidID)"] = post
+                        
+                        bid.parentPostInfo = post
                         
                         // SAVE SECTION DATA
                         self.sectionPostsArray.append(post)
@@ -91,7 +102,9 @@ class BuyingTableViewController: UITableViewController {
         
         print(" >> BuyingTable loaded ")
         
-        self.tableView.rowHeight = 70.0
+        
+        
+        //self.tableView.rowHeight = 118.0
         
         // Remove table view seperator lines
         tableView.separatorStyle = .None
@@ -124,35 +137,35 @@ class BuyingTableViewController: UITableViewController {
     }
 
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35.0
-    }
-    
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        // Create UIView from the custom nib
-        
-        let headerView = UINib(nibName: "SectionHeaderView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! SectionHeaderView
-        
-        // Use autolayout resizing
-        
-        headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
-        
-        headerView.titleLabel.text = ""
-        headerView.priceLabel.text = ""
-        
-        
-        for index in 0...section {
-            if let postIBidOn = sectionPostsArray[safe: index] {
-                headerView.titleLabel.text = postIBidOn.title
-                headerView.priceLabel.text = postIBidOn.formattedPrice
-            }
-        }
-
-        return headerView
-    }
-    
+//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 35.0
+//    }
+//    
+//    
+//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        
+//        // Create UIView from the custom nib
+//        
+//        let headerView = UINib(nibName: "SectionHeaderView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! SectionHeaderView
+//        
+//        // Use autolayout resizing
+//        
+//        headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+//        
+//        headerView.titleLabel.text = ""
+//        headerView.priceLabel.text = ""
+//        
+//        
+//        for index in 0...section {
+//            if let postIBidOn = sectionPostsArray[safe: index] {
+//                headerView.titleLabel.text = postIBidOn.title
+//                headerView.priceLabel.text = postIBidOn.formattedPrice
+//            }
+//        }
+//
+//        return headerView
+//    }
+//    
     //MARK: Table view: NumberOFROWS/CELLS
     
     
@@ -180,31 +193,34 @@ class BuyingTableViewController: UITableViewController {
             
             let myOfferForPost = cellBidsArray[indexPath.section]
             
-            //cell.buyingSectionPriceAmount.text = ""
-            //("Made an offer of \(postIBidOn.formattedAmount).")actually don't need this in the above label.. assume same price
             
+            cell.itemTitle.text = myOfferForPost.parentPostInfo?.title
             
             
             // if the bid is responded by seller
             
             switch cellBidsArray[indexPath.section].isRespondedBySeller {
                 
+
             case true:
-                
-                // if respondeded, then check whether Accepted
                 
                 switch cellBidsArray[indexPath.section].isAcceptedBySeller {
                     
                 case true:
                     // print("~~ MY BID WAS ACCEPTED")
                     cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
-                    cell.offerStatus.text = "has ACCEPTED YOUR OFFER!"
+                    cell.offerStatus.text = "has ACCEPTED your offer"
                     cell.offerStatus.textColor = UIColor.darkTextColor()
+                    
+                    
+                    
+                    
                 case false:
                     // print("~~ MY BID WAS REJECTED")
                     cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
-                    cell.offerStatus.text = "has DECLINED your offer"
-                    cell.offerStatus.textColor = UIColor.darkGrayColor()
+                    cell.offerStatus.text = "has declined your offer"
+                    cell.offerStatus.textColor = UIColor.darkTextColor()
+                
                 }
                 
             case false:
@@ -213,6 +229,7 @@ class BuyingTableViewController: UITableViewController {
                 cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                 cell.offerStatus.text = "has not yet responded"
                 cell.offerStatus.textColor = UIColor.lightGrayColor()
+
                 
             }
             
@@ -305,7 +322,8 @@ class BuyingTableViewController: UITableViewController {
         cell.userImage.hidden = isHidden
         cell.userName.hidden = isHidden
         cell.offerStatus.hidden = isHidden
-        
+        cell.viewListingButton.hidden = isHidden
+        cell.itemTitle.hidden = isHidden
     }
     
     deinit {

@@ -20,7 +20,7 @@ class BidForItem: NSObject {
     var isRespondedBySeller: Bool
     
     var formattedAmount: String {
-        let currencyLabel: String = "$ "
+        let currencyLabel: String = "$"
         
         //"%@%.2f ", [replace with var name],
         return String.localizedStringWithFormat("%@%.0f", currencyLabel, amount)
