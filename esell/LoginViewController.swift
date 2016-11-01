@@ -200,18 +200,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         })
     }
     
-//    func signedIn(user: FIRUser?) {
-//        MeasurementHelper.sendLoginEvent()
-//
-//        AppState.sharedInstance.displayName = user?.displayName ?? user?.email
-//        AppState.sharedInstance.photoUrl = user?.photoURL
-//        AppState.sharedInstance.signedIn = true
-//        NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-//        performSegueWithIdentifier(Constants.Segues.SignInToFp, sender: nil)
-//        
-//    }
-    
-    
     
     deinit {
         

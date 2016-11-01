@@ -297,7 +297,8 @@ class FirebaseManager {
             
             guard let name = sellerData["name"] as? String,
                 let email = sellerData["email"] as? String,
-                let imageURL = sellerData["fb_pic_url"] as? String else {
+                let imageURL = sellerData["fb_pic_url"] as? String,
+                let profileURL = sellerData["fb_url"] as? String else {
                     print("error")
                     return
             }
@@ -305,7 +306,7 @@ class FirebaseManager {
             
             // Prep the User object to return
             
-            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL)
+            let sellerInfo = User(id: uid, name: name, email: email, imageURL: imageURL, profileURL: profileURL)
             
             
             print("[fetchUserInfoFromFirebase] userData dict value: \(sellerData)")

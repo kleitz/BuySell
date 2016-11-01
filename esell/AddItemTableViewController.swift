@@ -240,7 +240,9 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         let imageName = NSUUID().UUIDString
         
-        let storageRef = FIRStorage.storage().reference().child("post_images").child("\(imageName).png")
+        let storage = FIRStorage.storage()
+        let storageRef = storage.referenceForURL("gs://buysell-b6e74.appspot.com")
+        let imagesRef = storageRef.child("post_images").child("\(imageName).png")
         
         
         // Do error checking for all fields to make sure before saving
@@ -298,7 +300,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         
         // After checking is ok, store in storage (the image gets its own url)
         
-        storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+        imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
             
             if error != nil {
                 print(error?.localizedDescription)

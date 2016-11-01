@@ -110,8 +110,9 @@ class ItemDetailTableViewController: UITableViewController {
             case 1: return UITableViewAutomaticDimension
             case 2: return 2
             case 3: return UITableViewAutomaticDimension
-            case 4: return UITableViewAutomaticDimension
-            default: return 0
+            case 4: return 2
+            case 5: return UITableViewAutomaticDimension
+            default: return 70
             }
         default: fatalError("unknown section")
         }

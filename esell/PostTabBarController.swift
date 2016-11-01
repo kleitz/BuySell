@@ -60,15 +60,9 @@ class PostTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-        self.view.backgroundColor = UIColor(red: 242.0/255, green: 239.0/255, blue: 230.0/255, alpha: 1.0)
-
-        // Set UI
+        // change tint color of tab bar items (Active selected color)
+        UITabBar.appearance().tintColor = UIColor(red: 20.0/255, green: 164.0/255, blue: 226.0/255, alpha: 1.0)
         
-        // change tint color of tab bar items
-        UITabBar.appearance().tintColor = UIColor(red: 21.0/255, green: 44.0/255, blue: 26.0/255, alpha: 1.0)
-        
-        /// change background/ tint color of tab bar
-        UITabBar.appearance().barTintColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
         
     }
 

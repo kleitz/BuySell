@@ -9,7 +9,7 @@
         <!--Segment View Controller-->
         <scene sceneID="omG-jU-AmE">
             <objects>
-                <viewController id="x18-N9-01e" customClass="SegmentViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="x18-N9-01e" customClass="SegmentViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QI1-L4-lOd"/>
                         <viewControllerLayoutGuide type="bottom" id="tP1-sx-1yL"/>
@@ -57,13 +57,13 @@
         <!--Listings Table View Controller-->
         <scene sceneID="6Jr-zr-dOr">
             <objects>
-                <tableViewController storyboardIdentifier="ListingsTableViewController" id="MjH-4V-Tyb" customClass="ListingsTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ListingsTableViewController" id="MjH-4V-Tyb" customClass="ListingsTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="109" sectionHeaderHeight="28" sectionFooterHeight="28" id="S2Q-5J-FUI">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell" rowHeight="109" id="rdX-C9-FRe" customClass="PostCell" customModule="esell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell" rowHeight="109" id="rdX-C9-FRe" customClass="PostCell" customModule="BuySell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="600" height="109"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rdX-C9-FRe" id="27P-jV-MXh">
@@ -200,7 +200,7 @@
         <!--Listings Collection View Controller-->
         <scene sceneID="dxb-cg-PMr">
             <objects>
-                <viewController storyboardIdentifier="ListingsCollectionViewController" id="i5z-e1-hx2" customClass="ListingsCollectionViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ListingsCollectionViewController" id="i5z-e1-hx2" customClass="ListingsCollectionViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oGe-WD-zIl"/>
                         <viewControllerLayoutGuide type="bottom" id="9Nl-AC-k11"/>
@@ -218,7 +218,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="RWa-em-kc7" customClass="CollectionViewCell" customModule="esell" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="RWa-em-kc7" customClass="CollectionViewCell" customModule="BuySell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="229" height="201"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -318,7 +318,7 @@
         <!--Transactions View Controller-->
         <scene sceneID="XoI-Ox-Bzt">
             <objects>
-                <viewController id="ws8-mv-Y98" customClass="TransactionsViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ws8-mv-Y98" customClass="TransactionsViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dDM-Fe-FZX"/>
                         <viewControllerLayoutGuide type="bottom" id="XZ4-2K-JvQ"/>
@@ -333,7 +333,7 @@
                                     <segment title="Buying"/>
                                     <segment title="Selling"/>
                                 </segments>
-                                <color key="tintColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.078431372550000003" green="0.64313725489999995" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FAr-Kk-c8C">
                                 <rect key="frame" x="282" y="303" width="37" height="37"/>
@@ -370,14 +370,14 @@
         <!--Buying Table View Controller-->
         <scene sceneID="nDp-oY-Ooc">
             <objects>
-                <tableViewController storyboardIdentifier="BuyingTableViewController" id="Pxn-gf-tsP" customClass="BuyingTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="BuyingTableViewController" id="Pxn-gf-tsP" customClass="BuyingTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="118" sectionHeaderHeight="28" sectionFooterHeight="28" id="rJP-Li-Yr7">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexBackgroundColor" red="0.0" green="0.6588235294" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="buyCell" rowHeight="118" id="amP-8h-dwp" customClass="BuyTableViewCell" customModule="esell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="buyCell" rowHeight="118" id="amP-8h-dwp" customClass="BuyTableViewCell" customModule="BuySell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="600" height="118"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="amP-8h-dwp" id="ZlD-jH-hRN">
@@ -524,13 +524,13 @@
         <!--Selling Table View Controller-->
         <scene sceneID="jlq-V0-G2c">
             <objects>
-                <tableViewController storyboardIdentifier="SellingTableViewController" id="UE2-UU-zRI" customClass="SellingTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SellingTableViewController" id="UE2-UU-zRI" customClass="SellingTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="BUI-KB-sX2">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="sellCell" rowHeight="80" id="VGC-sa-s5i" customClass="SellTableViewCell" customModule="esell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="sellCell" rowHeight="80" id="VGC-sa-s5i" customClass="SellTableViewCell" customModule="BuySell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="600" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VGC-sa-s5i" id="1c8-Td-HC7">
@@ -620,7 +620,7 @@
         <!--Profile Table View Controller-->
         <scene sceneID="d7i-MI-cu1">
             <objects>
-                <tableViewController id="Ner-6b-Hhd" customClass="ProfileTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Ner-6b-Hhd" customClass="ProfileTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3aY-xk-0Qf">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -705,7 +705,7 @@
         <!--Map View Controller-->
         <scene sceneID="Zq9-Lu-Eya">
             <objects>
-                <viewController id="5X9-U2-nGy" customClass="MapViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5X9-U2-nGy" customClass="MapViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RTn-SH-PMn"/>
                         <viewControllerLayoutGuide type="bottom" id="vRW-NM-fZ3"/>
@@ -739,7 +739,7 @@
         <!--Add Item Table View Controller-->
         <scene sceneID="yev-UT-epl">
             <objects>
-                <tableViewController id="Mfa-i4-7Oq" customClass="AddItemTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Mfa-i4-7Oq" customClass="AddItemTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="N56-Xc-zDz">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -971,7 +971,7 @@
         <!--Pickup Area-->
         <scene sceneID="bbU-23-IC7">
             <objects>
-                <viewController storyboardIdentifier="PickMapLocationViewController" title="Pickup Area" id="6ud-yh-Nte" customClass="PickMapLocationViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PickMapLocationViewController" title="Pickup Area" id="6ud-yh-Nte" customClass="PickMapLocationViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4MD-ll-ZZa"/>
                         <viewControllerLayoutGuide type="bottom" id="RNb-QK-0x9"/>
@@ -1061,7 +1061,7 @@
         <!--Add Item Background View Controller-->
         <scene sceneID="hDh-xD-rgn">
             <objects>
-                <viewController id="nPE-A6-4vn" customClass="AddItemBackgroundViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nPE-A6-4vn" customClass="AddItemBackgroundViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gzM-bT-G2D"/>
                         <viewControllerLayoutGuide type="bottom" id="uaG-bf-ASn"/>
@@ -1080,7 +1080,7 @@
         <!--Item Detail View Controller-->
         <scene sceneID="KSW-zd-mlL">
             <objects>
-                <viewController id="VlN-Tg-qn2" customClass="ItemDetailViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VlN-Tg-qn2" customClass="ItemDetailViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ott-Pb-Y4B"/>
                         <viewControllerLayoutGuide type="bottom" id="Mea-M8-poF"/>
@@ -1170,7 +1170,7 @@
         <!--Seller Info View Controller-->
         <scene sceneID="5fV-Dr-Iz6">
             <objects>
-                <viewController storyboardIdentifier="SellerInfoViewController" id="tYF-n6-Agg" customClass="SellerInfoViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SellerInfoViewController" id="tYF-n6-Agg" customClass="SellerInfoViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EPP-1B-iyw"/>
                         <viewControllerLayoutGuide type="bottom" id="8mx-k6-pZW"/>
@@ -1244,7 +1244,7 @@
         <!--Checkout View Controller-->
         <scene sceneID="IcZ-7c-5qc">
             <objects>
-                <viewController id="cbg-4o-37x" customClass="CheckoutViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cbg-4o-37x" customClass="CheckoutViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yOb-6f-s2f"/>
                         <viewControllerLayoutGuide type="bottom" id="gMr-Tt-6jC"/>
@@ -1299,7 +1299,7 @@
         <!--Item Detail Table View Controller-->
         <scene sceneID="4Im-Ti-YRV">
             <objects>
-                <tableViewController storyboardIdentifier="ItemDetailTableViewController" id="lic-aR-QMg" customClass="ItemDetailTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ItemDetailTableViewController" id="lic-aR-QMg" customClass="ItemDetailTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="eWD-bo-clg">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1477,25 +1477,22 @@
                                             <color key="backgroundColor" red="0.94901960780000005" green="0.93725490199999995" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="70" id="Oth-wE-VFb">
-                                        <rect key="frame" x="0.0" y="359" width="600" height="70"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="71" id="Oth-wE-VFb">
+                                        <rect key="frame" x="0.0" y="359" width="600" height="71"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="Oth-wE-VFb" id="ZwU-3k-jzY">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oth-wE-VFb" id="ZwU-3k-jzY">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lo1-qo-nKv">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lo1-qo-nKv">
                                                     <rect key="frame" x="10" y="10" width="50" height="50"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="50" id="98c-v4-gOm"/>
-                                                        <constraint firstAttribute="width" constant="50" id="TmY-jK-l1p"/>
+                                                        <constraint firstAttribute="width" constant="50" id="1Ue-JF-vNd"/>
+                                                        <constraint firstAttribute="height" constant="50" id="oAV-7m-f2Y"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum is a pseudo-Latin text used in web design, typographyhe visual elements" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Wq-bK-S51">
-                                                    <rect key="frame" x="70" y="-17" width="512" height="34"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="34" id="oVr-Bb-7xm"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="68" y="18" width="514" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1503,34 +1500,55 @@
                                             </subviews>
                                             <color key="backgroundColor" red="0.98823529409999999" green="0.98039215690000003" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="topMargin" constant="2" id="16z-tj-Ltl"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="0Wq-bK-S51" secondAttribute="bottom" id="21G-UF-8dW"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="3eN-k7-zeQ"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="0Wq-bK-S51" secondAttribute="trailing" constant="10" id="48u-Gb-tF2"/>
                                                 <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="0Wq-bK-S51" secondAttribute="centerY" id="4UN-pP-Xd4"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="top" constant="10" id="4vR-9h-Xvr"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="leading" secondItem="lo1-qo-nKv" secondAttribute="trailing" constant="10" id="5de-FP-gh8"/>
-                                                <constraint firstItem="0Wq-bK-S51" firstAttribute="leading" secondItem="lo1-qo-nKv" secondAttribute="trailing" constant="10" id="5fg-ht-RgH"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="ATM-2a-hNu"/>
                                                 <constraint firstItem="lo1-qo-nKv" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="top" constant="10" id="C2d-ot-kKm"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="0Wq-bK-S51" secondAttribute="centerY" id="GQc-sT-5y7"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="Gpp-q6-DbE"/>
+                                                <constraint firstItem="0Wq-bK-S51" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="topMargin" constant="10" id="IcV-ZH-oWX"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="leading" secondItem="ZwU-3k-jzY" secondAttribute="leadingMargin" constant="62" id="N8x-mZ-PYl"/>
+                                                <constraint firstItem="0Wq-bK-S51" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="RI7-KG-hsR"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="leading" secondItem="ZwU-3k-jzY" secondAttribute="leadingMargin" constant="10" id="VeL-YE-0sw"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="VeV-Z1-PUa"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="topMargin" id="WBh-fW-SXA"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="0Wq-bK-S51" secondAttribute="centerY" id="Yxe-4y-VP7"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="centerY" secondItem="lo1-qo-nKv" secondAttribute="centerY" id="cR7-97-mvm"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="caR-lu-kcV"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="leading" secondItem="ZwU-3k-jzY" secondAttribute="leadingMargin" constant="2" id="eyD-E9-m68"/>
+                                                <constraint firstItem="0Wq-bK-S51" firstAttribute="leading" secondItem="lo1-qo-nKv" secondAttribute="trailing" constant="8" symbolic="YES" id="gx2-fl-pMX"/>
+                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="top" secondItem="ZwU-3k-jzY" secondAttribute="topMargin" constant="2" id="mNR-dg-PXx"/>
                                                 <constraint firstItem="0Wq-bK-S51" firstAttribute="centerY" secondItem="lo1-qo-nKv" secondAttribute="centerY" id="n6F-Ab-bHn"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="0Wq-bK-S51" secondAttribute="trailing" constant="10" id="sCK-yR-B1w"/>
-                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="centerY" secondItem="ZwU-3k-jzY" secondAttribute="centerY" id="xbx-hV-MMc"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="lo1-qo-nKv" secondAttribute="bottom" constant="2" id="sEK-Sq-H8m"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="0Wq-bK-S51" secondAttribute="trailing" constant="10" id="tAa-TL-8lY"/>
+                                                <constraint firstAttribute="bottom" secondItem="lo1-qo-nKv" secondAttribute="bottom" constant="10" id="uZE-nS-fY8"/>
                                                 <constraint firstAttribute="topMargin" secondItem="lo1-qo-nKv" secondAttribute="top" constant="10" id="xcS-Pc-zNl"/>
-                                                <constraint firstItem="lo1-qo-nKv" firstAttribute="leading" secondItem="ZwU-3k-jzY" secondAttribute="leading" constant="10" id="y51-tB-rjv"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="lo1-qo-nKv" secondAttribute="bottom" constant="10" id="z0V-Pc-vJB"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
+                                                    <exclude reference="16z-tj-Ltl"/>
                                                     <exclude reference="4UN-pP-Xd4"/>
+                                                    <exclude reference="C2d-ot-kKm"/>
+                                                    <exclude reference="Gpp-q6-DbE"/>
+                                                    <exclude reference="VeV-Z1-PUa"/>
+                                                    <exclude reference="Yxe-4y-VP7"/>
+                                                    <exclude reference="caR-lu-kcV"/>
+                                                    <exclude reference="mNR-dg-PXx"/>
+                                                    <exclude reference="sEK-Sq-H8m"/>
                                                     <exclude reference="xcS-Pc-zNl"/>
                                                     <exclude reference="21G-UF-8dW"/>
                                                     <exclude reference="3eN-k7-zeQ"/>
                                                     <exclude reference="48u-Gb-tF2"/>
                                                     <exclude reference="5de-FP-gh8"/>
+                                                    <exclude reference="ATM-2a-hNu"/>
+                                                    <exclude reference="IcV-ZH-oWX"/>
                                                     <exclude reference="N8x-mZ-PYl"/>
+                                                    <exclude reference="RI7-KG-hsR"/>
                                                     <exclude reference="VeL-YE-0sw"/>
                                                     <exclude reference="WBh-fW-SXA"/>
                                                     <exclude reference="cR7-97-mvm"/>
@@ -1565,7 +1583,7 @@
         <!--Checkout Table View Controller-->
         <scene sceneID="qeV-AY-9h3">
             <objects>
-                <tableViewController storyboardIdentifier="CheckoutTableViewController" id="ImH-LJ-Pz3" customClass="CheckoutTableViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="CheckoutTableViewController" id="ImH-LJ-Pz3" customClass="CheckoutTableViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="31" sectionHeaderHeight="18" sectionFooterHeight="18" id="Gfc-UZ-cV2">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1684,16 +1702,16 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cashicon" translatesAutoresizingMaskIntoConstraints="NO" id="Jti-N6-Q1P">
+                                                    <rect key="frame" x="284" y="38" width="32" height="32"/>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIM-Ay-mBY">
-                                                    <rect key="frame" x="18" y="53" width="564" height="29"/>
+                                                    <rect key="frame" x="18" y="74" width="564" height="29"/>
                                                     <string key="text">Your offer to the seller will expire if rejected or not responded to within 72 hours. If accepted, you must bring cash when you pick up the item.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cashicon" translatesAutoresizingMaskIntoConstraints="NO" id="Jti-N6-Q1P">
-                                                    <rect key="frame" x="148" y="13" width="32" height="32"/>
-                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" red="0.98823529409999999" green="0.98039215690000003" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -1702,9 +1720,11 @@
                                                 <constraint firstItem="U60-c3-gbT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Jv4-LL-Ct0" secondAttribute="leadingMargin" constant="10" id="2gg-J4-YhB"/>
                                                 <constraint firstItem="fIM-Ay-mBY" firstAttribute="centerX" secondItem="Jv4-LL-Ct0" secondAttribute="centerX" id="2qo-gO-9r0"/>
                                                 <constraint firstItem="U60-c3-gbT" firstAttribute="centerX" secondItem="Jv4-LL-Ct0" secondAttribute="centerX" id="Afd-pP-ACE"/>
-                                                <constraint firstItem="fIM-Ay-mBY" firstAttribute="top" secondItem="U60-c3-gbT" secondAttribute="bottom" constant="14" id="Apr-H2-2W2"/>
+                                                <constraint firstItem="fIM-Ay-mBY" firstAttribute="top" secondItem="U60-c3-gbT" secondAttribute="bottom" constant="35" id="Apr-H2-2W2"/>
                                                 <constraint firstItem="Jti-N6-Q1P" firstAttribute="centerY" secondItem="U60-c3-gbT" secondAttribute="centerY" id="BhI-cg-rKy"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="fIM-Ay-mBY" secondAttribute="trailing" constant="10" id="HoA-uC-owE"/>
+                                                <constraint firstItem="Jti-N6-Q1P" firstAttribute="centerX" secondItem="Jv4-LL-Ct0" secondAttribute="centerX" id="In9-wA-soT"/>
+                                                <constraint firstItem="Jti-N6-Q1P" firstAttribute="top" secondItem="U60-c3-gbT" secondAttribute="bottom" constant="-1" id="LZN-yb-C43"/>
                                                 <constraint firstItem="Jti-N6-Q1P" firstAttribute="top" secondItem="Jv4-LL-Ct0" secondAttribute="topMargin" id="RTr-eP-V4v"/>
                                                 <constraint firstItem="U60-c3-gbT" firstAttribute="leading" secondItem="Jti-N6-Q1P" secondAttribute="trailing" constant="8" id="ax8-Xz-4YA"/>
                                                 <constraint firstItem="fIM-Ay-mBY" firstAttribute="leading" secondItem="Jv4-LL-Ct0" secondAttribute="leadingMargin" constant="10" id="cVl-c3-qt9"/>
@@ -1716,11 +1736,13 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
+                                                    <exclude reference="ax8-Xz-4YA"/>
+                                                    <exclude reference="fHT-cZ-wKz"/>
                                                     <exclude reference="0q1-0p-Fac"/>
                                                     <exclude reference="2MY-RW-4iI"/>
+                                                    <exclude reference="BhI-cg-rKy"/>
                                                     <exclude reference="RTr-eP-V4v"/>
                                                     <exclude reference="gLO-WH-ZhK"/>
-                                                    <exclude reference="ax8-Xz-4YA"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1744,7 +1766,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -1752,18 +1774,30 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BuySell" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuL-ig-Bjl">
+                                <rect key="frame" x="208" y="109" width="184" height="58"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="50"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.078431372549019607" green="0.64313725490196072" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="fuL-ig-Bjl" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="45" id="E4Y-nZ-1KL"/>
+                            <constraint firstItem="fuL-ig-Bjl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="P2y-VU-ztA"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aXO-sb-MyV"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1075" y="-23"/>
+            <point key="canvasLocation" x="1075" y="-251"/>
         </scene>
         <!--Browse-->
         <scene sceneID="9km-ZO-kFn">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tzB-v9-2A4" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tzB-v9-2A4" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <tabBarItem key="tabBarItem" title="Browse" image="shopbag" id="3Vu-eE-m6f"/>
                     <toolbarItems/>
@@ -1786,7 +1820,7 @@
         <!--Login NavigationController-->
         <scene sceneID="m4l-tV-blg">
             <objects>
-                <navigationController title="Login NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="opR-2w-4aV" sceneMemberID="viewController">
+                <navigationController title="Login NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="opR-2w-4aV" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xow-aB-XRn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1799,16 +1833,15 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YIz-kF-KRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="383" y="-264"/>
+            <point key="canvasLocation" x="422" y="-251"/>
         </scene>
         <!--Post Tab Bar Controller-->
         <scene sceneID="N7a-hf-pBK">
             <objects>
-                <tabBarController storyboardIdentifier="mainNavig" automaticallyAdjustsScrollViewInsets="NO" id="otS-5H-noJ" customClass="PostTabBarController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="mainNavig" automaticallyAdjustsScrollViewInsets="NO" id="otS-5H-noJ" customClass="PostTabBarController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="QTM-6I-nB7">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.98823529409999999" green="0.98039215690000003" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="tzB-v9-2A4" kind="relationship" relationship="viewControllers" id="5CE-c4-Hhv"/>
@@ -1825,7 +1858,7 @@
         <!--Me-->
         <scene sceneID="0FV-JN-f1N">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xgW-cg-PfA" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xgW-cg-PfA" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Me" image="profile" id="aAc-iW-fpc"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XJN-uC-S61">
@@ -1844,7 +1877,7 @@
         <!--My Offers-->
         <scene sceneID="g2f-ld-Fyz">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="twB-vK-OJV" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="twB-vK-OJV" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Offers" image="exchange" id="uLQ-sp-nxi"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7IF-qg-S05">
@@ -1863,7 +1896,7 @@
         <!--Sell-->
         <scene sceneID="5Uv-fQ-0Bc">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oRj-1a-mZr" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oRj-1a-mZr" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Sell" image="camera" id="fN3-9v-smO"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="CEV-ZF-fV2">
@@ -1882,7 +1915,7 @@
         <!--Map-->
         <scene sceneID="qO3-7c-oh2">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QbU-H2-dHx" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QbU-H2-dHx" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="Pq1-dQ-Ibs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="A1M-ze-ymE">
@@ -1901,7 +1934,7 @@
         <!--Navigation Controller-->
         <scene sceneID="CWx-D0-KZu">
             <objects>
-                <navigationController storyboardIdentifier="AddItemView" automaticallyAdjustsScrollViewInsets="NO" id="xyu-3j-AGc" customClass="NavigationController" customModule="esell" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AddItemView" automaticallyAdjustsScrollViewInsets="NO" id="xyu-3j-AGc" customClass="NavigationController" customModule="BuySell" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hFf-L7-Beh">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

@@ -21,6 +21,8 @@ class ListingsTableViewController: UITableViewController {
 
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
+        tableView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
+        
     }
     
     // MARK: - Table view data source

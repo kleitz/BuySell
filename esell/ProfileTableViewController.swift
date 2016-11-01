@@ -41,6 +41,7 @@ class ProfileTableViewController: UITableViewController {
         if let url = NSURL(string: userImageURL) {
             if let imageData = NSData(contentsOfURL: url) {
                 self.profileImage.image = UIImage(data: imageData)
+                //self.profileImage.
             }
         }
         
@@ -70,5 +71,11 @@ class ProfileTableViewController: UITableViewController {
         
         appDelegate.window?.rootViewController = loginPageNav
         
+    }
+    
+
+    private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
+        view.clipsToBounds = true
+        view.layer.cornerRadius = cornerRadiusParams
     }
 }
