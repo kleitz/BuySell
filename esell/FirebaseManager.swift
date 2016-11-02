@@ -538,11 +538,7 @@ class FirebaseManager {
     // Grab ALL bids by a UID
     
     func fetchBidsByUserID(userID uid: String, withCompletionHandler: (bidsCreated: [BidForItem])-> Void ){
-        // wront way of writing query
-        // ref.child("bids").queryEqualToValue(uid).observeSingleEventOfType(.Value)
-        
-        // correct way
-        
+
         // note: limit to 25
         
         ref.child("bids").queryOrderedByChild("bidder_id").queryEqualToValue(uid).queryLimitedToLast(25).observeEventType(.Value, withBlock: { (snapshot
@@ -591,11 +587,11 @@ class FirebaseManager {
                     withCompletionHandler(bidsCreated: bidArray)
                     
                 }
+            } else {
+                withCompletionHandler(bidsCreated: [BidForItem]())
             }
             }, withCancelBlock: { (error) in
                 print("fetchBIDS error: \(error.localizedDescription)")
-                
-                
                 // TODO
         })
         

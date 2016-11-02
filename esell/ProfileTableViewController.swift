@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 
+
 class ProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var profileImage: UIImageView!
@@ -21,6 +22,11 @@ class ProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        
+
+        
+        
 
         self.navigationItem.title = "Profile"
         
@@ -41,7 +47,9 @@ class ProfileTableViewController: UITableViewController {
         if let url = NSURL(string: userImageURL) {
             if let imageData = NSData(contentsOfURL: url) {
                 self.profileImage.image = UIImage(data: imageData)
-                //self.profileImage.
+                self.profileImage.contentMode = .ScaleAspectFill
+                
+                self.roundUIView(self.profileImage, cornerRadiusParams: self.profileImage.frame.size.width / 2)
             }
         }
         

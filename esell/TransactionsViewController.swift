@@ -120,7 +120,6 @@ class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, 
             
         case Segment.postsBuying.rawValue:
             activityIndicator.startAnimating()
-            print("  > selected segment: BIDS")
         
             // set container view content
             
@@ -133,8 +132,7 @@ class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, 
             
         case Segment.postsSelling.rawValue:
             activityIndicator.startAnimating()
-            print("  > selected segment: POSTS")
-
+            
             // set container view content
             
             let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SellingTableViewController") as! SellingTableViewController

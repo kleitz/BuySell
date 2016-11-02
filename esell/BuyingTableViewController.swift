@@ -32,6 +32,7 @@ class BuyingTableViewController: UITableViewController {
     
     var delegate: BuyingStillLoadingDelegate?
 
+    var hasNoBids: Bool = false
     
     
     
@@ -44,12 +45,23 @@ class BuyingTableViewController: UITableViewController {
         let currentUser = getUserID()
         
         fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
+            
             print("returning bidsCreated \(bidsCreated)")
             
-            
-            // SAVE CELL DATA
+            // Save data (arrays that get appended should be reset to empty)
+            self.sectionPostsArray = []
             self.cellBidsArray = bidsCreated
             
+            
+            if self.cellBidsArray.count == 0 {
+                
+                self.hasNoBids = true
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tableView.reloadData()
+                }
+                
+            }
             
             for bid in self.cellBidsArray {
                 
@@ -89,9 +101,6 @@ class BuyingTableViewController: UITableViewController {
                     self.delegate?.stopLoading(self, isFinishedLoading: true)
                 }
             }
-            
-            
-            
         }
         
     }
@@ -135,39 +144,8 @@ class BuyingTableViewController: UITableViewController {
         
         return sectionPostsArray.count
     }
-
-    
-//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 35.0
-//    }
-//    
-//    
-//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        
-//        // Create UIView from the custom nib
-//        
-//        let headerView = UINib(nibName: "SectionHeaderView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! SectionHeaderView
-//        
-//        // Use autolayout resizing
-//        
-//        headerView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
-//        
-//        headerView.titleLabel.text = ""
-//        headerView.priceLabel.text = ""
-//        
-//        
-//        for index in 0...section {
-//            if let postIBidOn = sectionPostsArray[safe: index] {
-//                headerView.titleLabel.text = postIBidOn.title
-//                headerView.priceLabel.text = postIBidOn.formattedPrice
-//            }
-//        }
-//
-//        return headerView
-//    }
-//    
+   
     //MARK: Table view: NumberOFROWS/CELLS
-    
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -182,8 +160,10 @@ class BuyingTableViewController: UITableViewController {
         // set UI as hidden for cell, if sectionCountt=0
         setDefaultCellUI(cell, isHidden: true)
         
-        
-        if sectionPostsArray.count > 0 {
+        if hasNoBids == true {
+            cell.itemTitle.hidden = false
+            cell.itemTitle.text = "You haven't sent any offers"
+        } else if sectionPostsArray.count > 0 {
             
             // set UI as SHown for cell, if there are sections.
             setDefaultCellUI(cell, isHidden: false)
@@ -211,9 +191,6 @@ class BuyingTableViewController: UITableViewController {
                     cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                     cell.offerStatus.text = "has ACCEPTED your offer"
                     cell.offerStatus.textColor = UIColor.darkTextColor()
-                    
-                    
-                    
                     
                 case false:
                     // print("~~ MY BID WAS REJECTED")
@@ -268,8 +245,6 @@ class BuyingTableViewController: UITableViewController {
                                 // Display image (using main thread
                                 
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    
-                                    
                                     cell.userImage.image = image
                                     cell.userImage.contentMode = .ScaleAspectFill
                                     
