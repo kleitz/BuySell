@@ -89,7 +89,7 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         // Image handling
         
         // temp set image
-        cell.imageView.image = UIImage(named:"shopbag")
+        cell.imageView.image = UIImage(named:"pencart")
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             

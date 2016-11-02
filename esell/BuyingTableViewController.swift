@@ -16,10 +16,12 @@ class BuyingTableViewController: UITableViewController {
     // MARK: Data Variables
     
     // for section/header
-    var sectionPostsArray = [ItemListing]()  // { didSet { tableView.reloadData() } }
+    var sectionPostsArray = [ItemListing]()
     
     // for each section/header cell
-    var cellBidsArray = [BidForItem]()  // { didSet { tableView.reloadData() } }
+    var cellBidsArray = [BidForItem]()
+    
+    
     /// NOTE : I need a dictionary or something for this.
     /// the key is the sectionPoastArray.each . id 
     /// the value is a an Array of bidForItem
@@ -172,8 +174,8 @@ class BuyingTableViewController: UITableViewController {
             // MARK: Buying section: must exist. show my 1 bid under parent post
             
             let myOfferForPost = cellBidsArray[indexPath.section]
-            
-            
+            print("indexpath.section: \(indexPath.section)")
+            print("indexpath.row: \(indexPath.row)")
             cell.itemTitle.text = myOfferForPost.parentPostInfo?.title
             
             
@@ -190,13 +192,13 @@ class BuyingTableViewController: UITableViewController {
                     // print("~~ MY BID WAS ACCEPTED")
                     cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                     cell.offerStatus.text = "has ACCEPTED your offer"
-                    cell.offerStatus.textColor = UIColor.darkTextColor()
+                    cell.offerStatus.textColor = UIColor.lightGrayColor()
                     
                 case false:
                     // print("~~ MY BID WAS REJECTED")
                     cell.offerSentAmount.text = "You sent an offer of \(myOfferForPost.formattedAmount)"
                     cell.offerStatus.text = "has declined your offer"
-                    cell.offerStatus.textColor = UIColor.darkTextColor()
+                    cell.offerStatus.textColor = UIColor.lightGrayColor()
                 
                 }
                 
@@ -267,6 +269,39 @@ class BuyingTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let identifier = segue.identifier {
+            
+            switch identifier {
+                
+            case "segueFromBuyingToDetail":
+                
+                
+                guard let senderAsButton = sender as? UIButton,
+                let cell = senderAsButton.superview?.superview?.superview as? UITableViewCell else {
+                    fatalError()
+                }
+                
+                let rowIndex = self.tableView.indexPathForCell(cell)!.section
+                
+                guard let itemDetailController = segue.destinationViewController as? ItemDetailTableViewController else {
+                    fatalError("seg failed")
+                }
+                print("test rowinDex (.row): \(sectionPostsArray[rowIndex])")
+                
+                itemDetailController.post = sectionPostsArray[rowIndex]
+                
+
+            default: break
+            }
+        }
+        
+    }
+
+    
 
     
     // MARK: - Other
@@ -299,6 +334,8 @@ class BuyingTableViewController: UITableViewController {
         cell.offerStatus.hidden = isHidden
         cell.viewListingButton.hidden = isHidden
         cell.itemTitle.hidden = isHidden
+        
+        cell.headerView.hidden = isHidden
     }
     
     deinit {

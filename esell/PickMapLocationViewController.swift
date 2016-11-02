@@ -28,6 +28,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
     
     var searchController:UISearchController!
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     var annotation:MKAnnotation!
     
     var localSearchRequest:MKLocalSearchRequest!
@@ -45,6 +47,9 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         super.viewDidLoad()
         
         
+        // test
+        self.searchBar.delegate = self
+        
         
         
         // Set up title
@@ -59,7 +64,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         
         // Setup label/checkmark icon
-        self.locationLabel.text = "Press on map to drop a pin, or use search"
+        self.locationLabel.text = "Touch map or search to pin your city"
         self.checkmarkImage.hidden = true
         
         
@@ -93,9 +98,9 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         // Set up serach button as rightBarButton
         
-        let searchButton = UIBarButtonItem(title: "Search", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(showSearchBar))
+        //let searchButton = UIBarButtonItem(title: "Search", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(showSearchBar))
         
-        navigationItem.rightBarButtonItem = searchButton
+       // navigationItem.rightBarButtonItem = searchButton
         
         
         // Set up Label to show when user pins a location
@@ -203,20 +208,20 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         }
     }
     
-    
-    func showSearchBar(){
-        
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.hidesNavigationBarDuringPresentation = false
-        self.searchController.searchBar.delegate = self
-        self.presentViewController(searchController, animated: true, completion: nil)
-    }
+//    
+//    func showSearchBar(){
+//        
+//        searchController = UISearchController(searchResultsController: nil)
+//        searchController.hidesNavigationBarDuringPresentation = false
+//        self.searchController.searchBar.delegate = self
+//        self.presentViewController(searchController, animated: true, completion: nil)
+//    }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar){
         
         // dismiss search bar and present search results
         searchBar.resignFirstResponder()
-        self.dismissViewControllerAnimated(true, completion: nil)
+        
         if self.mapView.annotations.count != 0{
             annotation = self.mapView.annotations[0]
             self.mapView.removeAnnotation(annotation)
@@ -352,7 +357,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
                 // update current view's label
                 dispatch_async(dispatch_get_main_queue(), {
                     
-                    self.locationLabel.text = "Selected: \(city)"
+                    self.locationLabel.text = "\(city)"
                     
                     self.checkmarkImage.hidden = false
                     

@@ -116,7 +116,7 @@ class SellingTableViewController: UITableViewController {
     // Table view: SECTION/HEADER - [posts] go under here
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35.0
+        return 28.0
     }
     
     
@@ -251,17 +251,17 @@ class SellingTableViewController: UITableViewController {
             
             // Set up UI
 
-            cell.offerAmount.text = bidsForOnePost.formattedAmount
+            cell.offerAmount.text = "made an offer of \(bidsForOnePost.formattedAmount)"
             cell.offerPaymentImage.contentMode = .ScaleAspectFill
             
             cell.userName.text = bidsForOnePost.parentPostUserInfo?.name
             
-            switch bidsForOnePost.isPaidOnline {
-            case true:
-                cell.offerPaymentImage.image = UIImage(named: "crediticon")
-            case false:
-                cell.offerPaymentImage.image = UIImage(named: "cashicon")
-            }
+//            switch bidsForOnePost.isPaidOnline {
+//            case true:
+//                cell.offerPaymentImage.image = UIImage(named: "crediticon")
+//            case false:
+//                cell.offerPaymentImage.image = UIImage(named: "cashicon")
+//            }
             
             
             // stuff that requires querying for user from bidder_id: NAME, PROFILE PIC..
@@ -333,7 +333,7 @@ class SellingTableViewController: UITableViewController {
                 cell.acceptOfferButton.backgroundColor = UIColor(red: 143.0/255, green: 190.0/255, blue: 0/255, alpha: 1.0)
                 
                 cell.acceptOfferButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-                cell.acceptOfferButton.setTitle("Accept Offer", forState: .Normal)
+                cell.acceptOfferButton.setTitle("Accept", forState: .Normal)
                 
                 
             case true:
@@ -350,13 +350,13 @@ class SellingTableViewController: UITableViewController {
                     
                 case true:
                     
-                    cell.acceptOfferButton.setTitle("you accepted", forState: .Normal)
+                    cell.acceptOfferButton.setTitle("Accepted", forState: .Normal)
                     cell.acceptOfferButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
                     
                     
                 case false:
                     
-                    cell.acceptOfferButton.setTitle("declined", forState: .Normal)
+                    cell.acceptOfferButton.setTitle("Declined", forState: .Normal)
                     cell.acceptOfferButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
                     
                 }
@@ -407,9 +407,6 @@ class SellingTableViewController: UITableViewController {
         let confirmSaveOption = UIAlertAction(title: "Accept Bid", style: UIAlertActionStyle.Destructive, handler: {
             (alert: UIAlertAction!) -> Void in
             
-            
-            print(" > clicked CONFIRM SAVE BID")
-            
             // do save
             self.fireBase.updateAllBidsOfOnePost(parentPostID: acceptedBid.parentPostID, acceptedBidID: acceptedBid.bidID, withCompletionHandler:  { (isUpdated) in
                 if isUpdated == true {
@@ -419,11 +416,11 @@ class SellingTableViewController: UITableViewController {
                     acceptedBid.parentPostInfo?.isOpen = false
                     
                     print("----- [updateAllBids] acceptedBid.parentPostInfo?.isOpen, it hsould be set to false: \(acceptedBid.parentPostInfo?.isOpen)")
-                    //                    self.fireBase.fetchPostsForBrowse()
-                    
-                    self.tableView.reloadData()
-                    
+ 
                     // TODO need to write the conditionals for changing cell UI
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.tableView.reloadData()
+                    }
                 }
             })
             
@@ -443,8 +440,8 @@ class SellingTableViewController: UITableViewController {
     
     func popupNotifyPosted(){
         
-        let alertController = UIAlertController(title: "Bid Accepted", message:
-            "Your buyer is notified - contact them to set up your delivery!", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alertController = UIAlertController(title: "You Accepted an Offer", message:
+            "Your buyer is notified - set up contact for pickup.", preferredStyle: UIAlertControllerStyle.ActionSheet)
         
         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         
@@ -463,7 +460,7 @@ class SellingTableViewController: UITableViewController {
     }
     
     
-    // for image rounding for the button in tableView for accepting bid
+    // for image rounding
     
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true

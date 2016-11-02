@@ -13,6 +13,7 @@ import FBSDKLoginKit
 
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
+    @IBOutlet weak var guestLoginButton: UIButton!
 
     let loginButton: FBSDKLoginButton = {
         let button = FBSDKLoginButton()

@@ -9,11 +9,11 @@
 import UIKit
 
 class ItemDetailTableViewController: UITableViewController {
-
+    
     @IBOutlet weak var itemTitle: UILabel!
     
     @IBOutlet weak var itemImage: UIImageView!
-
+    
     @IBOutlet weak var itemDescription: UILabel!
     
     @IBOutlet weak var itemPrice: UILabel!
@@ -25,12 +25,13 @@ class ItemDetailTableViewController: UITableViewController {
     @IBOutlet weak var pickupDescription: UILabel!
     
     @IBOutlet weak var pickupIconImage: UIImageView!
-
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // vars for post info
     var post = ItemListing(id: "temp")
     
-    var postImage = UIImage()
+    var postImage: UIImage?
     
     
     // vars for Seller
@@ -39,9 +40,11 @@ class ItemDetailTableViewController: UITableViewController {
     var daysAgo = "less than 1 day"
     
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         tableView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
         
@@ -56,7 +59,7 @@ class ItemDetailTableViewController: UITableViewController {
         
         
         // Setup the UI elements with ItemListing attributes passed in
-
+        
         itemTitle.text = post.title
         
         itemPrice.text = post.formattedPrice
@@ -66,14 +69,56 @@ class ItemDetailTableViewController: UITableViewController {
         pickupIconImage.hidden = false
         pickupDescription.text = post.pickupDescription
         
+        if let postImage = postImage {
+            self.itemImage.image = postImage
+            self.itemImage.contentMode = .ScaleAspectFill
+        } else {
+            
+            activityIndicator.startAnimating()
+            
+            guard let imageURL = post.imageURL else {
+                fatalError()
+            }
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                if let url = NSURL(string: imageURL) {
+                    let urlRequest = NSURLRequest(URL: url)
+                    
+                    let task = NSURLSession.sharedSession().dataTaskWithRequest(urlRequest, completionHandler: { (data, response, error) in
+                        if error == nil {
+                            
+                            guard let unwrappedData = data else {
+                                print("Error converting image")
+                                return
+                            }
+                            
+                            guard let image = UIImage(data: unwrappedData) else {
+                                print("Error converting image")
+                                return
+                            }
+                            dispatch_async(dispatch_get_main_queue(), {
+                                
+                                self.activityIndicator.stopAnimating()
+                                
+                                self.postImage = image
+                                self.itemImage.image = image
+                                self.itemImage.contentMode = .ScaleAspectFill
+                                
+                            })
+                            
+                        } else {
+                            print(error?.localizedDescription)
+                        }
+                    })
+                    
+                    task.resume()
+                }
+            }
+        }
         
-        itemImage.image = postImage
-        itemImage.contentMode = .ScaleAspectFill
-    
-
         
         // Handle date for posted how many days ago
-
+        
         let now: NSDate = NSDate()
         
         switch now.daysFrom(post.createdDate) {
@@ -84,7 +129,7 @@ class ItemDetailTableViewController: UITableViewController {
         default: daysAgo = String("\(now.daysFrom(post.createdDate)) days ago")
             
         }
-    
+        
         
         // Query Firebase to get SELLER INFO to appear, use author UID to get name
         let fireBase = FirebaseManager()
@@ -95,10 +140,10 @@ class ItemDetailTableViewController: UITableViewController {
             
             self.loadSellerInfo(self.sellerAsUser)
         }
-
+        
         
     }
-
+    
     
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -119,7 +164,7 @@ class ItemDetailTableViewController: UITableViewController {
         
     }
     
-
+    
     func loadSellerInfo(sellerData: User) {
         
         // Background for get profile image
@@ -172,9 +217,9 @@ class ItemDetailTableViewController: UITableViewController {
         // Display seller name as text
         
         self.itemSeller.text = ("Posted \(self.daysAgo) \n\(self.sellerAsUser.name ?? "")")
-
+        
     }
-
+    
     
     // for image rounding
     
@@ -183,7 +228,7 @@ class ItemDetailTableViewController: UITableViewController {
         view.layer.cornerRadius = cornerRadiusParams
     }
     
-
+    
     
 }
 

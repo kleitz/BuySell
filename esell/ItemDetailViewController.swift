@@ -15,6 +15,7 @@ import UIKit
 class ItemDetailViewController: UIViewController, UIViewControllerTransitioningDelegate  {
     
     
+    @IBOutlet weak var makeOfferButton: UIButton!
 
     
     @IBOutlet weak var containerView: UIView!
@@ -35,6 +36,7 @@ class ItemDetailViewController: UIViewController, UIViewControllerTransitioningD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        makeOfferButton.layer.cornerRadius = 10
         
         // Navigation UI stuff
         self.navigationItem.title = "Item Detail"

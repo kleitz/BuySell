@@ -26,6 +26,7 @@ class BuyTableViewCell: UITableViewCell {
     @IBOutlet weak var itemTitle: UILabel!
     @IBOutlet weak var viewListingButton: UIButton!
     
+    @IBOutlet weak var headerView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

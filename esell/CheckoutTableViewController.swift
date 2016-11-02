@@ -64,7 +64,7 @@ class CheckoutTableViewController: UITableViewController, UITextViewDelegate {
         // set Description UITextField
         
         offerAmount.delegate = self
-        offerAmount.text = "\(post.formattedPriceWithoutSymbol)"
+        offerAmount.text = ""
         offerAmount.textColor = UIColor.lightGrayColor()
         offerAmount.layer.cornerRadius = 5.0
         offerAmount.layer.borderWidth = 0.5
@@ -90,24 +90,14 @@ class CheckoutTableViewController: UITableViewController, UITextViewDelegate {
     
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "0"
+            textView.text = nil
             textView.textColor = UIColor.lightGrayColor()
         }
     }
     
     
     
-    func isStringNumerical(string : String) -> Bool {
-        // Only allow numbers. Look for anything not a number.
-        let range = string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
-        return (range == nil)
-    }
     
-    // Dismiss Keyboard functions
-    func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
-    }
     
     // MARK: - TableView settings
     
@@ -139,6 +129,16 @@ class CheckoutTableViewController: UITableViewController, UITextViewDelegate {
         footerView.contentView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
     }
     
+    
+    
+    
+    
+    
+    // Dismiss Keyboard functions
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
     
     
     deinit {

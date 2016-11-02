@@ -21,8 +21,6 @@ class ListingsTableViewController: UITableViewController {
 
         sourceViewController = self.parentViewController?.tabBarController as! PostTabBarController
         
-        tableView.backgroundColor = UIColor(red: 252.0/255, green: 250.0/255, blue: 244.0/255, alpha: 1.0)
-        
     }
     
     // MARK: - Table view data source
@@ -52,7 +50,7 @@ class ListingsTableViewController: UITableViewController {
         cell.locationText.text = post.pickupDescription.componentsSeparatedByString(",")[0] ?? ""
         
         // temp set image
-        cell.photo.image = UIImage(named:"shopbag")
+        cell.photo.image = UIImage(named:"pencart")
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             

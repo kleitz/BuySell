@@ -37,12 +37,13 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         print("post received??? in CheckoutViewController \(post.id) & price: \(post.price)")
         
         // Add function to button
-        
+        checkoutButton.layer.cornerRadius = 10
         checkoutButton.addTarget(self, action: #selector(prepareSaveOffer), forControlEvents: .TouchUpInside)
-        
         
         
         // Add the TableViewController into the viewcontroller
@@ -81,8 +82,11 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
         
         let postID = childViewController.post.id
         let price = childViewController.post.price
-        
-        
+
+        if isStringNumerical(childViewController.offerAmount.text) == false || childViewController.offerAmount.text == "" || childViewController.offerAmount.text == "0" {
+            
+            popupNotifyIncomplete("You must enter a valid offer amount")
+        }
         
         // Pass to Firebase
         
@@ -104,6 +108,14 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
             popupNotifyPosted(title: "Error sending bid", message: "Please try again, something went wrong")
         }
     }
+    
+    
+    func isStringNumerical(string : String) -> Bool {
+        // Only allow numbers. Look for anything not a number.
+        let range = string.rangeOfCharacterFromSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        return (range == nil)
+    }
+    
     
     
     
@@ -137,6 +149,11 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
         )
         
         self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
+        view.clipsToBounds = true
+        view.layer.cornerRadius = cornerRadiusParams
     }
 
 

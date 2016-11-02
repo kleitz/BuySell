@@ -181,7 +181,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             annotationView!.rightCalloutAccessoryView = UIButton(type: .InfoLight)
 
             annotationView!.canShowCallout = true
-            annotationView!.image = UIImage(named: "shopbag")
+            annotationView!.image = UIImage(named: "shopbag_transparent")
             
             return annotationView
             
