@@ -1182,6 +1182,7 @@
                                 <exclude reference="U8e-tO-hs8"/>
                                 <exclude reference="oAi-1a-op2"/>
                                 <exclude reference="oxq-i1-wjB"/>
+                                <exclude reference="WKy-e5-QsD"/>
                                 <exclude reference="0Aq-dh-pgG"/>
                                 <exclude reference="1ya-O2-R0k"/>
                                 <exclude reference="201-u7-0aI"/>
@@ -1195,7 +1196,6 @@
                                 <exclude reference="h5e-5q-8gs"/>
                                 <exclude reference="oil-et-msD"/>
                                 <exclude reference="ywy-mZ-5QC"/>
-                                <exclude reference="WKy-e5-QsD"/>
                             </mask>
                         </variation>
                     </view>
@@ -1289,11 +1289,11 @@
                             <mask key="constraints">
                                 <exclude reference="1JC-W3-jlF"/>
                                 <exclude reference="zVj-Ks-q6h"/>
-                                <exclude reference="E96-mE-UDl"/>
-                                <exclude reference="NqN-dc-fgN"/>
                                 <exclude reference="FLH-Ck-pjc"/>
                                 <exclude reference="fh6-5Z-R7r"/>
                                 <exclude reference="j0P-OT-b9E"/>
+                                <exclude reference="E96-mE-UDl"/>
+                                <exclude reference="NqN-dc-fgN"/>
                                 <exclude reference="5Ef-Mv-QwA"/>
                                 <exclude reference="HyS-A4-IO4"/>
                                 <exclude reference="Qop-kF-5qJ"/>
