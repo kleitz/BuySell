@@ -86,11 +86,11 @@ class ProfileTableViewController: UITableViewController {
         
         let loginPage = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
         
-        let loginPageNav = UINavigationController(rootViewController: loginPage)
+        //let loginPageNav = UINavigationController(rootViewController: loginPage)
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        appDelegate.window?.rootViewController = loginPageNav
+        appDelegate.window?.rootViewController = loginPage
         
     }
     

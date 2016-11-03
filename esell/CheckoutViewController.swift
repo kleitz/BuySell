@@ -20,11 +20,10 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
 
     // MARK: - IBOutlets
     
-
-    @IBOutlet weak var mainContainerView: UIView!
     
     @IBOutlet weak var checkoutButton: UIButton!
     
+    @IBOutlet weak var mainContainerView: UIView!
     
     
     // MARK: - Data Variables
@@ -38,8 +37,7 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
+
         print("post received??? in CheckoutViewController \(post.id) & price: \(post.price)")
         
         // Add function to button
@@ -82,6 +80,8 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
         
         // guard for non nil values
         guard let childViewController = self.childViewControllers.first as? CheckoutTableViewController else {
+            
+            print("1st hcildview is: \(childViewControllers.first)")
             fatalError()
             //TODO change to return later
         }

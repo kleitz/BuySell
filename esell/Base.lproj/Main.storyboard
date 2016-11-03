@@ -1359,6 +1359,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="checkoutButton" destination="nNE-zc-OWO" id="vNa-ju-qwg"/>
+                        <outlet property="mainContainerView" destination="tpm-Ge-Wr3" id="6Fj-OB-T8b"/>
                         <segue destination="Ctw-xY-fEW" kind="unwind" identifier="unwindToDetail" unwindAction="unwindToDetail:" id="unT-6v-RJ0"/>
                     </connections>
                 </viewController>
@@ -1845,7 +1846,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bnG-zm-Ozk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3375" y="1288"/>
+            <point key="canvasLocation" x="3623" y="1330"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
