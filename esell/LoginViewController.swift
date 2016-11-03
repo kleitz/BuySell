@@ -62,8 +62,49 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         loginButton.delegate = self
         
+        
+        guestLoginButton.addTarget(self, action: #selector(loginGuest), forControlEvents: .TouchUpInside)
+        
     }
 
+    
+    func loginGuest() {
+        
+        FIRAuth.auth()?.signInAnonymouslyWithCompletion({ (user, error) in
+            
+            if let error = error {
+                print("[LoginControl] ERROR anonymous login -> error: \(error.localizedDescription)")
+                return
+            }
+            
+            
+            let isAnonymous = user!.anonymous  // true
+            let uid = user!.uid
+            
+            print("UID: \(uid) . isAnonymous: \(isAnonymous)")
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(uid, forKey: "uid")
+            defaults.setObject(nil, forKey: "userImageURL")
+            defaults.setObject("Guest User", forKey: "userName")
+            
+            // Success login, go to Main Page
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
+                
+                print("ERROR setting up main controller to go to")
+                return
+            }
+            
+            let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+            
+            appDelegate.window?.rootViewController = mainPage
+
+        })
+        
+        
+    }
+    
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError?) {
         

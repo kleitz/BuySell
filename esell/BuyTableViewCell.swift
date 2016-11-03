@@ -28,6 +28,8 @@ class BuyTableViewCell: UITableViewCell {
     
     @IBOutlet weak var headerView: UIView!
     
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

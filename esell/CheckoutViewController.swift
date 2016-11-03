@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 protocol FirebaseManagerBidDelegate: class {
     
@@ -73,6 +74,11 @@ class CheckoutViewController: UIViewController, FirebaseManagerBidDelegate  {
     // MARK: - FUNCTIONS
     
     func prepareSaveOffer() {
+        if FIRAuth.auth()?.currentUser?.anonymous == true {
+            popupNotifyIncomplete("You must log out as Guest User and register an account first")
+            return
+        }
+        
         
         // guard for non nil values
         guard let childViewController = self.childViewControllers.first as? CheckoutTableViewController else {

@@ -20,8 +20,7 @@ class SellTableViewCell: UITableViewCell {
     
     @IBOutlet weak var acceptOfferButton: UIButton!
     
-    
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
     

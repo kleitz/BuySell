@@ -19,13 +19,10 @@ class ProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var logoutButton: UIButton!
     
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        
-
-        
         
 
         self.navigationItem.title = "Profile"
@@ -34,14 +31,31 @@ class ProfileTableViewController: UITableViewController {
         // Remove table view seperator lines
         tableView.separatorStyle = .None
         
-        // get userInfo from NSUserDefaults
+
+        
+        guard let user = FIRAuth.auth()?.currentUser else {
+            print("ERROR")
+            return
+        }
+        
+        print("CUCRENT USER : \(user) displayNmae\(user.displayName). id: \(user.uid). is anonymous? \(user.anonymous)")
+        
+        
+        
+        if user.anonymous {
+            
+            self.profileName.text = "Guest User"
+            self.profileImage.image = UIImage(named:"profile_large")
+            
+        } else {
+        
+        self.profileName.text = user.displayName
         
         let defaults = NSUserDefaults.standardUserDefaults()
-    
         
-        guard let userImageURL = defaults.stringForKey("userImageURL"),
-            let userName = defaults.stringForKey("userName")  else {
-            fatalError("failed Profile")
+        guard let userImageURL = defaults.stringForKey("userImageURL") else {
+            print("Failed getting profile picture")
+            return
         }
         
         if let url = NSURL(string: userImageURL) {
@@ -52,8 +66,7 @@ class ProfileTableViewController: UITableViewController {
                 self.roundUIView(self.profileImage, cornerRadiusParams: self.profileImage.frame.size.width / 2)
             }
         }
-        
-        self.profileName.text = userName
+        }
 
         
         // attach function to logout button

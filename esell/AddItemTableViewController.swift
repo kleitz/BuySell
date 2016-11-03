@@ -87,13 +87,19 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         imagePicker.delegate = self
         
         
+        
+        // CHECK FOR ANONYMOUS LOGIN
+        
+        if FIRAuth.auth()?.currentUser?.anonymous == true {
+            popupNotifyWarnGuestUser()
+        }
+    
+        
         // Looks for single or multiple taps. FOr dismissing keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
-        
-        
-        
+    
+
         // Create tap gesture recognizer
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(selectImage))
@@ -355,6 +361,18 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    func popupNotifyWarnGuestUser(){
+        
+        let alertController = UIAlertController(title: "Wait!", message:
+            "You must log out as Guest User and register an account first", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler:{ action in self.closeModal() }))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    
+    
     func popupNotifyMissingPickupLocation(){
         
         let alertController = UIAlertController(title: "Wait!", message:
@@ -429,6 +447,15 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
     
     func closeModal() {
         if let parent = self.presentingViewController as? PostTabBarController {
+            parent.selectedIndex = parent.previousIndex
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    func closeModalFromPopup() {
+        if let parent = self.presentingViewController?.presentingViewController as? PostTabBarController {
             parent.selectedIndex = parent.previousIndex
         }
         

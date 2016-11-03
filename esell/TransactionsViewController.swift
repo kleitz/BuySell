@@ -60,6 +60,7 @@ class TransactionsViewController: UIViewController, BuyingStillLoadingDelegate, 
         self.navigationItem.title = "My Offers"
         
         setupSegmentedControl()
+
         
     }
     

@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol ItemDetailDelegate {
+    func buttonWasClicked(manager: ItemDetailTableViewController, didClick: Bool)
+}
+
+
 class ItemDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var itemTitle: UILabel!
@@ -28,6 +33,9 @@ class ItemDetailTableViewController: UITableViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var userProfileButton: UIButton!
+    
+    
     // vars for post info
     var post = ItemListing(id: "temp")
     
@@ -38,6 +46,10 @@ class ItemDetailTableViewController: UITableViewController {
     
     var sellerAsUser = User(id: "temp")
     var daysAgo = "less than 1 day"
+    
+    
+    // delegate for button click
+    var delegate: ItemDetailDelegate?
     
     
     
@@ -56,6 +68,10 @@ class ItemDetailTableViewController: UITableViewController {
         
         tableView.estimatedRowHeight = 70 // Something reasonable to help ios render your cells
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        
+        //Add action to butotn for Delegate
+        self.userProfileButton.addTarget(self, action: #selector(clickUserInfo), forControlEvents: .TouchUpInside)
         
         
         // Setup the UI elements with ItemListing attributes passed in
@@ -218,6 +234,11 @@ class ItemDetailTableViewController: UITableViewController {
         
         self.itemSeller.text = ("Posted \(self.daysAgo) \n\(self.sellerAsUser.name ?? "")")
         
+    }
+    
+    
+    func clickUserInfo(){
+        delegate?.buttonWasClicked(self, didClick: true)
     }
     
     

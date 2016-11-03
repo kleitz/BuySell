@@ -37,7 +37,6 @@ class BuyingTableViewController: UITableViewController {
     var hasNoBids: Bool = false
     
     
-    
     // MARK:- Lifecycle ViewWillAPPEAR
     
     override func viewWillAppear(animated: Bool) {
@@ -50,27 +49,26 @@ class BuyingTableViewController: UITableViewController {
             
             print("returning bidsCreated \(bidsCreated)")
             
+            
+            
             // Save data (arrays that get appended should be reset to empty)
             self.sectionPostsArray = []
             self.cellBidsArray = bidsCreated
             
             
-            if self.cellBidsArray.count == 0 {
-                
+            if bidsCreated.count == 0 {
                 self.hasNoBids = true
-
                 dispatch_async(dispatch_get_main_queue()) {
                     self.tableView.reloadData()
                 }
-                
             }
+            
             
             for bid in self.cellBidsArray {
                 
                 // for each bid, look up the parent post so we can display post info in the table
                 // for each bid, need to store a dictinoary of the [ BId ID : POST INFO ]
-                
-                
+        
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     
                     self.fireBase.lookupSinglePost(postID: bid.parentPostID, withCompletionHandler: { (post) in
@@ -164,6 +162,7 @@ class BuyingTableViewController: UITableViewController {
         
         if hasNoBids == true {
             cell.itemTitle.hidden = false
+            cell.headerView.hidden = false
             cell.itemTitle.text = "You haven't sent any offers"
         } else if sectionPostsArray.count > 0 {
             
@@ -325,10 +324,10 @@ class BuyingTableViewController: UITableViewController {
         return userID
     }
     
-
+    
     private func setDefaultCellUI(cell: BuyTableViewCell, isHidden: Bool) {
         
-        cell.offerSentAmount.hidden = isHidden  
+        cell.offerSentAmount.hidden = isHidden
         cell.userImage.hidden = isHidden
         cell.userName.hidden = isHidden
         cell.offerStatus.hidden = isHidden
@@ -337,6 +336,8 @@ class BuyingTableViewController: UITableViewController {
         
         cell.headerView.hidden = isHidden
     }
+    
+    
     
     deinit {
         
