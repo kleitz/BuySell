@@ -97,14 +97,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
         
         
         // Set up serach button as rightBarButton
-        
         //let searchButton = UIBarButtonItem(title: "Search", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(showSearchBar))
-        
        // navigationItem.rightBarButtonItem = searchButton
-        
-        
-        // Set up Label to show when user pins a location
-        
         
         
         
@@ -148,11 +142,7 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             mapView.addAnnotation(annotation)
             
             /// SAVE map annotation
-            //
-            //            let test = getClosestCityFromCoordinate(annotation.coordinate)
-            //
-            //            print("test: \(test)")
-            
+
             saveAnnotationToPreviousViewController(annotation.coordinate)
             
         }
@@ -207,8 +197,8 @@ class PickMapLocationViewController: UIViewController, CLLocationManagerDelegate
             mapView.showsUserLocation = false
         }
     }
+
     
-//    
 //    func showSearchBar(){
 //        
 //        searchController = UISearchController(searchResultsController: nil)

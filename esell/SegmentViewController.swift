@@ -109,13 +109,9 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
         
         segmentControl.addTarget(self, action: #selector(setupSegmentSwitchView), forControlEvents: UIControlEvents.ValueChanged)
 
-
         // Set default segment that is Selected upon load
         
         segmentControl.selectedSegmentIndex = Segment.collection.rawValue
-        
-//        tableViewController.view.hidden = false
-//        collectionViewController.view.hidden = true
 
     }
     
@@ -141,19 +137,12 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     
     lazy var tableViewController: ListingsTableViewController = {
         
-        // Load storyboard
-        
         let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
-        
-        // Instantiate view controller
         
         var viewController = storyboard.instantiateViewControllerWithIdentifier("ListingsTableViewController") as! ListingsTableViewController
         
-        // Add this as a CHILD view controller
-        
         self.addViewControllerAsChildViewController(viewController)
         print(" >> Segment.mainview: just added table view controller \n")
-        
         
         return viewController
         
@@ -163,15 +152,9 @@ class SegmentViewController: UIViewController, FirebaseManagerDelegate {
     
     lazy var collectionViewController: ListingsCollectionViewController = {
         
-        // Load storyboard
-        
         let storyboard = UIStoryboard(name:"Main", bundle: NSBundle.mainBundle())
-        
-        // Instantiate view controller
-        
+    
         var viewController = storyboard.instantiateViewControllerWithIdentifier("ListingsCollectionViewController") as! ListingsCollectionViewController
-        
-        // Add this as a CHILD view controller
         
         self.addViewControllerAsChildViewController(viewController)
         print(" >> Segment.mainview: just added collection view controller \n")

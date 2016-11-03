@@ -29,6 +29,24 @@ class SellingTableViewController: UITableViewController {
         
         super.viewWillAppear(animated)
         
+        
+    }
+    
+    
+    
+    // MARK: Lifecycle ViewDIDLOAD
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print(" >> ViewDidLoad. sellingTable loaded ")
+        
+        self.tableView.rowHeight = 70.0
+    
+        tableView.separatorStyle = .None
+        
+        
+        // DO DATA FETCH HERE INSTEAD OF VIEWWILLAPPEAR
+        
         print("count of array(posts): \(sectionPostsArray.count)")
         print("count of array(bids): \(cellBidsArray.count)")
         
@@ -77,22 +95,8 @@ class SellingTableViewController: UITableViewController {
                 })
                 
             }
-        
+            
         }
-    }
-    
-    
-    
-    // MARK: Lifecycle ViewDIDLOAD
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        print(" >> ViewDidLoad. sellingTable loaded ")
-        
-        self.tableView.rowHeight = 70.0
-        
-        // Remove table view seperator lines
-        tableView.separatorStyle = .None
         
     }
     
@@ -158,13 +162,13 @@ class SellingTableViewController: UITableViewController {
         
         
         // If the 1st post is not placeholder then...
+        
         // MARK: Selling section: case2. I have posts and may/maynot have bids for the posts.
         
         headerView.titleLabel.text = myPost.title
         headerView.priceLabel.hidden = true
         headerView.priceLabel.text = myPost.formattedPrice
 
-        // headerView.priceLabel.hidden = false
         
         return headerView
         

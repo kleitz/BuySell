@@ -26,7 +26,6 @@
 		848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68211DACF5D000AED515 /* FirebaseManager.swift */; };
 		848F68241DAE9B6100AED515 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68231DAE9B6100AED515 /* CheckoutViewController.swift */; };
 		848F68261DAE9C5800AED515 /* CheckoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68251DAE9C5800AED515 /* CheckoutTableViewController.swift */; };
-		848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68271DAF59FF00AED515 /* CreditCard.swift */; };
 		848F682C1DB0C25600AED515 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F682B1DB0C25600AED515 /* TransactionsViewController.swift */; };
 		8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849993891D992451006C050C /* ListingsTableViewController.swift */; };
 		8499938E1D9B5701006C050C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499938D1D9B5701006C050C /* User.swift */; };
@@ -72,7 +71,6 @@
 		848F68211DACF5D000AED515 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		848F68231DAE9B6100AED515 /* CheckoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
 		848F68251DAE9C5800AED515 /* CheckoutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckoutTableViewController.swift; sourceTree = "<group>"; };
-		848F68271DAF59FF00AED515 /* CreditCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCard.swift; sourceTree = "<group>"; };
 		848F682B1DB0C25600AED515 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		849993891D992451006C050C /* ListingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsTableViewController.swift; sourceTree = "<group>"; };
 		8499938D1D9B5701006C050C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -210,7 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				8499938D1D9B5701006C050C /* User.swift */,
-				848F68271DAF59FF00AED515 /* CreditCard.swift */,
 				8499938F1D9B5715006C050C /* ItemListing.swift */,
 				84BE85171DB24C0B0001FEF8 /* BidForItem.swift */,
 				848F68211DACF5D000AED515 /* FirebaseManager.swift */,
@@ -405,7 +402,6 @@
 				84E299481DA5DDFC00A7E7DB /* SellerInfoViewController.swift in Sources */,
 				84321A8E1DB9374000332DF4 /* SellTableViewCell.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
-				848F68281DAF5A0000AED515 /* CreditCard.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
 				84F445251DA7713800429AE7 /* MapViewController.swift in Sources */,
 				8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */,

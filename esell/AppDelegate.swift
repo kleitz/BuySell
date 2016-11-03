@@ -21,39 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
-        // Use/configure Firebase
-        
+
         FIRApp.configure()
-        
-//        print("---> [appdel] FIR AUTH VALUE: \(FIRAuth.auth()?.currentUser?.email) // \(FIRAuth.auth()?.currentUser?.uid) ")
-//        
-//        // Go to main view if alreayd has auth
-//        
-//        if ((FIRAuth.auth()?.currentUser) != nil) {
-//            
-//            print("---> [appdel] logged in already, so present main View")
-//            
-//            // Get a reference to the storyboard
-//            
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            
-//            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
-//                
-//                print("---> [appdel] ERROR setting up main controller to go to")
-//                
-//                fatalError()
-//            }
-//            
-//            // Present/set the view controller
-//            
-//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//            appDelegate.window?.rootViewController = mainPage
-//            
-//            
-//            print("---> [appdel] the root is set as : MAIN navig\n")
-//        }
-        
         
         Fabric.with([Crashlytics.self])
         
