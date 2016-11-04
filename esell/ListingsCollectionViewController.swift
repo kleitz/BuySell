@@ -161,7 +161,15 @@ class ListingsCollectionViewController: UIViewController, UICollectionViewDelega
         return cell
 
     }
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CollectionViewCell
+        
+        // Image handling to clear cache
 
+        cell.imageView.image = nil
+        
+    }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
