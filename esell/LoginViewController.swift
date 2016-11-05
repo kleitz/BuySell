@@ -24,6 +24,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var fbLoginButton: FBSDKLoginButton!
     
     @IBOutlet weak var emailLoginButton: UIButton!
+    
+    
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    
+    
+    
    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,6 +76,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         fbLoginButton.layer.cornerRadius = 10
         fbLoginButton.clipsToBounds = true
+        
+        
+        emailLoginButton.addTarget(self, action: #selector(loginWithEmail), forControlEvents: .TouchUpInside)
         
         emailLoginButton.layer.cornerRadius = 10
 
@@ -127,6 +137,57 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 //        
 //    }
 
+    func loginWithEmail() {
+        guard let email = emailTextField.text else {
+            return
+        }
+        guard let password = passwordTextField.text else {
+            return
+        }
+        
+        FIRAuth.auth()?.signInWithEmail(email, password: password, completion: { (user: FIRUser?, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+                
+            }
+            
+            // means success
+            
+            guard let userID = user?.uid else {
+                print("error")
+                return
+            }
+            
+            
+            // save FIRAuth's uid in UserDefaults
+            print("CURRENT USER IS \(userID)")
+            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(userID, forKey: "uid")
+            
+            //TODO maybe should change all the NSUserDefaults stuff to ONE PLACE instead of login? I'm not getting the name here...
+            
+            
+            // Success login, go to Main Page
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let mainPage = storyboard.instantiateViewControllerWithIdentifier("mainNavig") as? UITabBarController else {
+                
+                print("ERROR setting up main controller to go to")
+                return
+            }
+            
+            let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+            
+            appDelegate.window?.rootViewController = mainPage
+
+            
+        })
+       
+    }
+    
     
     func loginGuest() {
         

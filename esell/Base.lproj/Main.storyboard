@@ -2201,9 +2201,11 @@
                     <navigationItem key="navigationItem" id="aXO-sb-MyV"/>
                     <connections>
                         <outlet property="emailLoginButton" destination="VBL-y9-lGv" id="DZZ-kM-gwd"/>
+                        <outlet property="emailTextField" destination="id4-DP-Nw6" id="p6X-kV-pgW"/>
                         <outlet property="fbLoginButton" destination="yZo-Vc-Avl" id="2AW-rr-Bp8"/>
                         <outlet property="guestLoginButton" destination="ova-rN-xQN" id="omD-Xl-DKa"/>
                         <outlet property="loginView" destination="LmN-Pv-yZz" id="dTr-kA-2rz"/>
+                        <outlet property="passwordTextField" destination="zVa-gw-Dop" id="twO-cV-y76"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
