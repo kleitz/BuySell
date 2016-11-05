@@ -28,7 +28,7 @@ class FirebaseManager {
     
     // save user in database
     
-    func createNewUserInFirebase(uid: String, name: String, email: String, createdAt: NSObject, fbID: String, fbPicURL: String, fbURL: String ) {
+    func saveNewUserWithFacebookLogin(uid: String, name: String, email: String, fbID: String, fbPicURL: String, fbURL: String ) {
         
         let usersRef = ref.child("users").child(uid)
         
@@ -45,6 +45,25 @@ class FirebaseManager {
         })
         
     }
+    
+    func saveNewUserWithEmailLogin(uid: String, name: String, email: String) {
+        
+        let usersRef = ref.child("users").child(uid)
+        
+        let values: [NSObject:AnyObject] = ["name": name, "email": email, "created_at": FIRServerValue.timestamp(), "fb_id": "", "fb_url": "" , "fb_pic_url": ""]
+        
+        usersRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err?.localizedDescription)
+                return
+            }
+            
+            // print("[LoginControl] user info -> in firebase DB")
+            
+        })
+        
+    }
+    
     
     // Function for saving to Firebase with all POST INFO
     

@@ -19,6 +19,7 @@
 		84321A8E1DB9374000332DF4 /* SellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */; };
 		8437E4581DBF633F00DD469D /* ItemDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8437E4571DBF633F00DD469D /* ItemDetailTableViewController.swift */; };
 		8437E45A1DC04DF700DD469D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8437E4591DC04DF700DD469D /* NavigationController.swift */; };
+		843A3D701DCDFC3000D05814 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843A3D6F1DCDFC3000D05814 /* CreateAccountViewController.swift */; };
 		8440F4F21DC7728600F8672F /* BuyHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8440F4F11DC7728600F8672F /* BuyHeaderView.xib */; };
 		8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */; };
 		848F681A1DAB88BE00AED515 /* AddItemBackgroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */; };
@@ -64,6 +65,7 @@
 		84321A8D1DB9374000332DF4 /* SellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellTableViewCell.swift; sourceTree = "<group>"; };
 		8437E4571DBF633F00DD469D /* ItemDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailTableViewController.swift; sourceTree = "<group>"; };
 		8437E4591DC04DF700DD469D /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		843A3D6F1DCDFC3000D05814 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		8440F4F11DC7728600F8672F /* BuyHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BuyHeaderView.xib; sourceTree = "<group>"; };
 		8459C7371DBDBA55008E213F /* AddItemTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemTableViewController.swift; sourceTree = "<group>"; };
 		848F68191DAB88BE00AED515 /* AddItemBackgroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemBackgroundViewController.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			children = (
 				84DFB0EE1D98F15E00111668 /* Main.storyboard */,
 				84DFB0EC1D98F15E00111668 /* LoginViewController.swift */,
+				843A3D6F1DCDFC3000D05814 /* CreateAccountViewController.swift */,
 				848F681B1DABA8B900AED515 /* PostTabBarController.swift */,
 				8437E4591DC04DF700DD469D /* NavigationController.swift */,
 				84E1BCB41D9BEAD800315DB3 /* ModelObjects */,
@@ -378,6 +381,7 @@
 				84E1BCBA1D9C052C00315DB3 /* PostCell.swift in Sources */,
 				8403BA611DBC84A100193E10 /* PickMapLocationViewController.swift in Sources */,
 				84321A801DB8C56500332DF4 /* ProfileTableViewController.swift in Sources */,
+				843A3D701DCDFC3000D05814 /* CreateAccountViewController.swift in Sources */,
 				84321A881DB8FDE300332DF4 /* SellingTableViewController.swift in Sources */,
 				84DFB0ED1D98F15E00111668 /* LoginViewController.swift in Sources */,
 				848F68241DAE9B6100AED515 /* CheckoutViewController.swift in Sources */,

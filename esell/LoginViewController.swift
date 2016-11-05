@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Firebase
+
 import FirebaseAuth
 import FBSDKLoginKit
 
@@ -15,11 +15,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
     @IBOutlet weak var guestLoginButton: UIButton!
 
-    let loginButton: FBSDKLoginButton = {
-        let button = FBSDKLoginButton()
-        button.readPermissions = ["email", "public_profile"]
-        return button
-    }()
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    @IBOutlet weak var loginView: UIView!
+
+    @IBOutlet weak var signupView: UIView!
+
+    @IBOutlet weak var fbLoginButton: FBSDKLoginButton!
+    
+    @IBOutlet weak var emailLoginButton: UIButton!
    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,6 +35,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         if ((FIRAuth.auth()?.currentUser) != nil) {
             
             print("---> [login] logged in already, so present main View")
+            
             
             // Get a reference to the storyboard
             
@@ -48,7 +53,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             appDelegate.window?.rootViewController = mainPage
             
-            
             print("---> [login] the root is set as : MAIN navig\n")
         }
 
@@ -57,15 +61,71 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(loginButton)
-        loginButton.center = view.center
         
-        loginButton.delegate = self
-        
+        fbLoginButton.delegate = self
+        fbLoginButton.readPermissions = ["email", "public_profile"]
         
         guestLoginButton.addTarget(self, action: #selector(loginGuest), forControlEvents: .TouchUpInside)
         
+        fbLoginButton.layer.cornerRadius = 10
+        fbLoginButton.clipsToBounds = true
+        
+        emailLoginButton.layer.cornerRadius = 10
+
+        
+        // Looks for single or multiple taps. FOr dismissing keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        
     }
+    
+//    func setupLoginRegisterButton() {
+//        loginRegisterButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+//        loginRegisterButton.topAnchor.constraintEqualToAnchor(inputsContainerView.bottomAnchor, constant: 12).active = true
+//        loginRegisterButton.widthAnchor.constraintEqualToAnchor(inputsContainerView.widthAnchor).active = true
+//        loginRegisterButton.heightAnchor.constraintEqualToConstant(50).active = true
+//        
+//    }
+//    
+//    func setupInputsContainer() {
+//        
+//        inputsContainerView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+//        
+//        inputsContainerView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
+//        inputsContainerView.widthAnchor.constraintEqualToAnchor(view.widthAnchor, constant: -24).active = true
+//        inputsContainerView.heightAnchor.constraintEqualToConstant(150).active = true
+//    }
+    
+//    func setupSegmentControl() {
+//        
+//        // Set default segment that is Selected upon load
+//        loginView.hidden = false
+//        signupView.hidden = true
+//        
+//        segmentControl.selectedSegmentIndex = 0
+//        
+//        
+//        // attach function to segmentControl UI
+//        
+//        segmentControl.addTarget(self, action: #selector(switchSegmentControl), forControlEvents: UIControlEvents.ValueChanged)
+//        
+//        
+//    }
+//    func switchSegmentControl() {
+//        
+//        switch segmentControl.selectedSegmentIndex {
+//            
+//        case 0:
+//            loginView.hidden = false
+//            signupView.hidden = true
+//        case 1:
+//            loginView.hidden = true
+//            signupView.hidden = false
+//        default: break
+//        }
+//        
+//    }
 
     
     func loginGuest() {
@@ -234,12 +294,17 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 let fireBase = FirebaseManager()
                 
-                fireBase.createNewUserInFirebase(uid, name: userName, email: email, createdAt: FIRServerValue.timestamp(), fbID: fbID, fbPicURL: pictureURL, fbURL: fbLink as String)
+                fireBase.saveNewUserWithFacebookLogin(uid, name: userName, email: email, fbID: fbID, fbPicURL: pictureURL, fbURL: fbLink as String)
                 
 
                 
             }
         })
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     
