@@ -17,8 +17,33 @@ class ProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var profileName: UILabel!
     
-    @IBOutlet weak var logoutButton: UIButton!
+
     
+    @IBAction func clickLogoutButton(sender: UIButton) {
+        print("clicked log out button")
+        
+        let loginManager = FBSDKLoginManager()
+        
+        loginManager.logOut()
+        
+        try! FIRAuth.auth()!.signOut()
+        
+        
+        print("[LoginControl] User Logged Out")
+        //self.dismissViewControllerAnimated(false, completion: nil)
+        print("in STACK: \(self.navigationController?.viewControllers.count)" )
+        
+        let loginPage = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        
+        let loginPageNav = UINavigationController(rootViewController: loginPage)
+        loginPageNav.navigationBarHidden = true
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        appDelegate.window?.rootViewController = loginPageNav
+
+        
+    }
     
     override func viewDidLoad() {
         
@@ -26,9 +51,7 @@ class ProfileTableViewController: UITableViewController {
         
         
         self.navigationItem.title = "Profile"
-        
-        
-        // Remove table view seperator lines
+
         tableView.separatorStyle = .None
         
         
@@ -38,7 +61,7 @@ class ProfileTableViewController: UITableViewController {
             return
         }
         
-        print("CUCRENT USER : \(user) displayNmae\(user.displayName). proivder. \(user.providerID) id: \(user.uid). is anonymous? \(user.anonymous)")
+        print("CUCRENT USER : \(user) displayNmae\(user.displayName). proivder. \(user.providerID) \(user.providerData) id: \(user.uid). is anonymous? \(user.anonymous) ")
         
         
         
@@ -52,13 +75,15 @@ class ProfileTableViewController: UITableViewController {
             let defaults = NSUserDefaults.standardUserDefaults()
             
             guard let userName = defaults.stringForKey("userName") else {
+                self.profileName.text = "Unknown User"
                 print("Failed getting user name")
                 return
             }
-            print("userName")
+
             self.profileName.text = userName
             
             guard let userImageURL = defaults.stringForKey("userImageURL") else {
+                self.profileImage.image = UIImage(named:"profile_large")
                 print("Failed getting profile picture")
                 return
             }
@@ -73,37 +98,10 @@ class ProfileTableViewController: UITableViewController {
                 }
             }
         }
-        
-        
-        // attach function to logout button
-        logoutButton.addTarget(self, action: #selector(logoutTapped(_:)), forControlEvents: .TouchUpInside)
-        
+
     }
     
-    func logoutTapped(button: UIButton) {
-        
-        
-        
-        let loginManager = FBSDKLoginManager()
-        
-        loginManager.logOut()
-        
-        try! FIRAuth.auth()!.signOut()
-        
-        
-        print("[LoginControl] User Logged Out")
-        
-        let loginPage = self.storyboard?.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-        
-        let loginPageNav = UINavigationController(rootViewController: loginPage)
-        loginPageNav.navigationBarHidden = true
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        appDelegate.window?.rootViewController = loginPageNav
-        
-    }
-    
+
     
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true

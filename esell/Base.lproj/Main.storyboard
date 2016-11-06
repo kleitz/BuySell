@@ -865,10 +865,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDY-bU-A0e">
-                                                    <rect key="frame" x="276" y="7" width="48" height="30"/>
+                                                    <rect key="frame" x="165" y="7" width="270" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="270" id="Nvm-W6-WcU"/>
+                                                    </constraints>
                                                     <state key="normal" title="Logout">
                                                         <color key="titleColor" red="0.078431372550000003" green="0.64313725489999995" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="clickLogoutButton:" destination="Ner-6b-Hhd" eventType="touchUpInside" id="D6u-fS-42o"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -895,7 +901,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="ZKX-9t-lj8"/>
                     <connections>
-                        <outlet property="logoutButton" destination="tDY-bU-A0e" id="20R-9Z-jkf"/>
                         <outlet property="profileImage" destination="PyD-LK-H7i" id="Vgc-cO-LTi"/>
                         <outlet property="profileName" destination="e0U-qQ-JoZ" id="HYy-SU-Z2Z"/>
                     </connections>
@@ -2033,10 +2038,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ova-rN-xQN">
-                                <rect key="frame" x="251" y="550" width="98" height="27"/>
+                                <rect key="frame" x="235" y="550" width="131" height="27"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <state key="normal" title="Log in as a Guest">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Skip and try as a Guest">
+                                    <color key="titleColor" red="0.59999999999999998" green="0.87843137250000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofE-iT-StX">
@@ -2109,7 +2114,7 @@
                                     <constraint firstAttribute="width" constant="40" id="yps-kd-yjh"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" red="0.59999999999999998" green="0.87843137250000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will never post to Facebook without your permission" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBi-i1-ZzG">

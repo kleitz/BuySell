@@ -148,7 +148,19 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         FIRAuth.auth()?.signInWithEmail(email, password: password, completion: { (user: FIRUser?, error) in
             
             if let error = error {
+
                 print(error.localizedDescription)
+                
+                switch error.code {
+                case 17008:
+                    self.popupNotifyIncomplete("Please check that your email is typed correctly")
+                case 17011: // email is wrong
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                case 17009: // password is wrong
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                default:
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                }
                 return
                 
             }
@@ -166,6 +178,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             let defaults = NSUserDefaults.standardUserDefaults()
             defaults.setObject(userID, forKey: "uid")
+            defaults.setObject(nil, forKey: "userImageURL")
+            
+            let fireBase = FirebaseManager()
+            fireBase.lookupSingleUser(userID: userID, withCompletionHandler: { (getUser) in
+                
+                defaults.setObject(getUser.name, forKey: "userName")
+                
+            })
+            
             
             //TODO maybe should change all the NSUserDefaults stuff to ONE PLACE instead of login? I'm not getting the name here...
             
@@ -258,6 +279,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         // error handling if you get an error using Firebase Auth
                         
                         print(error)
+                        
                         
                     }
                     
@@ -368,6 +390,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         view.endEditing(true)
     }
     
+    
+    func popupNotifyIncomplete(errorMessage: String){
+        
+        let alertController = UIAlertController(title: "Login Error", message:
+            errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil ))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     
     deinit {
         
