@@ -11,7 +11,12 @@ import FirebaseAuth
 
 class CreateAccountViewController: UIViewController {
 
-    @IBOutlet weak var closeWindowButton: UIButton!
+   
+    @IBAction func closeButton(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
     
     @IBOutlet weak var nameText: UITextField!
     
@@ -23,33 +28,37 @@ class CreateAccountViewController: UIViewController {
     
     @IBOutlet weak var createAccountButton: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        closeWindowButton.addTarget(self, action: #selector(closeViewController), forControlEvents: .TouchUpInside)
-        
-        
-        createAccountButton.addTarget(self, action: #selector(createAccount), forControlEvents: .TouchUpInside)
-    }
-
-    
-    func createAccount() {
+    @IBAction func createAccount(sender: UIButton) {
         
         prepareSaveFields()
-    
+        
+        print("click create account")
         
         guard let name = nameText.text where name != "" else {
-            //popup
+            
+            self.popupNotifyIncomplete("You must fill out all fields")
             return
         }
         
         guard let password = passwordText.text where password != "" else {
-            //popup
+            self.popupNotifyIncomplete("You must fill out all fields")
             return
         }
-        // check that passwords match and has min # of charas
+        
+        guard let passwordRetype = passwordRetypeText.text where passwordRetype != "" else {
+            self.popupNotifyIncomplete("You must fill out all fields")
+            return
+        }
+        
+        if password != passwordRetype {
+            
+            self.popupNotifyIncomplete("Password confirmation must match")
+            return
+            
+        }
+        
         guard let email = emailText.text where email != "" else {
-            //popup
+            self.popupNotifyIncomplete("You must fill out all fields")
             return
         }
         
@@ -61,7 +70,22 @@ class CreateAccountViewController: UIViewController {
         FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { (user: FIRUser?, error) in
             
             if let error = error {
+                print(error)
                 print(error.localizedDescription)
+                
+                
+                switch error.code {
+                case 17008:
+                    self.popupNotifyIncomplete("Please check that your email is typed correctly")
+                case 17011: // email is wrong
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                case 17009: // password is wrong
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                case 17007: // email already in use
+                    self.popupNotifyIncomplete("Email address already in use, please re-enter")
+                default:
+                    self.popupNotifyIncomplete("Incorrect email or password, please re-enter")
+                }
                 return
                 
             }
@@ -72,7 +96,7 @@ class CreateAccountViewController: UIViewController {
                 print("error")
                 return
             }
-    
+            
             
             // save FIRAuth's uid in UserDefaults
             print("CURRENT USER IS \(userID)")
@@ -84,9 +108,7 @@ class CreateAccountViewController: UIViewController {
             // Save
             
             fireBase.saveNewUserWithEmailLogin(userID, name: fullName, email: email)
-            
-            
-            
+
             
             // Success login, go to Main Page
             
@@ -103,6 +125,27 @@ class CreateAccountViewController: UIViewController {
             
         })
         
+
+        
+        
+    }
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        
+        // Looks for single or multiple taps. FOr dismissing keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        
+    }
+
+    
+    func createAccount() {
+        
         
         
     }
@@ -113,19 +156,21 @@ class CreateAccountViewController: UIViewController {
         
         
     }
-    func closeViewController() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
     
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
-    */
+    
+    func popupNotifyIncomplete(errorMessage: String){
+        
+        let alertController = UIAlertController(title: "Login Error", message:
+            errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil ))
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
 
 }

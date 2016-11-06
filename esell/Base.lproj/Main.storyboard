@@ -115,6 +115,9 @@
                                                 <state key="normal" title="Create Account">
                                                     <color key="titleColor" red="0.078431372550000003" green="0.64313725489999995" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="createAccount:" destination="Xg2-P9-ib4" eventType="touchUpInside" id="B7q-Tf-nlP"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BuySell" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uDN-oe-aqp">
                                                 <rect key="frame" x="195" y="65" width="220" height="58"/>
@@ -129,6 +132,9 @@
                                                     <constraint firstAttribute="height" constant="30" id="c6z-lo-b3u"/>
                                                 </constraints>
                                                 <state key="normal" image="icon_close_button"/>
+                                                <connections>
+                                                    <action selector="closeButton:" destination="Xg2-P9-ib4" eventType="touchUpInside" id="rfg-fR-ha9"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.078431372550000003" green="0.64313725489999995" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
@@ -208,7 +214,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="closeWindowButton" destination="azf-Of-eP4" id="NzC-qE-fi1"/>
                         <outlet property="createAccountButton" destination="E7D-xw-cbq" id="sxV-Wo-szV"/>
                         <outlet property="emailText" destination="uBY-C4-nPu" id="n6X-BL-VwV"/>
                         <outlet property="nameText" destination="NSP-9s-u7W" id="Abf-B9-Ydv"/>
@@ -2051,7 +2056,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Xg2-P9-ib4" kind="show" id="5Ie-fF-2W6"/>
+                                    <segue destination="Xg2-P9-ib4" kind="presentation" id="wMT-Sc-PbU"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yZo-Vc-Avl" customClass="FBSDKLoginButton">
@@ -2088,7 +2093,7 @@
                                     <constraint firstAttribute="width" constant="220" id="U2w-9i-Ibc"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rn4-hR-3eH">
                                 <rect key="frame" x="210" y="343" width="180" height="1"/>
