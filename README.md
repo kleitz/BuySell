@@ -2,8 +2,8 @@
 
 An app that functions as a local buy and sell marketplace.
 
-[![Login](/Screenshots/Screenshot0.jpg?raw=true)] [![Browse](/Screenshots/Screenshot1.jpg?raw=true)]
-[![Map](/Screenshots/Screenshot2.jpg?raw=true)] [![Post](/Screenshots/Screenshot3.jpg?raw=true)]
+[![Login](https://github.com/tigclaw/BuySell/tree/master/Screenshots/Screenshot0.jpg?raw=true)] [![Browse](https://github.com/tigclaw/BuySell/tree/master/Screenshots/Screenshot1.jpg?raw=true)]
+[![Map](https://github.com/tigclaw/BuySell/tree/master/Screenshots/Screenshot2.jpg?raw=true)] [![Post](https://github.com/tigclaw/BuySell/tree/master/Screenshots/Screenshot3.jpg?raw=true)]
 
 
 ## Features
