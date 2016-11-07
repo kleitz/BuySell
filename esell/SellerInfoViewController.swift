@@ -37,6 +37,7 @@ class SellerInfoViewController: UIViewController, MFMailComposeViewControllerDel
         
     }
     
+// TODO : need to fix bug with opening email window (when it goes back to app, the bottom bounds is shorter)
 //    override func viewWillAppear(animated: Bool) {
 //        print("..... self view bounds: \(self.view.bounds)")
 //        print("      self view frame: \(self.view.frame)")
@@ -49,7 +50,7 @@ class SellerInfoViewController: UIViewController, MFMailComposeViewControllerDel
 //    }
 
     var userInfo = User(id: "temp")
-    var userImage = UIImage()
+    var userImage = UIImage(named:"")
 
     
     override func viewDidLoad() {

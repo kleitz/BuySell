@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8403BA611DBC84A100193E10 /* PickMapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */; };
 		840D3C571DB49D6A0052D8B7 /* BodyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840D3C561DB49D6A0052D8B7 /* BodyCell.swift */; };
+		841A314D1DD0317600FE5AD2 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841A314C1DD0317600FE5AD2 /* EditProfileTableViewController.swift */; };
 		841DBE321DC18CB800D8B683 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841DBE311DC18CB800D8B683 /* MapManager.swift */; };
 		842D36201DB5AFD300AE5F5F /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D361F1DB5AFD300AE5F5F /* SectionHeaderView.swift */; };
 		842D36221DB5B01600AE5F5F /* SectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842D36211DB5B01600AE5F5F /* SectionHeaderView.xib */; };
@@ -55,6 +56,7 @@
 		26D7EE7CC04CB5DADAFDD9B3 /* Pods_esell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_esell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8403BA601DBC84A100193E10 /* PickMapLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickMapLocationViewController.swift; sourceTree = "<group>"; };
 		840D3C561DB49D6A0052D8B7 /* BodyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyCell.swift; sourceTree = "<group>"; };
+		841A314C1DD0317600FE5AD2 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		841DBE311DC18CB800D8B683 /* MapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		842D361F1DB5AFD300AE5F5F /* SectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		842D36211DB5B01600AE5F5F /* SectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeaderView.xib; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				84F554771DA2003300D7BDA5 /* ProfileViewController.swift */,
 				84321A7F1DB8C56400332DF4 /* ProfileTableViewController.swift */,
+				841A314C1DD0317600FE5AD2 /* EditProfileTableViewController.swift */,
 				84E299471DA5DDFC00A7E7DB /* SellerInfoViewController.swift */,
 			);
 			name = "Profile View";
@@ -407,6 +410,7 @@
 				84321A8E1DB9374000332DF4 /* SellTableViewCell.swift in Sources */,
 				8499938E1D9B5701006C050C /* User.swift in Sources */,
 				8499938A1D992451006C050C /* ListingsTableViewController.swift in Sources */,
+				841A314D1DD0317600FE5AD2 /* EditProfileTableViewController.swift in Sources */,
 				84F445251DA7713800429AE7 /* MapViewController.swift in Sources */,
 				8459C7381DBDBA55008E213F /* AddItemTableViewController.swift in Sources */,
 				848F68221DACF5D000AED515 /* FirebaseManager.swift in Sources */,

@@ -89,53 +89,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         
     }
-    
-//    func setupLoginRegisterButton() {
-//        loginRegisterButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
-//        loginRegisterButton.topAnchor.constraintEqualToAnchor(inputsContainerView.bottomAnchor, constant: 12).active = true
-//        loginRegisterButton.widthAnchor.constraintEqualToAnchor(inputsContainerView.widthAnchor).active = true
-//        loginRegisterButton.heightAnchor.constraintEqualToConstant(50).active = true
-//        
-//    }
-//    
-//    func setupInputsContainer() {
-//        
-//        inputsContainerView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-//        
-//        inputsContainerView.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
-//        inputsContainerView.widthAnchor.constraintEqualToAnchor(view.widthAnchor, constant: -24).active = true
-//        inputsContainerView.heightAnchor.constraintEqualToConstant(150).active = true
-//    }
-    
-//    func setupSegmentControl() {
-//        
-//        // Set default segment that is Selected upon load
-//        loginView.hidden = false
-//        signupView.hidden = true
-//        
-//        segmentControl.selectedSegmentIndex = 0
-//        
-//        
-//        // attach function to segmentControl UI
-//        
-//        segmentControl.addTarget(self, action: #selector(switchSegmentControl), forControlEvents: UIControlEvents.ValueChanged)
-//        
-//        
-//    }
-//    func switchSegmentControl() {
-//        
-//        switch segmentControl.selectedSegmentIndex {
-//            
-//        case 0:
-//            loginView.hidden = false
-//            signupView.hidden = true
-//        case 1:
-//            loginView.hidden = true
-//            signupView.hidden = false
-//        default: break
-//        }
-//        
-//    }
+
 
     func loginWithEmail() {
         guard let email = emailTextField.text else {
