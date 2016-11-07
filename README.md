@@ -1,10 +1,10 @@
-# esell
+# BuySell
 
-A local buy and sell marketplace. Browse posts.
+An app that functions as a local buy and sell marketplace.
 
-![Screenshot0][img0] &nbsp;&nbsp; ![Screenshot1][img1] &nbsp;&nbsp;
+[![Login](/Screenshots/Screenshot0.jpg?raw=true)] [![Browse](/Screenshots/Screenshot1.jpg?raw=true)]
+[![Map](/Screenshots/Screenshot2.jpg?raw=true)] [![Post](/Screenshots/Screenshot3.jpg?raw=true)]
 
-![Screenshot2][img2] &nbsp;&nbsp; ![Screenshot3][img3]
 
 ## Features
 * Post item for sale with just a photo, price, description, location
