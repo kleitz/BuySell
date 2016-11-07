@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SellingTableViewController: UITableViewController {
     
@@ -50,11 +51,16 @@ class SellingTableViewController: UITableViewController {
         print("count of array(posts): \(sectionPostsArray.count)")
         print("count of array(bids): \(cellBidsArray.count)")
         
-        let currentUser = getUserID()
+        guard let currentUser = FIRAuth.auth()?.currentUser else {
+            print("failed getting current user")
+            return
+        }
+        
+        let uid = currentUser.uid
         
         // 2 - Fetch my posts
         
-        fireBase.fetchPostsByUserID(userID: currentUser) { (postsCreated) in
+        fireBase.fetchPostsByUserID(userID: uid) { (postsCreated) in
             // 2a -  this returns a list of my created posts
             
             self.sectionPostsArray = postsCreated
@@ -469,18 +475,6 @@ class SellingTableViewController: UITableViewController {
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true
         view.layer.cornerRadius = cornerRadiusParams
-    }
-    
-    
-    // Get user ID function
-    
-    private func getUserID() -> String {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        guard let userID = defaults.stringForKey("uid") else {
-            fatalError("failed getting nsuserdefaults uid")
-        }
-        return userID
     }
     
     

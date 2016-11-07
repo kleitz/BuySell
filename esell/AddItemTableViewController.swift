@@ -259,7 +259,7 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
             return
         }
         
-        guard let imageData = UIImagePNGRepresentation(imageFromPicker) else {
+        guard let imageData = imageFromPicker.mediumQualityJPEGNSData else {
             print("error w/ converting image to NSData")
             return
         }
@@ -471,3 +471,5 @@ class AddItemTableViewController: UITableViewController, UINavigationControllerD
 
 
 }
+
+

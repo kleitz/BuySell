@@ -64,6 +64,16 @@ class FirebaseManager {
         
     }
     
+    // update user
+    func updateUserInfo(uid: String, name: String, email: String, imageURL: String) {
+
+        self.ref.child("users/\(uid)/name").setValue(name)
+        self.ref.child("users/\(uid)/email").setValue(email)
+        self.ref.child("users/\(uid)/last_updated").setValue(FIRServerValue.timestamp())
+        self.ref.child("users/\(uid)/fb_pic_url").setValue(imageURL)
+     
+        
+    }
     
     // Function for saving to Firebase with all POST INFO
     

@@ -26,6 +26,7 @@ class NavigationController: UINavigationController {
         
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         
+        
     }
 
 

@@ -21,10 +21,11 @@ class ProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var profileName: UILabel!
     
-
-    @IBOutlet weak var profileNameTextView: UITextView!
     
     @IBOutlet weak var editAccountButton: UIButton!
+    
+    @IBOutlet weak var logoutButton: UIButton!
+    
     
     @IBAction func clickEditAccount(sender: UIButton) {
         
@@ -53,7 +54,7 @@ class ProfileTableViewController: UITableViewController {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         appDelegate.window?.rootViewController = loginPageNav
-
+        
         
     }
     
@@ -63,11 +64,20 @@ class ProfileTableViewController: UITableViewController {
         
         
         self.navigationItem.title = "Profile"
-
-        tableView.separatorStyle = .None
         
-//        let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(clickEdit(_:)))
-//        self.navigationItem.setRightBarButtonItem(editButton, animated: true)
+        tableView.separatorStyle = .None
+        logoutButton.layer.cornerRadius = 10
+        
+        
+        
+        
+        loadUserInfo()
+        
+        
+    }
+    
+    
+    func loadUserInfo() {
         
         guard let user = FIRAuth.auth()?.currentUser else {
             print("ERROR")
@@ -75,7 +85,6 @@ class ProfileTableViewController: UITableViewController {
         }
         
         print("CUCRENT USER : \(user) displayNmae\(user.displayName). proivder. \(user.providerID) \(user.providerData) id: \(user.uid). is anonymous? \(user.anonymous) ")
-        
         
         
         if user.anonymous {
@@ -87,16 +96,20 @@ class ProfileTableViewController: UITableViewController {
             
             let defaults = NSUserDefaults.standardUserDefaults()
             
-            guard let userName = defaults.stringForKey("userName") else {
-                self.profileName.text = "Unknown User"
-                print("Failed getting user name")
-                return
+            
+            dispatch_async(dispatch_get_main_queue()){
+                
+                guard let userName = defaults.stringForKey("userName") else {
+                    self.profileName.text = "Unknown User"
+                    print("Failed getting user name")
+                    return
+                }
+                
+                
+                
+                self.profileName.text = userName
             }
             
-            self.profileNameTextView.text = userName
-            self.profileNameTextView.editable = true
-            
-            self.profileName.text = userName
             
             
             
@@ -109,50 +122,50 @@ class ProfileTableViewController: UITableViewController {
             
             if let url = NSURL(string: userImageURL) {
                 if let imageData = NSData(contentsOfURL: url) {
-                    self.profileImage.image = UIImage(data: imageData)
+                    
+                    dispatch_async(dispatch_get_main_queue()){
+                        self.profileImage.image = UIImage(data: imageData)
+                    }
+                    
                     self.profileImage.contentMode = .ScaleAspectFill
                     
                     self.roundUIView(self.profileImage, cornerRadiusParams: self.profileImage.frame.size.width / 2)
                 }
             }
         }
-
+        
     }
     
-    func clickEdit(button: UIBarButtonItem)
-    {
-        print("clickEdit")
-        
-        
-        
-    }
-
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if let identifier = segue.identifier {
             
             switch identifier {
                 
-                case "segueToEditProfile":
+            case "segueToEditProfile":
                 
-                    guard let editProfileVC = segue.destinationViewController as? EditProfileTableViewController else {
-                        print("segue failed")
+                guard let editProfileVC = segue.destinationViewController as? EditProfileTableViewController else {
+                    print("segue failed")
+                    return
+                }
+                
+                guard let userImage = self.profileImage.image,
+                    let userName = self.profileName.text else {
+                        print("ERROR getting values for segue from original VC")
                         return
                 }
                 
-                editProfileVC.userImage.image = self.profileImage.image
-                
-                editProfileVC.nameText.text = self.profileName.text
-                
-                
+                editProfileVC.profileImage = userImage
+                editProfileVC.profileName = userName
+            
                 
             default: break
             }
             
         }
-
+        
     }
-
+    
     
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true

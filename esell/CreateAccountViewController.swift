@@ -105,7 +105,25 @@ class CreateAccountViewController: UIViewController {
             defaults.setObject(userID, forKey: "uid")
             defaults.setObject(name, forKey: "userName")
             
-            // Save
+            
+            
+            // Save FIR user profile change
+            
+            if let user = user {
+                let changeRequest = user.profileChangeRequest()
+                changeRequest.displayName = name
+                changeRequest.commitChangesWithCompletion { error in
+                    if let error = error {
+                        print("ERROR \(error.localizedDescription)")
+                        // An error happened.
+                    } else {
+                        print("FIR user profile updated")
+                        // Profile updated.
+                    }
+                }
+            }
+            
+            // Save to users node in Firebase
             
             fireBase.saveNewUserWithEmailLogin(userID, name: fullName, email: email)
 

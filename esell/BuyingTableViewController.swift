@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 
 
 class BuyingTableViewController: UITableViewController {
@@ -43,9 +43,14 @@ class BuyingTableViewController: UITableViewController {
         
         super.viewWillAppear(animated)
 
-        let currentUser = getUserID()
+        guard let currentUser = FIRAuth.auth()?.currentUser else {
+            print("failed getting current user")
+            return
+        }
         
-        fireBase.fetchBidsByUserID(userID: currentUser) { (bidsCreated) in
+        let uid = currentUser.uid
+        
+        fireBase.fetchBidsByUserID(userID: uid) { (bidsCreated) in
             
             print("returning bidsCreated \(bidsCreated)")
             
@@ -310,18 +315,6 @@ class BuyingTableViewController: UITableViewController {
     private func roundUIView(view: UIView, cornerRadiusParams: CGFloat!) {
         view.clipsToBounds = true
         view.layer.cornerRadius = cornerRadiusParams
-    }
-    
-    // Get user ID function
-    
-    func getUserID() -> String {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        guard let userID = defaults.stringForKey("uid") else {
-            fatalError("failed getting nsuserdefaults uid")
-        }
-        
-        return userID
     }
     
     
